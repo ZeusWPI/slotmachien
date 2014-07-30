@@ -7,19 +7,12 @@ public class NXTMain {
 		boolean quit = true;
 		while (quit) {
 
-			String connected = "Connected";
-			String waiting = "Waiting...";
-			String closing = "Closing...";
-
-			LCD.drawString(waiting, 0, 0);
+			LCD.drawString("Waiting", 0, 0);
 			NXTConnection connection = USB.waitForConnection();
-			LCD.clear();
-			LCD.drawString(connected, 0, 0);
-
 			DataInputStream dis = connection.openDataInputStream();
 
 			LCD.clear();
-			LCD.drawString("Streams found", 0, 0);
+			LCD.drawString("Connected", 0, 0);
 
 			boolean stop = true; 
 			
@@ -44,9 +37,9 @@ public class NXTMain {
 			dis.close();
 
 			LCD.clear();
-			LCD.drawString(closing, 0, 0);
+			LCD.drawString("Closing", 0, 0);
 
-			Thread.sleep(2000);
+			Thread.sleep(1000);
 
 			connection.close();
 			LCD.clear();
