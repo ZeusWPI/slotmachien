@@ -1,8 +1,6 @@
 slotmachien
 ===========
 
-<<<<<<< HEAD
-
 volg deze gidsen om aan de slag te kunnen
 
 http://www.lejos.org/nxt/nxj/tutorial/Preliminaries/GettingStarted.htm
@@ -32,6 +30,3 @@ SlotMachienPC:
 SlotMachienBOT:
 * schrijven voor in het #zeus-kanaal
 * commandos: open/close/status/last
-=======
-Code for the slot machine.
->>>>>>> d52e16b8afc16fdac6380f3322d968374f2075d5
