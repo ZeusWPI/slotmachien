@@ -31,11 +31,11 @@ public class PCMain {
         Scanner sc = new Scanner(System.in);
         while (true) {
             String s = sc.nextLine();
-            if (TOLK.containsKey(s)) {
+            if (TOLK.containsKey(s.toLowerCase())) {
                 oStream.write(TOLK.get(s));
                 oStream.flush();                
             }
-
+            sc.close();    
         }
     }
 

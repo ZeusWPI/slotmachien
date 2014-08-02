@@ -9,61 +9,79 @@ public class NXTMain {
         boolean quit = false;
         while (!quit) {
 
-            LCD.drawString("Waiting", 0, 0);
+            drawString("Waiting");
             NXTConnection connection = USB.waitForConnection();
             DataInputStream dis = connection.openDataInputStream();
 
-            LCD.clear();
-            LCD.drawString("Connected", 0, 0);
+            drawString("Connected");
 
             boolean restart = false;
 
+            //
+
             while (!restart) {
-                /**
-                 * als 1 gestuurd wordt dan draaien de motoren een halve slag
-                 * vooruit als 2 gestuurd wordt dan draaien de motoren een halve
-                 * slag achteruit als 3 gestuurd wordt dan herstart het
-                 * programma als 4 (of groter) gestuurd wordt dan stopt het
-                 * programma
-                 */
 
                 byte b = dis.readByte();
-                if (b > 2) {
+                switch (b) {
+                case 1:     //open the door
+                    open();
+                case 2:     //close the door
+                    close();
+                case 3:     //restart the program
                     restart = true;
-                    LCD.clear();
-                    LCD.drawString("Restarting", 0, 0);
-
-                    if (b > 3) {
-                        quit = true;
-                        LCD.clear();
-                        LCD.drawString("Quiting", 0, 0);
-                    }
-                } else {
-                    turn(b == 1);
+                    drawString("Restarting");                    
+                case 4:     //quit the program
+                    quit = true;
+                    drawString("Quitting");
                 }
             }
 
             dis.close();
-
             connection.close();
             LCD.clear();
         }
     }
 
-    public static void turn(boolean b) {
-        int turn = 180;
-        String turning = "Opening";
-        if (!b) {
-            turn = -turn;
-            turning = "Closing";
+    public static void open() {
+        if (getStatus() == 0) {
+            turn(180);
         }
-        LCD.clear();
-        LCD.drawString(turning, 0, 0);
-        Motor.B.setSpeed(900);
+    }
+
+    public static void close() {
+        if (getStatus() == 1) {
+            turn(-180);
+        }
+    }
+
+    public static void turn(int turn) {
+        Motor.B.setSpeed(900); // 2.5 rotations per second
         Motor.C.setSpeed(900);
         Motor.B.rotate(turn, true);
         Motor.C.rotate(turn);
         Motor.B.flt();
         Motor.C.flt();
     }
+
+    public static int getStatus() { //check if the door is open or closed
+        if (Motor.B.getTachoCount() > 350 && Motor.B.getTachoCount() < 10) {
+            return 0;
+        } else if (Motor.B.getTachoCount() > 170
+                && Motor.B.getTachoCount() < 190) {
+            return 1;
+        } else {
+            setToKnownStatus();
+            return 2;
+        }
+    }
+    
+    public static void setToKnownStatus() {
+        // check the tachocount turn the lock to the closest fixed position
+    }
+    
+    public static void drawString(String s) {
+        LCD.clear();
+        LCD.drawString(s, 0, 0);
+    }
+
 }
