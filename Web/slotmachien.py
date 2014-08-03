@@ -36,8 +36,10 @@ def before_slotmachien_request():
   authKey = ""
   if request.headers.get('Authorization'):
     authKey = request.headers['Authorization']
+  # token support for slack, because it doesn't support headers out of the box
+  elif request.args.get('token'):
+    authKey = request.args['token']
   key = AuthKey.select().where(AuthKey.key == authKey)
-  print key.count()
   if key.count() == 0:
     abort(401)
 slotmachien_bp.before_request(before_slotmachien_request)
