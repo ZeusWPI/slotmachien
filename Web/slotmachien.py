@@ -50,6 +50,11 @@ def open():
   send_command("open")
   return "ok"
 
+@slotmachien_bp.route('/close', methods=['POST'])
+def close():
+  send_command("close")
+  return "ok"
+
 app.register_blueprint(slotmachien_bp, url_prefix='/slotmachien')
 
 def send_command(command):
