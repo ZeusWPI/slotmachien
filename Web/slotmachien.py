@@ -1,29 +1,31 @@
+import settings
+
 from flask import Flask, Blueprint, abort, request
-from peewee import *
 from flask_peewee.admin import Admin
 from flask_peewee.auth import Auth
 from flask_peewee.db import Database
+from peewee import *
 
-import settings
-app = Flask(__name__)
 
-#Database settings
+# Database settings
 DATABASE = {
-  'name': settings.db_name,
-  'engine': 'peewee.SqliteDatabase',
+    'name': settings.db_name,
+    'engine': 'peewee.SqliteDatabase',
 }
-
 SECRET_KEY = settings.secret_key
 DEBUG = True
+
+
+class AuthKey(db.Model):
+    key = TextField()
+
 # Create the database
+app = Flask(__name__)
 app.config.from_object(__name__)
 db = Database(app)
 
-# create an Auth object for use with our flask app and database wrapper
+# Create an Auth object for use with our flask app and database wrapper
 auth = Auth(app, db)
-
-class AuthKey(db.Model):
-  key = TextField()
 
 admin = Admin(app, auth)
 admin.register(AuthKey)
@@ -31,42 +33,45 @@ admin.setup()
 
 slotmachien_bp = Blueprint('slotmachien', __name__)
 
-# Method before request to check if allow to make request
+
+# Method before request to check if allowed to make request
 def before_slotmachien_request():
-  authKey = ""
-  if request.headers.get('Authorization'):
-    authKey = request.headers['Authorization']
-  # token support for slack, because it doesn't support headers out of the box
-  elif request.args.get('token'):
-    authKey = request.args['token']
-  key = AuthKey.select().where(AuthKey.key == authKey)
-  if key.count() == 0:
-    abort(401)
+    # Token support for slack, because it doesn't support customizing headers
+    # out of the box
+    auth_key = (request.headers.get('Authorization') or
+                request.args.get('token'))
+    key = AuthKey.select().where(AuthKey.key == auth_key)
+    if key.count() == 0:
+        abort(401)
 slotmachien_bp.before_request(before_slotmachien_request)
 
-# create the routes
+
+# Create the routes
 @slotmachien_bp.route("/open", methods=['POST'])
-def open():
-  send_command("open")
-  return "ok"
+def open_door():
+    send_command("open")
+    return "ok"
+
 
 @slotmachien_bp.route('/close', methods=['POST'])
-def close():
-  send_command("close")
-  return "ok"
+def close_door():
+    send_command("close")
+    return "ok"
 
 app.register_blueprint(slotmachien_bp, url_prefix='/slotmachien')
 
+
 def send_command(command):
-  #TODO: send command to named pipe
-  print(command)
+    # TODO: send command to named pipe
+    print(command)
+
 
 def create():
-  auth.User.create_table(fail_silently=True)
-  AuthKey.create_table(fail_silently=True)
+    auth.User.create_table(fail_silently=True)
+    AuthKey.create_table(fail_silently=True)
 
 if __name__ == "__main__":
-  create()
-  app.run(
-    port = settings.port
-  )
+    create()
+    app.run(
+        port=settings.port
+    )
