@@ -15,14 +15,14 @@ DATABASE = {
 SECRET_KEY = settings.secret_key
 DEBUG = True
 
-
-class AuthKey(db.Model):
-    key = TextField()
-
 # Create the database
 app = Flask(__name__)
 app.config.from_object(__name__)
 db = Database(app)
+
+# Create database models
+class AuthKey(db.Model):
+    key = TextField()
 
 # Create an Auth object for use with our flask app and database wrapper
 auth = Auth(app, db)
