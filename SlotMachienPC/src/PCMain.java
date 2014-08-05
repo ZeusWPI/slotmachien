@@ -10,13 +10,20 @@ import lejos.pc.comm.NXTCommFactory;
 import lejos.pc.comm.NXTInfo;
 
 public class PCMain {
-    
-    private static final Map<String, Byte> TOLK = new HashMap<String, Byte>() {{
-        put("open", (byte) 1);
-        put("close", (byte) 2); 
-        put("restart", (byte) 3);
-        put("quit", (byte) 4);        
-    }};
+
+    private static final Map<String, Byte> TOLK = new HashMap<String, Byte>() {
+
+        private static final long serialVersionUID = 1L;
+
+        {
+            put("open", (byte) 1);
+            put("close", (byte) 2);
+            put("restart", (byte) 3);
+            put("test", (byte) 4);
+            put("clear", (byte) 5);
+            put("quit", (byte) 6);
+        }
+    };
 
     public static void main(String[] args) throws NXTCommException,
             IOException, InterruptedException {
@@ -28,15 +35,11 @@ public class PCMain {
 
         // datastream richting brick opstellen op basis van de stdin
         OutputStream oStream = nxtComm.getOutputStream();
-        Scanner sc = new Scanner(System.in);
-        while (true) {
-            String s = sc.nextLine();
-            if (TOLK.containsKey(s.toLowerCase())) {
-                oStream.write(TOLK.get(s));
-                oStream.flush();                
-            }
-            sc.close();    
+        String commando = args[0].toLowerCase();
+        if (TOLK.containsKey(commando)) {
+            oStream.write(TOLK.get(commando));
+            System.out.print(commando);
+            oStream.flush();
         }
     }
-
 }
