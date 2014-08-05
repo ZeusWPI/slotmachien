@@ -41,5 +41,7 @@ public class PCMain {
             System.out.print(commando);
             oStream.flush();
         }
+        oStream.close();
+        nxtComm.close();
     }
 }
