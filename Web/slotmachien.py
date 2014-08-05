@@ -103,5 +103,6 @@ def create():
 if __name__ == "__main__":
     create()
     app.run(
-        port=settings.port
+        port=settings.port,
+        host='0.0.0.0'
     )
