@@ -18,13 +18,13 @@ After that you can go to localhost:<port>/admin, and login to the admin interfac
 and add an AuthKey for the requests.
 
 # Sending requests
-All requests need to have an `Authorization` field with the AuthKey as param
+All requests need to have an `Authorization` field with the AuthKey as param, or as ?token=<key>
 
 ## Open door
-Send an POST request to `/slotmachien/open`
+Send a POST request to `/slotmachien/open`
 
 ## Close door
-Send an POST request to `/slotmachien/close`
+Send a POST request to `/slotmachien/close`
 
 ## Status door
-Not yet implemented
+Send a GET request to `/slotmachien/`
