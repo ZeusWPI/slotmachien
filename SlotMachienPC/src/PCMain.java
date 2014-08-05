@@ -29,19 +29,29 @@ public class PCMain {
             IOException, InterruptedException {
 
         // communicatie opstellen met de brick
-        NXTComm nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
-        NXTInfo[] nxtInfo = nxtComm.search(null);
-        nxtComm.open(nxtInfo[0]);
+        try {
+            NXTComm nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
+            NXTInfo[] nxtInfo = nxtComm.search(null);
+            nxtComm.open(nxtInfo[0]);
 
-        // datastream richting brick opstellen op basis van de stdin
-        OutputStream oStream = nxtComm.getOutputStream();
-        String commando = args[0].toLowerCase();
-        if (TOLK.containsKey(commando)) {
-            oStream.write(TOLK.get(commando));
-            System.out.print(commando);
-            oStream.flush();
+            try {
+                // datastream richting brick opstellen op basis van de stdin
+                OutputStream oStream = nxtComm.getOutputStream();
+                String commando = args[0].toLowerCase();
+                if (TOLK.containsKey(commando)) {
+                    oStream.write(TOLK.get(commando));
+                    System.out.print(commando);
+                    oStream.flush();
+                }
+            } catch (Exception ex) {
+
+            } finally {
+                oStream.close();
+            }
+        } catch (Exception ex) {
+
+        } finally {
+            nxtComm.close();
         }
-        oStream.close();
-        nxtComm.close();
     }
 }
