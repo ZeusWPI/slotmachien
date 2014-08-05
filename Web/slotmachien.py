@@ -83,7 +83,7 @@ def send_command(command):
         return jsonify({'status': 'error'})
     print(command)
     # TODO: get response
-    subprocess.call(['sudo java -classpath /opt/leJOS_NXJ/lib/pc/pccomm.jar:. PCMain',command])
+    subprocess.call(['cd ../SlotMachienPC/src && sudo java -classpath /opt/leJOS_NXJ/lib/pc/pccomm.jar:. PCMain',command])
     return jsonify({'status': command})
 
 def auth_key():
