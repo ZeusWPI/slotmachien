@@ -27,10 +27,10 @@ public class NXTMain {
             drawString(Byte.toString(b));
             switch (b) {
             case 1: // open de door
-                open();
+                turnTo(POSITION_OPEN);
                 break;
             case 2: // close de door
-                close();
+                turnTo(POSITION_CLOSED);
                 break;
             case 3: // quit de program
                 quit = true;
@@ -42,14 +42,6 @@ public class NXTMain {
             connection.close();
         }
 
-    }
-
-    public static void open() {
-        turnTo(20);
-    }
-
-    public static void close() {
-        turnTo(200);
     }
 
     public static void turn(int turn) {
@@ -97,7 +89,7 @@ public class NXTMain {
         turn(-440);
         Motor.B.resetTachoCount();
         Motor.C.resetTachoCount();
-        open();
+        turnTo(POSITION_OPEN);
         
         // De bug
         drawString(Integer.toString(Motor.B.getTachoCount()));
