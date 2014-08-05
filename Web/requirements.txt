@@ -1,0 +1,6 @@
+Flask==0.10.1
+peewee==2.2.5
+flask-peewee==0.6.5
+wtf-peewee==0.2.3
+WTForms==2.0
+Jinja2==2.7.2
