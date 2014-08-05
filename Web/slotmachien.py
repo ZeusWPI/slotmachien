@@ -1,6 +1,7 @@
 import settings
 
 from datetime import datetime as dt
+import subprocess
 
 from flask import Flask, Blueprint, abort, request, jsonify
 from flask_peewee.admin import Admin, ModelAdmin
@@ -78,8 +79,11 @@ app.register_blueprint(slotmachien_bp, url_prefix='/slotmachien')
 def send_command(command):
     # TODO: send command to named pipe
     log_action(command)
+    if command == 'status':
+        return jsonify({'status': 'error'})
     print(command)
     # TODO: get response
+    subprocess.call(['sudo java -classpath /opt/leJOS_NXJ/lib/pc/pccomm.jar:. PCMain',command])
     return jsonify({'status': command})
 
 def auth_key():
