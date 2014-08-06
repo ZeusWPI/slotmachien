@@ -5,8 +5,12 @@ import lejos.nxt.comm.*;
 import lejos.util.Delay;
 
 public class NXTMain {
+	
     private static final int POSITION_OPEN = 0;
     private static final int POSITION_CLOSED = 180;
+    
+    private static final int STEPPER_ANGLE = 20;
+    private static final int EXTREMUM_TO_OPEN = -440;
     
     public static void main(String[] args) throws Exception {
         
@@ -87,19 +91,16 @@ public class NXTMain {
         LCD.clear();
         LCD.drawString(s, 0, 0);
     }
-    
-    private static final int STEPPER_ANGLE_THAT_SOMEHOW_IS_A_MAGIC_NUMBER_BUT_REALLY_ISNT = 20;
-    private static final int ANGULAR_DIFFERENCE_BETWEEN_THE_EXTREMUM_AND_THE_DESIRED_CALLIBRATION_POINT_THAT_SOMEHOW_IS_A_MAGIC_NUMBER_BUT_REALLY_ISNT = -440;
 
     public static void calibrate() {
         drawString("calibrating");
         // Turn to extremum as calibration point (in steps of 20)
         Motor.B.setStallThreshold(5, 500);
         while(!Motor.B.isStalled()) {
-            turn(STEPPER_ANGLE_THAT_SOMEHOW_IS_A_MAGIC_NUMBER_BUT_REALLY_ISNT);
+            turn(STEPPER_ANGLE);
         }
         // Turn to open position
-        turn(ANGULAR_DIFFERENCE_BETWEEN_THE_EXTREMUM_AND_THE_DESIRED_CALLIBRATION_POINT_THAT_SOMEHOW_IS_A_MAGIC_NUMBER_BUT_REALLY_ISNT); 
+        turn(EXTREMUM_TO_OPEN); 
         
         // Calibrate open position to 0
         Delay.msDelay(200);
