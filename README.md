@@ -19,14 +19,17 @@ TODO
 ====
 
 SlotMachienNXT:
-* herschrijven zodat het niet slecht is
-* bijhouden of de deur al dan niet open is
+* ~~herschrijven zodat het niet slecht is~~
+* ~~bijhouden of de deur al dan niet open is~~
 * data terugsturen naar PC
 
 SlotMachienPC:
-* herschrijven zodat het niet slecht is
-* data ontvangen en doorsturen naar BOT
+* ~~herschrijven zodat het niet slecht is~~
+* data ontvangen van NXT
 
 SlotMachienBOT:
 * schrijven voor in het #zeus-kanaal
 * commandos: open/close/status/last
+
+SlotMachienSERV:
+* geen idee vraag feliciaan
