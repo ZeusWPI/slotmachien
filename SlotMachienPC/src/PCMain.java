@@ -32,16 +32,25 @@ public class PCMain {
         NXTComm nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
         NXTInfo[] nxtInfo = nxtComm.search(null);
         nxtComm.open(nxtInfo[0]);
+        try {
+                // datastream richting brick opstellen op basis van de stdin
+                OutputStream oStream = nxtComm.getOutputStream();
+            try {
+                String commando = args[0].toLowerCase();
+                if (TOLK.containsKey(commando)) {
+                    oStream.write(TOLK.get(commando));
+                    System.out.print(commando);
+                    oStream.flush();
+                }
+            } catch (Exception ex) {
 
-        // datastream richting brick opstellen op basis van de stdin
-        OutputStream oStream = nxtComm.getOutputStream();
-        String commando = args[0].toLowerCase();
-        if (TOLK.containsKey(commando)) {
-            oStream.write(TOLK.get(commando));
-            System.out.print(commando);
-            oStream.flush();
+            } finally {
+                oStream.close();
+            }
+        } catch (Exception ex) {
+
+        } finally {
+            nxtComm.close();
         }
-        oStream.close();
-        nxtComm.close();
     }
 }
