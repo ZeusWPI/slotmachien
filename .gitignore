@@ -6,3 +6,5 @@
 *.ear
 
 .metadata/
+.project
+.classpath
