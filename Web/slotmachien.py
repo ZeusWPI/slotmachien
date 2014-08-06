@@ -16,7 +16,7 @@ DATABASE = {
     'engine': 'peewee.SqliteDatabase',
 }
 SECRET_KEY = settings.secret_key
-DEBUG = True
+DEBUG = settings.debug
 
 # Create the database
 app = Flask(__name__)
@@ -81,13 +81,13 @@ app.register_blueprint(slotmachien_bp, url_prefix='/slotmachien')
 
 
 def send_command(command):
-    # TODO: send command to named pipe
     log_action(command)
-    return jsonify({'status': 'error'})
+    if settings.debug:
+        return jsonfiy({'status': 'error'})
     if command == 'status':
         return jsonify({'status': 'error'})
     print(command)
-    # TODO: get response
+
     subprocess.call(['cd ../SlotMachienPC/src && sudo java -classpath /opt/leJOS_NXJ/lib/pc/pccomm.jar:. PCMain ' + command], shell=True)
     return jsonify({'status': command})
 
