@@ -1,16 +1,12 @@
 package com.example.slotmachien;
 
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
+
+import android.util.Log;
 
 public class PostRequestTask extends RequestTask {
 
@@ -18,16 +14,17 @@ public class PostRequestTask extends RequestTask {
         HttpClient hc = new DefaultHttpClient();
         HttpPost post = new HttpPost(SLOTMACHIEN_URL);
 
-        List<NameValuePair> pairs = new ArrayList<>();
-        pairs.add(new BasicNameValuePair("token", TOKEN_VALUE));
+        post.addHeader("Content-Type", "application/json");
+        post.addHeader("Authorization", "test");
 
         HttpResponse res = null;
         try {
-            post.setEntity(new UrlEncodedFormEntity(pairs));
+            post.setEntity(new StringEntity("{ \"action\" : \"" + msg[0] + "\" }"));
             res = hc.execute(post);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Log.d("post", "" + res.getStatusLine().getStatusCode() + " " + res.getStatusLine().getReasonPhrase());
         return res;
     }
 
