@@ -2,19 +2,21 @@ package com.example.slotmachien;
 
 import java.util.concurrent.ExecutionException;
 
-import org.apache.http.HttpResponse;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ProgressBar;
 
 public class MainActivity extends Activity {
 
     public static final String OPEN_MSG = "open";
     public static final String CLOSE_MSG = "close";
+    
+    //TODO implement progressbar
+    private ProgressBar progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,16 +26,16 @@ public class MainActivity extends Activity {
 
     public void onOpen(View view) throws InterruptedException,
             ExecutionException {
-        HttpResponse res = new PostRequestTask().execute(OPEN_MSG).get();
+        new PostRequestTask().execute(OPEN_MSG);
     }
 
     public void onClose(View view) throws InterruptedException,
             ExecutionException {
-        HttpResponse res = new PostRequestTask().execute(CLOSE_MSG).get();
+        new PostRequestTask().execute(CLOSE_MSG);
     }
 
     public void onStatus(View view) throws InterruptedException, ExecutionException {
-        HttpResponse res = new GetRequestTask().execute(CLOSE_MSG).get();
+        new GetRequestTask().execute(CLOSE_MSG);
     }
 
     public AlertDialog createErrorDialog(String msg) {

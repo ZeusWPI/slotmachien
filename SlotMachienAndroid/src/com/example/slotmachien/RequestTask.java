@@ -8,12 +8,14 @@ import org.apache.http.HttpResponse;
 
 import android.os.AsyncTask;
 
-public abstract class RequestTask extends AsyncTask<String, Void, HttpResponse> {
+public abstract class RequestTask extends
+        AsyncTask<String, Integer, HttpResponse> {
 
-    //TODO Fix this horrible shit
+    // TODO Fix this horrible shit
     static {
         Properties p = new Properties();
-        InputStream input = RequestTask.class.getResourceAsStream("info.properties");
+        InputStream input = RequestTask.class
+                .getResourceAsStream("info.properties");
         try {
             p.load(input);
         } catch (IOException e) {
@@ -24,5 +26,4 @@ public abstract class RequestTask extends AsyncTask<String, Void, HttpResponse> 
     }
     public static final String SLOTMACHIEN_URL;
     public static final String TOKEN_VALUE;
-    
 }
