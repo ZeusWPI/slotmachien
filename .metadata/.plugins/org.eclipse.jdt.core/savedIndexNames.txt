@@ -1,3 +1,0 @@
-INDEX VERSION 1.127+/home/jeroen/slotmachien/.metadata/.plugins/org.eclipse.jdt.core
-3612465606.index
-1828074365.index
