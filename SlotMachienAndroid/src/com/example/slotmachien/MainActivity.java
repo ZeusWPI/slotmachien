@@ -1,6 +1,5 @@
 package com.example.slotmachien;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,21 +12,20 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.ToggleButton;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity {
 
     public static final String SLOTMACHIEN_URL = "raspberrypi/slotmachien/";
     public static final String TOKEN_VALUE = "test";
+    public static final String OPEN_MSG = "open";
+    public static final String CLOSE_MSG = "close";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,34 +34,20 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void onToggleClick(View view) {
-        String msg = ((ToggleButton) view).isChecked() ? "close" : "open";
-
+    public void onOpen(View view) {
         try {
-            HttpResponse res = sendPost(msg);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
+            sendPost(OPEN_MSG);
+        } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    public void onClose(View view) {
+        try {
+            sendPost(CLOSE_MSG);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }        
     }
 
     /**
