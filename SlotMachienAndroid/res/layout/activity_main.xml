@@ -24,8 +24,10 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/textView1"
-        android:text="Open"
-        android:onClick="onOpen" />
+        android:minHeight="100dip"
+        android:minWidth="100dip"
+        android:onClick="onOpen"
+        android:text="Open" />
 
     <Button
         android:id="@+id/button2"
@@ -34,7 +36,19 @@
         android:layout_alignBaseline="@+id/button1"
         android:layout_alignBottom="@+id/button1"
         android:layout_toRightOf="@+id/textView1"
+        android:minHeight="100dip"
+        android:minWidth="100dip"
         android:onClick="onClose"
         android:text="Close" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="59dp"
+        android:onClick="onStatus"
+        android:text="Status" />
 
 </RelativeLayout>
