@@ -43,7 +43,7 @@ public class NXTMain {
                 turnTo(POSITION_CLOSED);
                 break;
         }
-        drawString( getStatus()?"open":"closed" );
+        drawString( isOpen()?"open":"closed" );
         
     }
 
@@ -68,23 +68,21 @@ public class NXTMain {
         Motor.C.flt();
     }
 
-    // Get door status
-    public static boolean getStatus() {
-        if ( checkRotationProximity( Motor.B.getTachoCount(), POSITION_OPEN, 20) ) {
+    private static final int OPEN_LIMIT = 40;
+    private static final int CLOSED_LIMIT = 100;
+
+    // Get door status    
+    public static boolean isOpen() {
+        if (  Motor.B.getTachoCount() < OPEN_LIMIT ) {
             return true;
         }
-        if ( checkRotationProximity( Motor.B.getTachoCount(), POSITION_CLOSED, 20) ) {
+        if ( Motor.B.getTachoCount() > CLOSED_LIMIT) {
             return false;
         }
         
-        // If no status could be determined, try recalibrating.
-        //calibrate();
+        // If no status could be determined, recalibrate (aka shit's fucked, yo).
+        calibrate();
         return true;
-    }
-    
-    public static boolean checkRotationProximity(int rotation, int target, int toleration){
-        int normalized = (rotation - target + 360)%360;
-        return ( 360-toleration < normalized || normalized < toleration);
     }
 
     public static void drawString(String s) {
@@ -100,7 +98,8 @@ public class NXTMain {
             turn(20);
         }
         // Turn to open position
-        turn(-450);
+        turn(-440);
+        
         // Calibrate open position to 0
         Delay.msDelay(200);
         Motor.B.resetTachoCount();
@@ -120,7 +119,7 @@ public class NXTMain {
             }
 
             public void buttonReleased(Button b) {
-                drawString( getStatus()?"open":"closed" );
+                drawString( isOpen()?"open":"closed" );
             }
         });
         Button.RIGHT.addButtonListener(new ButtonListener() {
@@ -129,17 +128,17 @@ public class NXTMain {
             }
 
             public void buttonReleased(Button b) {
-                drawString( getStatus()?"open":"closed" );
+                drawString( isOpen()?"open":"closed" );
             }
         });
         Button.ENTER.addButtonListener(new ButtonListener() {
             public void buttonPressed(Button b) {
                 //MAAK KABAAL LOL
-                drawString("LOLOLOLOLOLOLOL");
-                File muziekje = new File("muziekje.wav");
-                Sound.playSample(muziekje, 100);
-                Delay.msDelay(12000);
-                drawString( getStatus()?"open":"closed" );
+//                drawString("LOLOLOLOLOLOLOL");
+//                File muziekje = new File("muziekje.wav");
+//                Sound.playSample(muziekje, 100);
+//                Delay.msDelay(12000);
+                drawString( isOpen()?"open":"closed" );
             }
 
             public void buttonReleased(Button b) {
