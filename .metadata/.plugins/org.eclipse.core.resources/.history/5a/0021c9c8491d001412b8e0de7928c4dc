@@ -2,6 +2,8 @@ import java.io.*;
 
 import lejos.nxt.*;
 import lejos.nxt.comm.*;
+import lejos.nxt.remote.NXTCommand;
+import lejos.nxt.remote.NXTProtocol;
 import lejos.util.Delay;
 
 public class NXTMain {
