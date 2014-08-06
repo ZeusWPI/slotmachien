@@ -1,7 +1,6 @@
 package com.example.slotmachien;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
@@ -14,9 +13,10 @@ public abstract class RequestTask extends AsyncTask<String, Void, HttpResponse> 
     //TODO Fix this horrible shit
     static {
         Properties p = new Properties();
+        InputStream input = RequestTask.class.getResourceAsStream("info.properties");
         try {
-            InputStream input = new FileInputStream("info.properties");
-        } catch (FileNotFoundException e) {
+            p.load(input);
+        } catch (IOException e) {
             e.printStackTrace();
         }
         SLOTMACHIEN_URL = p.getProperty("slotmachien_url");
