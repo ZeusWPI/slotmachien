@@ -19,7 +19,7 @@ and add an AuthKey for the requests.
 
 # Sending requests
 All requests need to have an `Authorization` field with the AuthKey as param, or as ?token=<key>
-
+All requests respond
 ## Open door
 Send a POST request to `/slotmachien/open`
 
@@ -28,3 +28,14 @@ Send a POST request to `/slotmachien/close`
 
 ## Status door
 Send a GET request to `/slotmachien/`
+
+## Update door
+Send a POST request to `/slotmachien/`
+Header set the `Content-Type: application/json`
+With payload
+```javascript
+{
+    "action": "open"
+}
+```
+Possible action keywords are: open, close

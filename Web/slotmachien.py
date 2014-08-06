@@ -69,6 +69,10 @@ def open_door():
 def close_door():
     return send_command('close')
 
+@slotmachien_bp.route('/', methods=['POST'])
+def update_door():
+    return send_command(request.get_json(force=True)['action'])
+
 @slotmachien_bp.route('/')
 def status_door():
     return send_command('status')
@@ -79,6 +83,7 @@ app.register_blueprint(slotmachien_bp, url_prefix='/slotmachien')
 def send_command(command):
     # TODO: send command to named pipe
     log_action(command)
+    return jsonify({'status': 'error'})
     if command == 'status':
         return jsonify({'status': 'error'})
     print(command)
