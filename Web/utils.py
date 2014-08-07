@@ -10,13 +10,9 @@ from models import LogAction
 
 def send_command(command):
     log_action(command)
-    if app.config['DEBUG']:
-        return jsonify({'status': 'error'})
-    if command == 'status':
-        return jsonify({'status': 'error'})
-    print(command)
 
-    subprocess.call(['cd ../SlotMachienPC/src && sudo java -classpath /opt/leJOS_NXJ/lib/pc/pccomm.jar:. PCMain ' + command], shell=True)
+    if not app.config['DEBUG']:
+        subprocess.call(['cd ../SlotMachienPC/src && sudo java -classpath /opt/leJOS_NXJ/lib/pc/pccomm.jar:. PCMain ' + command], shell=True)
     return jsonify({'status': command})
 
 
