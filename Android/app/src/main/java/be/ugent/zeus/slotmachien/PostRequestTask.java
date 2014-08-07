@@ -1,4 +1,4 @@
-package com.example.slotmachien;
+package be.ugent.zeus.slotmachien;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;

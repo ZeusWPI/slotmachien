@@ -1,4 +1,4 @@
-package com.example.slotmachien;
+package be.ugent.zeus.slotmachien;
 
 import android.os.AsyncTask;
 
@@ -32,6 +32,9 @@ public abstract class RequestTask extends
     public static final String AUTHORIZATION;
     public static final String CONTENT_TYPE;
 
+    private static final int CONNECTION_TIMEOUT = 3000;
+    private static final int SOCKET_TIMEOUT = 5000;
+
     private MainActivity main;
     protected HttpClient client;
 
@@ -39,10 +42,9 @@ public abstract class RequestTask extends
         this.main = main;
 
         HttpParams params = new BasicHttpParams();
-        int connectionTimeout = 3000;
         int socketTimeout = 5000;
-        HttpConnectionParams.setConnectionTimeout(params, connectionTimeout);
-        HttpConnectionParams.setSoTimeout(params, socketTimeout);
+        HttpConnectionParams.setConnectionTimeout(params, CONNECTION_TIMEOUT);
+        HttpConnectionParams.setSoTimeout(params, SOCKET_TIMEOUT);
         this.client = new DefaultHttpClient(params);
 
         main.startProgressBar();

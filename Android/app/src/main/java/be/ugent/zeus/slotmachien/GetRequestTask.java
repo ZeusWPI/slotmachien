@@ -1,9 +1,7 @@
-package com.example.slotmachien;
+package be.ugent.zeus.slotmachien;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.IOException;
 
@@ -19,7 +17,7 @@ public class GetRequestTask extends RequestTask {
 
         HttpResponse response = null;
         try {
-            client.execute(request);
+            response = client.execute(request);
         } catch (IOException e) {
             e.printStackTrace();
         }

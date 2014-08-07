@@ -1,4 +1,4 @@
-package com.example.slotmachien;
+package be.ugent.zeus.slotmachien;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -12,10 +12,6 @@ import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends Activity {
 
-    public static final String OPEN_MSG = "open";
-    public static final String CLOSE_MSG = "close";
-
-    //TODO implement progressbar
     private ProgressBar progress;
 
     @Override
@@ -26,15 +22,16 @@ public class MainActivity extends Activity {
     }
 
     public void onOpen(View view) throws InterruptedException, ExecutionException {
-        new PostRequestTask(this).execute(OPEN_MSG);
+        new PostRequestTask(this).execute(getResources().getString(R.string.open));
     }
 
     public void onClose(View view) throws InterruptedException, ExecutionException {
-        new PostRequestTask(this).execute(CLOSE_MSG);
+        new PostRequestTask(this).execute(getResources().getString(R.string.close));
     }
 
+
     public void onStatus(View view) throws InterruptedException, ExecutionException {
-        new GetRequestTask(this).execute(CLOSE_MSG);
+        //TODO
     }
 
     public AlertDialog createErrorDialog(String msg) {
@@ -52,7 +49,6 @@ public class MainActivity extends Activity {
     }
 
     public void startProgressBar() {
-        System.out.println(progress);
         progress.setVisibility(View.VISIBLE);
     }
 
