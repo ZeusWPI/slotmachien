@@ -1,46 +1,30 @@
 package com.example.slotmachien;
 
-import android.util.Log;
-
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 
 public class PostRequestTask extends RequestTask {
 
+    public PostRequestTask(MainActivity main) {
+        super(main);
+    }
+
     @Override
     protected HttpResponse doInBackground(String... msg) {
-        HttpClient hc = new DefaultHttpClient();
         HttpPost post = new HttpPost(SLOTMACHIEN_URL);
-        publishProgress(1);
 
-        post.addHeader("Content-Type", "application/json");
-        post.addHeader("Authorization", "test");
-        publishProgress(1);
+        post.addHeader("Content-Type", CONTENT_TYPE);
+        post.addHeader("Authorization", AUTHORIZATION);
 
         HttpResponse res = null;
         try {
-            post.setEntity(new StringEntity("{ \"action\" : \"" + msg[0]
-                    + "\" }"));
-            res = hc.execute(post);
-            publishProgress(1);
+            post.setEntity(new StringEntity("{ \"action\" : \"" + msg[0] + "\" }"));
+            res = client.execute(post);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return res;
-    }
-
-    @Override
-    protected void onPostExecute(HttpResponse res) {
-        Log.d("post", "" + res.getStatusLine().getStatusCode() + " "
-                + res.getStatusLine().getReasonPhrase());
-    }
-
-    @Override
-    protected void onProgressUpdate(Integer... integers) {
-        System.out.println(integers[0]);
     }
 
 }

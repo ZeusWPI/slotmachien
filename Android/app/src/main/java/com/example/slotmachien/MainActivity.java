@@ -22,18 +22,19 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        progress = (ProgressBar)findViewById(R.id.progressBar1);
     }
 
     public void onOpen(View view) throws InterruptedException, ExecutionException {
-        new PostRequestTask().execute(OPEN_MSG);
+        new PostRequestTask(this).execute(OPEN_MSG);
     }
 
     public void onClose(View view) throws InterruptedException, ExecutionException {
-        new PostRequestTask().execute(CLOSE_MSG);
+        new PostRequestTask(this).execute(CLOSE_MSG);
     }
 
     public void onStatus(View view) throws InterruptedException, ExecutionException {
-        new GetRequestTask().execute(CLOSE_MSG);
+        new GetRequestTask(this).execute(CLOSE_MSG);
     }
 
     public AlertDialog createErrorDialog(String msg) {
@@ -50,4 +51,12 @@ public class MainActivity extends Activity {
         return builder.create();
     }
 
+    public void startProgressBar() {
+        System.out.println(progress);
+        progress.setVisibility(View.VISIBLE);
+    }
+
+    public void stopProgressBar() {
+        progress.setVisibility(View.GONE);
+    }
 }

@@ -9,9 +9,12 @@ import java.io.IOException;
 
 public class GetRequestTask extends RequestTask {
 
+    public GetRequestTask(MainActivity main) {
+        super(main);
+    }
+
     @Override
     protected HttpResponse doInBackground(String... params) {
-        HttpClient client = new DefaultHttpClient();
         HttpGet request = new HttpGet(SLOTMACHIEN_URL);
 
         HttpResponse response = null;
