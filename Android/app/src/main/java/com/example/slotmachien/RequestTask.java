@@ -14,7 +14,7 @@ public abstract class RequestTask extends
         Properties p = new Properties();
         try {
 
-            p.load(RequestTask.class.getClassLoader().getResourceAsStream("slotmachien.properties"));
+            p.load(RequestTask.class.getClassLoader().getResourceAsStream("assets/slotmachien.properties"));
         } catch (Exception e) {
             e.printStackTrace();
         }
