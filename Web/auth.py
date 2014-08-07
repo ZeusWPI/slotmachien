@@ -1,6 +1,7 @@
 from flask import abort, request
 from flask_peewee.auth import Auth
 
+from app import app, db
 from models import AuthKey
 
 def create_auth(app, db):
@@ -22,3 +23,6 @@ def before_slotmachien_request():
     if not has_auth_key():
         abort(401)
 
+
+# Do the Auth
+auth = create_auth(app, db)

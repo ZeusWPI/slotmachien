@@ -1,11 +1,13 @@
-from flask import Flask, Blueprint, request
+from flask import Blueprint, request
 
-from auth import before_slotmachien_request
+from app import app
+from auth import auth, before_slotmachien_request
 from utils import send_command
 
 
 slotmachien_bp = Blueprint('slotmachien', __name__)
 slotmachien_bp.before_request(before_slotmachien_request)
+app.register_blueprint(slotmachien_bp, url_prefix='/slotmachien')
 
 @slotmachien_bp.route('/open', methods=['POST'])
 def open_door():
@@ -25,7 +27,3 @@ def update_door():
 @slotmachien_bp.route('/')
 def status_door():
     return send_command('status')
-
-
-def register_blueprint(app):
-    app.register_blueprint(slotmachien_bp, url_prefix='/slotmachien')

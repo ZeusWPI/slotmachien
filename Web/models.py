@@ -1,7 +1,6 @@
-from peewee import ForeignKeyField, TextField, DateTimeField
+from peewee import *
 
-from flask_peewee import db
-
+from app import db
 
 # Create database models
 class AuthKey(db.Model):
