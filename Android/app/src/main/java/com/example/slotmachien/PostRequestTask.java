@@ -1,12 +1,12 @@
 package com.example.slotmachien;
 
+import android.util.Log;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-
-import android.util.Log;
 
 public class PostRequestTask extends RequestTask {
 
@@ -37,9 +37,9 @@ public class PostRequestTask extends RequestTask {
         Log.d("post", "" + res.getStatusLine().getStatusCode() + " "
                 + res.getStatusLine().getReasonPhrase());
     }
-    
+
     @Override
-    protected void onProgressUpdate(Integer...integers) {
+    protected void onProgressUpdate(Integer... integers) {
         System.out.println(integers[0]);
     }
 

@@ -1,10 +1,10 @@
 package com.example.slotmachien;
 
-import java.util.Properties;
+import android.os.AsyncTask;
 
 import org.apache.http.HttpResponse;
 
-import android.os.AsyncTask;
+import java.util.Properties;
 
 public abstract class RequestTask extends
         AsyncTask<String, Integer, HttpResponse> {
@@ -21,6 +21,7 @@ public abstract class RequestTask extends
         SLOTMACHIEN_URL = p.getProperty("slotmachien_url");
         TOKEN_VALUE = p.getProperty("token_value");
     }
+
     public static final String SLOTMACHIEN_URL;
     public static final String TOKEN_VALUE;
 }

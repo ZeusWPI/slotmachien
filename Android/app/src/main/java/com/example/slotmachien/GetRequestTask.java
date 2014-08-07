@@ -1,11 +1,11 @@
 package com.example.slotmachien;
 
-import java.io.IOException;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.io.IOException;
 
 public class GetRequestTask extends RequestTask {
 

@@ -1,7 +1,5 @@
 package com.example.slotmachien;
 
-import java.util.concurrent.ExecutionException;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -10,11 +8,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import java.util.concurrent.ExecutionException;
+
 public class MainActivity extends Activity {
 
     public static final String OPEN_MSG = "open";
     public static final String CLOSE_MSG = "close";
-    
+
     //TODO implement progressbar
     private ProgressBar progress;
 
@@ -24,13 +24,11 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
     }
 
-    public void onOpen(View view) throws InterruptedException,
-            ExecutionException {
+    public void onOpen(View view) throws InterruptedException, ExecutionException {
         new PostRequestTask().execute(OPEN_MSG);
     }
 
-    public void onClose(View view) throws InterruptedException,
-            ExecutionException {
+    public void onClose(View view) throws InterruptedException, ExecutionException {
         new PostRequestTask().execute(CLOSE_MSG);
     }
 
@@ -47,7 +45,8 @@ public class MainActivity extends Activity {
                         dialog.cancel();
 
                     }
-                });
+                }
+        );
         return builder.create();
     }
 
