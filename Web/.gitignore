@@ -1,4 +1,3 @@
-env/
-settings.py
+local_settings.py
 *.pyc
 *.db
