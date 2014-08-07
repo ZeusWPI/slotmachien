@@ -3,13 +3,15 @@ import subprocess
 
 from flask import jsonify
 
-from settings import *
+from app import app
+from auth import has_auth_key
+from models import LogAction
 
 
 def send_command(command):
     log_action(command)
-    if settings.DEBUG:
-        return jsonfiy({'status': 'error'})
+    if app.config['DEBUG']:
+        return jsonify({'status': 'error'})
     if command == 'status':
         return jsonify({'status': 'error'})
     print(command)
@@ -19,4 +21,4 @@ def send_command(command):
 
 
 def log_action(action):
-    LogAction.create(auth_key=auth_key(), action=action, logged_on=dt.now())
+    LogAction.create(auth_key=has_auth_key(), action=action, logged_on=dt.now())
