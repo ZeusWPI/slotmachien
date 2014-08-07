@@ -10,6 +10,8 @@ from models import LogAction
 
 def send_command(command):
     log_action(command)
+    if command == 'status':
+        return jsonify({'error': 'NotImplementedError'})
 
     if not app.config['DEBUG']:
         subprocess.call(['cd ../SlotMachienPC/src && sudo java -classpath /opt/leJOS_NXJ/lib/pc/pccomm.jar:. PCMain ' + command], shell=True)
