@@ -44,12 +44,12 @@ public class PCMain {
 					oStream.flush();
 				}
 			} catch (Exception ex) {
-
+				ex.printStackTrace(System.err);
 			} finally {
 				oStream.close();
 			}
 		} catch (Exception ex) {
-
+			ex.printStackTrace(System.err);
 		} finally {
 			nxtComm.close();
 		}

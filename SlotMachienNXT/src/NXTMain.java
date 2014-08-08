@@ -24,7 +24,7 @@ public class NXTMain {
 	private static final int STEPPER_ANGLE = 20;
 	private static final int EXTREMUM_TO_OPEN = -440;
 
-	private static boolean STATUS; // true: door unlocked; False: door locked.
+	private static boolean status; // true: door unlocked; false: door locked.
 
 	public static void main(String[] args) throws Exception {
 
@@ -54,11 +54,11 @@ public class NXTMain {
 		switch (b) {
 		case 1: // open de door
 			turnTo(POSITION_OPEN);
-			STATUS = true;
+			status = true;
 			break;
 		case 2: // close de door
 			turnTo(POSITION_CLOSED);
-			STATUS = false;
+			status = false;
 			break;
 		case 3: // send status to slotmachienPC
 			sendStatus(conn);
@@ -92,11 +92,11 @@ public class NXTMain {
 	// check door status
 	public static boolean checkStatus() {
 		if (Motor.B.getTachoCount() < OPEN_LIMIT_BEFORE_DEADZONE
-				&& STATUS == true) {
+				&& status) {
 			return true;
 		}
 		if (Motor.B.getTachoCount() > CLOSED_LIMIT_BEFORE_DEADZONE
-				&& STATUS == false) {
+				&& !status) {
 			return false;
 		}
 
@@ -131,7 +131,7 @@ public class NXTMain {
 		Motor.B.flt();
 		Motor.C.flt();
 
-		STATUS = true;
+		status = true;
 
 		drawString("calibrated");
 	}
@@ -139,7 +139,7 @@ public class NXTMain {
 	public static void sendStatus(NXTConnection conn) {
 		DataOutputStream dos = conn.openDataOutputStream();
 		byte b = 0;
-		if (!STATUS) {
+		if (!status) {
 			b = 1;
 		}
 		try {
