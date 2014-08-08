@@ -13,6 +13,8 @@ import be.ugent.zeus.slotmachien.MainActivity;
  */
 public class PostRequestService extends RequestService {
 
+    public static final String RESPONSE = "RESPONSE";
+
     @Override
     protected void onHandleIntent(Intent intent) {
         HttpPost post = new HttpPost(SLOTMACHIEN_URL);
@@ -23,15 +25,16 @@ public class PostRequestService extends RequestService {
         HttpResponse res = null;
         try {
             post.setEntity(new StringEntity("{ \"action\" : \"" + intent.getStringExtra(MESSAGE) + "\" }"));
+            System.out.println("executing");
             res = client.execute(post);
-            System.out.println(res.getStatusLine().getReasonPhrase() + " " + res.getStatusLine().getStatusCode());
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            Intent broadcastIntent = new Intent();
+            broadcastIntent.setAction(MainActivity.ResponseReceiver.PROCESSED);
+            broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+            broadcastIntent.putExtra(RESPONSE, res.getStatusLine().getReasonPhrase() + " " + res.getStatusLine().getStatusCode());
+            sendBroadcast(broadcastIntent);
         }
-
-        Intent broadcastIntent = new Intent();
-        broadcastIntent.setAction(MainActivity.ResponseReceiver.PROCESSED);
-        broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-        sendBroadcast(broadcastIntent);
     }
 }

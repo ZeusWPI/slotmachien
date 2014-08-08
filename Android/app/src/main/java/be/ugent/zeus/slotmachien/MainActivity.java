@@ -55,6 +55,7 @@ public class MainActivity extends Activity {
     }
 
     public AlertDialog createErrorDialog(String msg) {
+        System.out.println(msg);
         AlertDialog.Builder builder = new AlertDialog.Builder(this).setMessage(
                 msg).setNegativeButton(getString(android.R.string.cancel),
                 new OnClickListener() {
@@ -82,6 +83,7 @@ public class MainActivity extends Activity {
         @Override
         public void onReceive(Context context, Intent intent) {
             stopProgressBar();
+            createErrorDialog(intent.getStringExtra(PostRequestService.RESPONSE)).show();
         }
     }
 }
