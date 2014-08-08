@@ -9,7 +9,7 @@
     tools:context="com.example.be.ugent.zeus.slotmachien.MainActivity" >
 
     <Button
-        android:id="@id/openButton"
+        android:id="@+id/openButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minHeight="100dip"
@@ -20,7 +20,7 @@
         android:layout_toLeftOf="@id/statusButton" />
 
     <Button
-        android:id="@id/closeButton"
+        android:id="@+id/closeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minHeight="100dip"
@@ -31,7 +31,7 @@
         android:layout_toRightOf="@id/statusButton" />
 
     <Button
-        android:id="@id/statusButton"
+        android:id="@+id/statusButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
