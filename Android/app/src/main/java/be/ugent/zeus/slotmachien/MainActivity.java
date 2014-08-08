@@ -2,31 +2,52 @@ package be.ugent.zeus.slotmachien;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.util.concurrent.ExecutionException;
+
+import be.ugent.zeus.slotmachien.service.PostRequestService;
+import be.ugent.zeus.slotmachien.service.RequestService;
 
 public class MainActivity extends Activity {
 
     private ProgressBar progress;
+    private ResponseReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         progress = (ProgressBar)findViewById(R.id.progressBar1);
+
+        IntentFilter filter = new IntentFilter(ResponseReceiver.PROCESSED);
+        filter.addCategory(Intent.CATEGORY_DEFAULT);
+        receiver = new ResponseReceiver();
+        registerReceiver(receiver, filter);
     }
 
     public void onOpen(View view) throws InterruptedException, ExecutionException {
-        new PostRequestTask(this).execute(getResources().getString(R.string.open));
+        postRequest(getResources().getString(R.string.open));
     }
 
     public void onClose(View view) throws InterruptedException, ExecutionException {
-        new PostRequestTask(this).execute(getResources().getString(R.string.close));
+        postRequest(getResources().getString(R.string.close));
+    }
+
+    public void postRequest(String msg) {
+        Intent intent = new Intent(this, PostRequestService.class);
+        intent.putExtra(RequestService.MESSAGE, msg);
+        startService(intent);
+        startProgressBar();
     }
 
 
@@ -55,4 +76,15 @@ public class MainActivity extends Activity {
     public void stopProgressBar() {
         progress.setVisibility(View.GONE);
     }
+
+    public class ResponseReceiver extends BroadcastReceiver {
+        public static final String PROCESSED = "be.ugent.zeus.slotmachien.PROCESSED";
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            stopProgressBar();
+        }
+    }
 }
+
+
