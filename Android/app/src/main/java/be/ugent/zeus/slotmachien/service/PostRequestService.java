@@ -23,18 +23,20 @@ public class PostRequestService extends RequestService {
         post.addHeader("Authorization", AUTHORIZATION);
 
         HttpResponse res = null;
+        String s = "Undefined";
         try {
             post.setEntity(new StringEntity("{ \"action\" : \"" + intent.getStringExtra(MESSAGE) + "\" }"));
-            System.out.println("executing");
             res = client.execute(post);
+            s = res.getStatusLine().getReasonPhrase() + " " + res.getStatusLine().getStatusCode();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            Intent broadcastIntent = new Intent();
-            broadcastIntent.setAction(MainActivity.ResponseReceiver.PROCESSED);
-            broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-            broadcastIntent.putExtra(RESPONSE, res.getStatusLine().getReasonPhrase() + " " + res.getStatusLine().getStatusCode());
-            sendBroadcast(broadcastIntent);
         }
+
+
+        Intent broadcastIntent = new Intent();
+        broadcastIntent.setAction(MainActivity.ResponseReceiver.PROCESSED);
+        broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+        broadcastIntent.putExtra(RESPONSE, s);
+        sendBroadcast(broadcastIntent);
     }
 }
