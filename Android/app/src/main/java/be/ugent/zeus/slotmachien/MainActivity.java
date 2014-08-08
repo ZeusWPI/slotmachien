@@ -11,7 +11,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import java.util.concurrent.ExecutionException;
 
@@ -27,7 +26,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        progress = (ProgressBar)findViewById(R.id.progressBar1);
+        progress = (ProgressBar) findViewById(R.id.progressBar1);
 
         IntentFilter filter = new IntentFilter(ResponseReceiver.PROCESSED);
         filter.addCategory(Intent.CATEGORY_DEFAULT);
