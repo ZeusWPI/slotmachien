@@ -7,7 +7,7 @@ android {
     defaultConfig {
         applicationId "be.ugent.zeus.slotmachien"
         minSdkVersion 10
-        targetSdkVersion 21
+        targetSdkVersion 20
     }
 
     buildTypes {
@@ -25,6 +25,6 @@ sourceSets {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:+'
-    compile 'com.android.support:appcompat-v7:+'
+    compile 'com.android.support:support-v4:20.+'
+    compile 'com.android.support:appcompat-v7:20.+'
 }
