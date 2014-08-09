@@ -11,17 +11,17 @@ import org.apache.http.params.HttpParams;
 import java.util.Properties;
 
 /**
- * Created by Lorin on 8/08/2014.
+ * Created by Lorin.
  */
 public abstract class RequestService extends IntentService {
 
     public static final String MESSAGE = "msg";
-    public static final String SLOTMACHIEN_URL;
-    public static final String AUTHORIZATION;
-    public static final String CONTENT_TYPE;
+    static final String SLOTMACHIEN_URL;
+    static final String AUTHORIZATION;
+    static final String CONTENT_TYPE;
     private static final int CONNECTION_TIMEOUT = 3000;
     private static final int SOCKET_TIMEOUT = 5000;
-    protected HttpClient client;
+    final HttpClient client;
 
     public RequestService() {
         super("RequestService");

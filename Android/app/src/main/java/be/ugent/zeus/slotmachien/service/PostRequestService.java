@@ -9,7 +9,7 @@ import org.apache.http.entity.StringEntity;
 import be.ugent.zeus.slotmachien.MainActivity;
 
 /**
- * Created by Lorin on 8/08/2014.
+ * Created by Lorin.
  */
 public class PostRequestService extends RequestService {
 
@@ -22,7 +22,7 @@ public class PostRequestService extends RequestService {
         post.addHeader("Content-Type", CONTENT_TYPE);
         post.addHeader("Authorization", AUTHORIZATION);
 
-        HttpResponse res = null;
+        HttpResponse res;
         String s = "Undefined";
         try {
             post.setEntity(new StringEntity("{ \"action\" : \"" + intent.getStringExtra(MESSAGE) + "\" }"));
@@ -31,7 +31,6 @@ public class PostRequestService extends RequestService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
         Intent broadcastIntent = new Intent();
         broadcastIntent.setAction(MainActivity.ResponseReceiver.PROCESSED);

@@ -34,15 +34,15 @@ public class MainActivity extends Activity {
         registerReceiver(receiver, filter);
     }
 
-    public void onOpen(View view) throws InterruptedException, ExecutionException {
+    public void onOpen(View view) {
         postRequest(getResources().getString(R.string.open));
     }
 
-    public void onClose(View view) throws InterruptedException, ExecutionException {
+    public void onClose(View view) {
         postRequest(getResources().getString(R.string.close));
     }
 
-    public void postRequest(String msg) {
+    void postRequest(String msg) {
         Intent intent = new Intent(this, PostRequestService.class);
         intent.putExtra(RequestService.MESSAGE, msg);
         startService(intent);
@@ -50,11 +50,11 @@ public class MainActivity extends Activity {
     }
 
 
-    public void onStatus(View view) throws InterruptedException, ExecutionException {
+    public void onStatus(View view) {
         //TODO
     }
 
-    public AlertDialog createErrorDialog(String msg) {
+    AlertDialog createErrorDialog(String msg) {
         System.out.println(msg);
         AlertDialog.Builder builder = new AlertDialog.Builder(this).setMessage(
                 msg).setNegativeButton(getString(android.R.string.cancel),
@@ -69,11 +69,11 @@ public class MainActivity extends Activity {
         return builder.create();
     }
 
-    public void startProgressBar() {
+    void startProgressBar() {
         progress.setVisibility(View.VISIBLE);
     }
 
-    public void stopProgressBar() {
+    void stopProgressBar() {
         progress.setVisibility(View.GONE);
     }
 
