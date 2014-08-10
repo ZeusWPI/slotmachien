@@ -21,7 +21,7 @@ public abstract class RequestService extends IntentService {
     public static final String CONTENT_TYPE;
     private static final int CONNECTION_TIMEOUT = 3000;
     private static final int SOCKET_TIMEOUT = 5000;
-    private final HttpClient client;
+    protected final HttpClient client;
 
     public RequestService() {
         super("RequestService");

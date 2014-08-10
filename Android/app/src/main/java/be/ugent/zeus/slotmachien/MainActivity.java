@@ -17,7 +17,7 @@ import be.ugent.zeus.slotmachien.service.RequestService;
 
 public class MainActivity extends Activity {
 
-    private ProgressBar spinner;
+    private ProgressBar requestProgressBar;
     private ResponseReceiver receiver;
     private IntentFilter filter;
 
@@ -25,7 +25,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        spinner = (ProgressBar) findViewById(R.id.spinner);
+        requestProgressBar = (ProgressBar) findViewById(R.id.requestProgressBar);
 
         filter = new IntentFilter(ResponseReceiver.PROCESSED);
         filter.addCategory(Intent.CATEGORY_DEFAULT);
@@ -34,11 +34,13 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onResume() {
+        super.onResume();
         registerReceiver(receiver, filter);
     }
 
     @Override
     protected void onPause() {
+        super.onPause();
         unregisterReceiver(receiver);
     }
 
@@ -79,11 +81,11 @@ public class MainActivity extends Activity {
     }
 
     private void startProgressBar() {
-        spinner.setVisibility(View.VISIBLE);
+        requestProgressBar.setVisibility(View.VISIBLE);
     }
 
     private void stopProgressBar() {
-        spinner.setVisibility(View.GONE);
+        requestProgressBar.setVisibility(View.GONE);
     }
 
     public class ResponseReceiver extends BroadcastReceiver {
