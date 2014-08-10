@@ -1,6 +1,14 @@
-#!/usr/bin/python
-from flup.server.fcgi import WSGIServer
-from app import app
+from app import app, db
+
+from auth import *
+from admin import admin
+from database import create_tables
+from models import *
+from views import *
+
+
+admin.setup()
 
 if __name__ == '__main__':
-    WSGIServer(app).run()
+    create_tables(auth)
+    WSGIServer(app, bindAddress='/var/spool/fcgi.sock').run()
