@@ -16,12 +16,12 @@ import java.util.Properties;
 public abstract class RequestService extends IntentService {
 
     public static final String MESSAGE = "msg";
-    static final String SLOTMACHIEN_URL;
-    static final String AUTHORIZATION;
-    static final String CONTENT_TYPE;
+    public static final String SLOTMACHIEN_URL;
+    public static final String AUTHORIZATION;
+    public static final String CONTENT_TYPE;
     private static final int CONNECTION_TIMEOUT = 3000;
     private static final int SOCKET_TIMEOUT = 5000;
-    final HttpClient client;
+    private final HttpClient client;
 
     public RequestService() {
         super("RequestService");

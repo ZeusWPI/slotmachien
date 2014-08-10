@@ -12,26 +12,34 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import java.util.concurrent.ExecutionException;
-
 import be.ugent.zeus.slotmachien.service.PostRequestService;
 import be.ugent.zeus.slotmachien.service.RequestService;
 
 public class MainActivity extends Activity {
 
-    private ProgressBar progress;
+    private ProgressBar spinner;
     private ResponseReceiver receiver;
+    private IntentFilter filter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        progress = (ProgressBar) findViewById(R.id.progressBar1);
+        spinner = (ProgressBar) findViewById(R.id.spinner);
 
-        IntentFilter filter = new IntentFilter(ResponseReceiver.PROCESSED);
+        filter = new IntentFilter(ResponseReceiver.PROCESSED);
         filter.addCategory(Intent.CATEGORY_DEFAULT);
         receiver = new ResponseReceiver();
+    }
+
+    @Override
+    protected void onResume() {
         registerReceiver(receiver, filter);
+    }
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(receiver);
     }
 
     public void onOpen(View view) {
@@ -42,7 +50,7 @@ public class MainActivity extends Activity {
         postRequest(getResources().getString(R.string.close));
     }
 
-    void postRequest(String msg) {
+    private void postRequest(String msg) {
         Intent intent = new Intent(this, PostRequestService.class);
         intent.putExtra(RequestService.MESSAGE, msg);
         startService(intent);
@@ -54,27 +62,28 @@ public class MainActivity extends Activity {
         //TODO
     }
 
-    AlertDialog createErrorDialog(String msg) {
+    private AlertDialog createErrorDialog(String msg) {
         System.out.println(msg);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this).setMessage(
-                msg).setNegativeButton(getString(android.R.string.cancel),
-                new OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setMessage(msg)
+                .setNegativeButton(getString(android.R.string.cancel),
+                        new OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        }
+                );
 
-                    }
-                }
-        );
         return builder.create();
     }
 
-    void startProgressBar() {
-        progress.setVisibility(View.VISIBLE);
+    private void startProgressBar() {
+        spinner.setVisibility(View.VISIBLE);
     }
 
-    void stopProgressBar() {
-        progress.setVisibility(View.GONE);
+    private void stopProgressBar() {
+        spinner.setVisibility(View.GONE);
     }
 
     public class ResponseReceiver extends BroadcastReceiver {
@@ -87,5 +96,3 @@ public class MainActivity extends Activity {
         }
     }
 }
-
-

@@ -41,7 +41,7 @@
         android:text="@string/close" />
 
     <ProgressBar
-        android:id="@+id/progressBar1"
+        android:id="@+id/spinner"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
