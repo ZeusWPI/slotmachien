@@ -6,58 +6,48 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.slotmachien.MainActivity" >
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="63dp"
-        android:text="SSID"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+    tools:context="be.ugent.zeus.slotmachien.MainActivity">
 
     <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/textView1"
-        android:minHeight="100dip"
-        android:minWidth="100dip"
-        android:onClick="onOpen"
-        android:text="Open" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/button1"
-        android:layout_alignBottom="@+id/button1"
-        android:layout_toRightOf="@+id/textView1"
-        android:minHeight="100dip"
-        android:minWidth="100dip"
-        android:onClick="onClose"
-        android:text="Close" />
-
-    <Button
-        android:id="@+id/button3"
+        android:id="@+id/statusButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="19dp"
         android:onClick="onStatus"
-        android:text="Status" />
+        android:text="@string/status" />
 
-    <ProgressBar
-        android:id="@+id/progressBar1"
-        style="?android:attr/progressBarStyleHorizontal"
+    <Button
+        android:id="@+id/openButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/button1"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/statusButton"
+        android:minHeight="100dip"
+        android:minWidth="100dip"
+        android:onClick="onOpen"
+        android:text="@string/open" />
+
+    <Button
+        android:id="@+id/closeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/openButton"
+        android:layout_toRightOf="@id/statusButton"
+        android:minHeight="100dip"
+        android:minWidth="100dip"
+        android:onClick="onClose"
+        android:text="@string/close" />
+
+    <ProgressBar
+        android:id="@+id/spinner"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/openButton"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="31dp" />
+        android:layout_marginTop="31dp"
+        android:visibility="gone" />
 
 </RelativeLayout>
