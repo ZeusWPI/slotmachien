@@ -11,4 +11,4 @@ admin.setup()
 
 if __name__ == '__main__':
     create_tables(auth)
-    WSGIServer(app, bindAddress='/var/spool/fcgi.sock').run()
+    WSGIServer(app).run()
