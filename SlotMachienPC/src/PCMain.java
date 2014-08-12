@@ -44,11 +44,9 @@ public class PCMain {
 			if (OUT_TOLK.containsKey(commando)) {
 				oStream.write(OUT_TOLK.get(commando));
 				oStream.flush();
-				if (commando.equals("status")) {
-					try(InputStream iStream = nxtComm.getInputStream()) {
-						byte b = (byte) iStream.read();
-						System.out.print(IN_TOLK.get(b));
-					}
+				try (InputStream iStream = nxtComm.getInputStream()) {
+					byte b = (byte) iStream.read();
+					System.out.print(IN_TOLK.get(b));
 				}
 			}
 		} catch (Exception ex) {
