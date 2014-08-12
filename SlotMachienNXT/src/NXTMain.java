@@ -13,6 +13,10 @@ import lejos.nxt.comm.NXTConnection;
 import lejos.nxt.comm.USB;
 import lejos.util.Delay;
 
+enum Status {
+	OPEN, CLOSED;
+}
+
 public class NXTMain {
 
 	private static final int POSITION_OPEN = 0;
@@ -24,7 +28,7 @@ public class NXTMain {
 	private static final int STEPPER_ANGLE = 20;
 	private static final int EXTREMUM_TO_OPEN = -440;
 
-	private static boolean status; // true: door unlocked; false: door locked.
+	private static Status status;
 
 	public static void main(String[] args) throws Exception {
 
@@ -34,7 +38,6 @@ public class NXTMain {
 		calibrate();
 
 		while (true) {
-
 			// Wait for incoming command
 			NXTConnection conn = USB.waitForConnection();
 			DataInputStream dis = conn.openDataInputStream();
@@ -54,11 +57,11 @@ public class NXTMain {
 		switch (b) {
 		case 1: // open de door
 			turnTo(POSITION_OPEN);
-			status = true;
+			status = Status.OPEN;
 			break;
 		case 2: // close de door
 			turnTo(POSITION_CLOSED);
-			status = false;
+			status = Status.CLOSED;
 			break;
 		case 3: // send status to slotmachienPC
 			sendStatus(conn);
@@ -92,11 +95,11 @@ public class NXTMain {
 	// check door status
 	public static boolean checkStatus() {
 		if (Motor.B.getTachoCount() < OPEN_LIMIT_BEFORE_DEADZONE
-				&& status) {
+				&& status == Status.OPEN ) {
 			return true;
 		}
 		if (Motor.B.getTachoCount() > CLOSED_LIMIT_BEFORE_DEADZONE
-				&& !status) {
+				&& status == Status.CLOSED) {
 			return false;
 		}
 
@@ -131,7 +134,7 @@ public class NXTMain {
 		Motor.B.flt();
 		Motor.C.flt();
 
-		status = true;
+		status = Status.OPEN;
 
 		drawString("calibrated");
 	}
@@ -139,7 +142,7 @@ public class NXTMain {
 	public static void sendStatus(NXTConnection conn) {
 		DataOutputStream dos = conn.openDataOutputStream();
 		byte b = 0;
-		if (!status) {
+		if (status == Status.CLOSED) {
 			b = 1;
 		}
 		try {
