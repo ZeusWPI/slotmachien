@@ -67,10 +67,12 @@ public class NXTMain {
 		case 1: // open de door
 			turnTo(POSITION_OPEN);
 			status = Status.OPEN;
+			sendStatus(conn);
 			break;
 		case 2: // close de door
 			turnTo(POSITION_CLOSED);
 			status = Status.CLOSED;
+			sendStatus(conn);
 			break;
 		case 3: // send status to slotmachienPC
 			sendStatus(conn);
