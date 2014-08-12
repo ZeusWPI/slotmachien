@@ -1,5 +1,5 @@
 from datetime import datetime as dt
-import subprocess
+from subprocess import Popen, PIPE
 
 from flask import jsonify
 
@@ -10,12 +10,22 @@ from models import LogAction
 
 def send_command(command):
     log_action(command)
-    if command == 'status':
-        return jsonify({'error': 'NotImplementedError'})
 
-    if not app.config['DEBUG']:
-        subprocess.call(['cd ../SlotMachienPC/src && sudo java -classpath /opt/leJOS_NXJ/lib/pc/pccomm.jar:. PCMain ' + command], shell=True)
-    return jsonify({'status': command})
+    if app.config['DEBUG']:
+        response = 'error'
+    else:
+        p = Popen(['cd ../SlotMachienPC/src && ' +
+                   'java -cp /opt/leJOS_NXJ/lib/pc/pccomm.jar:. PCMain ' +
+                   command], stdin=PIPE, stdout=PIPE, shell=True)
+        rc = p.wait(timeout=10)  # 10 seconds
+        output, error = p.communicate()
+        if rc == 0 and len(output) > 0:
+            # success
+            response = output.strip()
+        else:
+            response = 'error'
+
+    return jsonify({'status': response})
 
 
 def log_action(action):
