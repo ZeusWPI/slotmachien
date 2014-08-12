@@ -46,7 +46,7 @@ public class PCMain {
 				oStream.flush();
 				try (InputStream iStream = nxtComm.getInputStream()) {
 					byte b = (byte) iStream.read();
-					System.out.print(IN_TOLK.get(b));
+					System.out.println(IN_TOLK.get(b));
 				}
 			}
 		} catch (Exception ex) {

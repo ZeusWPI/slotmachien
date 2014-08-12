@@ -13,7 +13,7 @@ import lejos.nxt.comm.USB;
 import lejos.util.Delay;
 
 enum Status {
-	OPEN(0), CLOSED(1);
+	OPEN(0), CLOSED(1), DEADZONED(2);
 
 	private byte b;
 
@@ -34,14 +34,16 @@ public class NXTMain {
 	private static final int OPEN_LIMIT_BEFORE_DEADZONE = 40;
 	private static final int CLOSED_LIMIT_BEFORE_DEADZONE = 100;
 
-	private static final int STEPPER_ANGLE = 20;
 	private static final int EXTREMUM_TO_OPEN = -440;
-
-	private static Status status;
+	
+	private static final int ALLOWED_TACHO_MARGIN = 3;
 
 	public static void main(String[] args) throws Exception {
 
 		addButtonListeners();
+		
+		Motor.B.setStallThreshold(5, 200);
+		Motor.C.setStallThreshold(5, 200);
 
 		// initial calibration
 		calibrate();
@@ -66,20 +68,16 @@ public class NXTMain {
 		switch (b) {
 		case 1: // open de door
 			turnTo(POSITION_OPEN);
-			status = Status.OPEN;
-			sendStatus(conn);
 			break;
 		case 2: // close de door
 			turnTo(POSITION_CLOSED);
-			status = Status.CLOSED;
-			sendStatus(conn);
 			break;
-		case 3: // send status to slotmachienPC
-			sendStatus(conn);
+		case 3: // send status to slotmachienPC;
 			break;
 		}
-		drawString(checkStatus() ? "open" : "closed");
-
+		Status status = getStatus();
+		sendStatus(conn, status);
+		drawString(status.toString());
 	}
 
 	public static void turn(int turn) {
@@ -91,75 +89,78 @@ public class NXTMain {
 		Motor.B.flt();
 		Motor.C.flt();
 	}
-
-	// CODE DUPLICATION !!!1!!
+	
 	public static void turnTo(int turn) {
+		turnTo(turn, true);
+	}
+
+	public static void turnTo(int turn, boolean pingpong) {
 		// IK GA HARD MAN
+		int prevPos = Motor.B.getTachoCount();
 		Motor.B.setSpeed(900);
 		Motor.C.setSpeed(900);
 		Motor.B.rotateTo(turn, true);
-		Motor.C.rotateTo(turn);
+		Motor.C.rotateTo(turn, true);
+		while ((Motor.B.isMoving() && Motor.C.isMoving())) {
+			//wait for the motors to stop moving
+		}
+		if ( ( Motor.B.getTachoCount() > turn + ALLOWED_TACHO_MARGIN ||
+				Motor.B.getTachoCount() < turn - ALLOWED_TACHO_MARGIN ) &&
+				pingpong) {
+			turnTo(prevPos,false);
+		}
 		Motor.B.flt();
 		Motor.C.flt();
 	}
 
 	// check door status
-	public static boolean checkStatus() {
-		if (Motor.B.getTachoCount() < OPEN_LIMIT_BEFORE_DEADZONE
-				&& status == Status.OPEN) {
-			return true;
+	public static Status getStatus() {
+		if (Motor.B.getTachoCount() < OPEN_LIMIT_BEFORE_DEADZONE) {
+			return Status.OPEN;
 		}
-		if (Motor.B.getTachoCount() > CLOSED_LIMIT_BEFORE_DEADZONE
-				&& status == Status.CLOSED) {
-			return false;
+		if (Motor.B.getTachoCount() > CLOSED_LIMIT_BEFORE_DEADZONE) {
+			return Status.CLOSED;
 		}
-
-		/* If no status could be determined, recalibrate because
-		 *  the physical lock angle is located in the deadzone, or
-		 * the current STATUS does not match the physical lock status
-		 */
-		calibrate();
-		return true;
+		return Status.DEADZONED;
 	}
 
 	public static void drawString(String s) {
 		LCD.clear();
 		LCD.drawString(s, 0, 0);
-		Delay.msDelay(500);
 	}
 
 	public static void calibrate() {
 		drawString("calibrating");
-		// Turn to extremum as calibration point (in steps of 20)
-		Motor.B.setStallThreshold(5, 500);
-		while (!Motor.B.isStalled()) {
-			turn(STEPPER_ANGLE);
+		Motor.B.setSpeed(400);
+		Motor.C.setSpeed(400);
+		Motor.B.forward();
+		Motor.C.forward();
+		while (!(Motor.B.isStalled() || Motor.C.isStalled())) {
+			//wait for the motors to stall
 		}
-		// Turn to open position
-		turn(EXTREMUM_TO_OPEN);
 
-		// Calibrate open position to 0
-		Delay.msDelay(200);
 		Motor.B.resetTachoCount();
 		Motor.C.resetTachoCount();
-
-		// shit's fucked, yo
+		
+		turnTo(EXTREMUM_TO_OPEN,false);
+		
+		Motor.B.resetTachoCount();
+		Motor.C.resetTachoCount();
+		
 		Motor.B.flt();
 		Motor.C.flt();
-
-		status = Status.OPEN;
-
-		drawString(checkStatus() ? "open" : "closed");
+		
+		drawString(getStatus().toString());
 	}
 
-	public static void sendStatus(NXTConnection conn) {
+	public static void sendStatus(NXTConnection conn, Status status) {
 		drawString("waiting for stream");
 		try (DataOutputStream dos = conn.openDataOutputStream()) {
 			drawString("outputstream opened");
 			dos.write(status.toByte());
 			dos.flush();
 			drawString("byte sent");
-		} catch (IOException e) {
+		} catch (IOException|NullPointerException e) {
 			drawString("could not send status");
 		}
 	}
@@ -171,7 +172,6 @@ public class NXTMain {
 			}
 
 			public void buttonReleased(Button b) {
-				drawString(checkStatus() ? "open" : "closed");
 			}
 		});
 		Button.RIGHT.addButtonListener(new ButtonListener() {
@@ -180,17 +180,17 @@ public class NXTMain {
 			}
 
 			public void buttonReleased(Button b) {
-				drawString(checkStatus() ? "open" : "closed");
 			}
 		});
 		Button.ENTER.addButtonListener(new ButtonListener() {
 			public void buttonPressed(Button b) {
+				
 				// MAAK KABAAL LOL
 				drawString("LOLOLOLOLOLOLOL");
 				File muziekje = new File("muziekje.wav");
 				Sound.playSample(muziekje, 100);
 				Delay.msDelay(11000);
-				drawString(checkStatus() ? "open" : "closed");
+				drawString(getStatus().toString());
 			}
 
 			public void buttonReleased(Button b) {
@@ -199,7 +199,7 @@ public class NXTMain {
 		});
 		Button.ESCAPE.addButtonListener(new ButtonListener() {
 			public void buttonPressed(Button b) {
-				calibrate();
+				System.exit(0);
 			}
 
 			public void buttonReleased(Button b) {
