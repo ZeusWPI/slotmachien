@@ -114,9 +114,10 @@ public class NXTMain {
 			return false;
 		}
 
-		// If no status could be determined, recalibrate because
-		// the physical lock angle is located in the deadzone, or
-		// the current STATUS does not match the physical lock status
+		/* If no status could be determined, recalibrate because
+		 *  the physical lock angle is located in the deadzone, or
+		 * the current STATUS does not match the physical lock status
+		 */
 		calibrate();
 		return true;
 	}
