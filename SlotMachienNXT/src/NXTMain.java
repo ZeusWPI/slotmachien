@@ -146,7 +146,7 @@ public class NXTMain {
 
 		status = Status.OPEN;
 
-		drawString("calibrated");
+		drawString(checkStatus() ? "open" : "closed");
 	}
 
 	public static void sendStatus(NXTConnection conn) {
@@ -186,7 +186,7 @@ public class NXTMain {
 				drawString("LOLOLOLOLOLOLOL");
 				File muziekje = new File("muziekje.wav");
 				Sound.playSample(muziekje, 100);
-				Delay.msDelay(12000);
+				Delay.msDelay(11000);
 				drawString(checkStatus() ? "open" : "closed");
 			}
 
@@ -196,10 +196,7 @@ public class NXTMain {
 		});
 		Button.ESCAPE.addButtonListener(new ButtonListener() {
 			public void buttonPressed(Button b) {
-				// TO BE REPLACED WITH "calibrate()" BEFORE DEPLOYMENT
-				// CURRENTLY FOR DEBUGGING ONLY
-
-				System.exit(0);
+				calibrate();
 			}
 
 			public void buttonReleased(Button b) {
