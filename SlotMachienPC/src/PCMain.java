@@ -34,9 +34,12 @@ public class PCMain {
 			IOException, InterruptedException {
 
 		// communicatie opstellen met de brick
+		PrintStream oldOut = System.out;
+		System.setOut(System.err);
 		NXTComm nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
 		NXTInfo[] nxtInfo = nxtComm.search(null);
 		nxtComm.open(nxtInfo[0]);
+		System.setOut(oldOut);
 
 		// datastream richting brick opstellen op basis van de stdin
 		try (OutputStream oStream = nxtComm.getOutputStream()) {
@@ -53,6 +56,7 @@ public class PCMain {
 			ex.printStackTrace(System.err);
 			System.exit(1);
 		}
+
 		nxtComm.close();
 	}
 }
