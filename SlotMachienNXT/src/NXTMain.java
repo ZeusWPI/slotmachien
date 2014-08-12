@@ -1,4 +1,3 @@
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -15,13 +14,13 @@ import lejos.util.Delay;
 
 enum Status {
 	OPEN(0), CLOSED(1);
-	
+
 	private byte b;
 
 	private Status(int b) {
 		this.b = (byte) b;
 	}
-	
+
 	public byte toByte() {
 		return b;
 	}
@@ -62,7 +61,7 @@ public class NXTMain {
 		}
 
 	}
-	
+
 	public static void runCode(byte b, NXTConnection conn) {
 		switch (b) {
 		case 1: // open de door
@@ -105,7 +104,7 @@ public class NXTMain {
 	// check door status
 	public static boolean checkStatus() {
 		if (Motor.B.getTachoCount() < OPEN_LIMIT_BEFORE_DEADZONE
-				&& status == Status.OPEN ) {
+				&& status == Status.OPEN) {
 			return true;
 		}
 		if (Motor.B.getTachoCount() > CLOSED_LIMIT_BEFORE_DEADZONE
@@ -152,22 +151,20 @@ public class NXTMain {
 
 	public static void sendStatus(NXTConnection conn) {
 		drawString("waiting for stream");
-		DataOutputStream dos = conn.openDataOutputStream();
-		drawString("outputstream opened");
-		try {
+		try (DataOutputStream dos = conn.openDataOutputStream()) {
+			drawString("outputstream opened");
 			dos.write(status.toByte());
 			dos.flush();
-			dos.close();
 			drawString("byte sent");
 		} catch (IOException e) {
-			e.printStackTrace();
+			drawString("could not send status");
 		}
 	}
 
 	public static void addButtonListeners() {
 		Button.LEFT.addButtonListener(new ButtonListener() {
 			public void buttonPressed(Button b) {
-				runCode((byte) 1, null); //I highly doubt this is good practice
+				runCode((byte) 1, null); // I highly doubt this is good practice
 			}
 
 			public void buttonReleased(Button b) {
@@ -176,7 +173,7 @@ public class NXTMain {
 		});
 		Button.RIGHT.addButtonListener(new ButtonListener() {
 			public void buttonPressed(Button b) {
-				runCode((byte) 2, null); //I highly doubt this is good practice
+				runCode((byte) 2, null); // I highly doubt this is good practice
 			}
 
 			public void buttonReleased(Button b) {

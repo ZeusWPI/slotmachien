@@ -21,15 +21,14 @@ public class PCMain {
 			put("status", (byte) 3);
 		}
 	};
-	
+
 	private static final Map<Byte, String> IN_TOLK = new HashMap<Byte, String>() {
 
 		{
 			put((byte) 0, "open");
 			put((byte) 1, "closed");
 		}
-	};	 
-	
+	};
 
 	public static void main(String[] args) throws NXTCommException,
 			IOException, InterruptedException {
@@ -38,32 +37,24 @@ public class PCMain {
 		NXTComm nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
 		NXTInfo[] nxtInfo = nxtComm.search(null);
 		nxtComm.open(nxtInfo[0]);
-		
-		try {
-			// datastream richting brick opstellen op basis van de stdin
-			OutputStream oStream = nxtComm.getOutputStream();
-			try {
-				String commando = args[0].toLowerCase();
-				if (OUT_TOLK.containsKey(commando)) {
-					oStream.write(OUT_TOLK.get(commando));
-					oStream.flush();
-					if (OUT_TOLK.get(commando) == (byte) 3) {
-						InputStream iStream = nxtComm.getInputStream();
-						System.out.println("stream established");
+
+		// datastream richting brick opstellen op basis van de stdin
+		try (OutputStream oStream = nxtComm.getOutputStream()) {
+			String commando = args[0].toLowerCase();
+			if (OUT_TOLK.containsKey(commando)) {
+				oStream.write(OUT_TOLK.get(commando));
+				oStream.flush();
+				if (commando.equals("status")) {
+					try(InputStream iStream = nxtComm.getInputStream()) {
 						byte b = (byte) iStream.read();
 						System.out.print(IN_TOLK.get(b));
-						iStream.close();
 					}
 				}
-			} catch (Exception ex) {
-				ex.printStackTrace(System.err);
-			} finally {
-				oStream.close();
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace(System.err);
-		} finally {
-			nxtComm.close();
+			System.exit(1);
 		}
+		nxtComm.close();
 	}
 }
