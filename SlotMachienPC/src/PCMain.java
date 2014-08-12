@@ -25,8 +25,8 @@ public class PCMain {
 	private static final Map<Byte, String> IN_TOLK = new HashMap<Byte, String>() {
 
 		{
-			put((byte) 1, "open");
-			put((byte) 2, "close");
+			put((byte) 0, "open");
+			put((byte) 1, "closed");
 		}
 	};	 
 	

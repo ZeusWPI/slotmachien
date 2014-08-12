@@ -14,7 +14,17 @@ import lejos.nxt.comm.USB;
 import lejos.util.Delay;
 
 enum Status {
-	OPEN, CLOSED;
+	OPEN(0), CLOSED(1);
+	
+	private byte b;
+
+	private Status(int b) {
+		this.b = (byte) b;
+	}
+	
+	public byte toByte() {
+		return b;
+	}
 }
 
 public class NXTMain {
@@ -54,7 +64,6 @@ public class NXTMain {
 	}
 	
 	public static void runCode(byte b, NXTConnection conn) {
-		drawString("recieved" + b);
 		switch (b) {
 		case 1: // open de door
 			turnTo(POSITION_OPEN);
@@ -145,13 +154,8 @@ public class NXTMain {
 		drawString("waiting for stream");
 		DataOutputStream dos = conn.openDataOutputStream();
 		drawString("outputstream opened");
-		byte b = 0;
-		if (status == Status.CLOSED) {
-			b = 1;
-		}
-		Delay.msDelay(1000);
 		try {
-			dos.write(b);
+			dos.write(status.toByte());
 			dos.flush();
 			dos.close();
 			drawString("byte sent");
