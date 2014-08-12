@@ -11,7 +11,7 @@ import lejos.pc.comm.NXTInfo;
 
 public class PCMain {
 
-	private static final Map<String, Byte> TOLK = new HashMap<String, Byte>() {
+	private static final Map<String, Byte> OUT_TOLK = new HashMap<String, Byte>() {
 
 		private static final long serialVersionUID = 1L;
 
@@ -21,6 +21,15 @@ public class PCMain {
 			put("status", (byte) 3);
 		}
 	};
+	
+	private static final Map<Byte, String> IN_TOLK = new HashMap<Byte, String>() {
+
+		{
+			put((byte) 1, "open");
+			put((byte) 2, "close");
+		}
+	};	 
+	
 
 	public static void main(String[] args) throws NXTCommException,
 			IOException, InterruptedException {
@@ -29,19 +38,22 @@ public class PCMain {
 		NXTComm nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
 		NXTInfo[] nxtInfo = nxtComm.search(null);
 		nxtComm.open(nxtInfo[0]);
+		
 		try {
 			// datastream richting brick opstellen op basis van de stdin
 			OutputStream oStream = nxtComm.getOutputStream();
 			try {
 				String commando = args[0].toLowerCase();
-				if (TOLK.containsKey(commando)) {
-					oStream.write(TOLK.get(commando));
-					if (TOLK.get(commando) == 3) {
+				if (OUT_TOLK.containsKey(commando)) {
+					oStream.write(OUT_TOLK.get(commando));
+					oStream.flush();
+					if (OUT_TOLK.get(commando) == (byte) 3) {
 						InputStream iStream = nxtComm.getInputStream();
-						System.out.print((byte) iStream.read());
+						System.out.println("stream established");
+						byte b = (byte) iStream.read();
+						System.out.print(IN_TOLK.get(b));
 						iStream.close();
 					}
-					oStream.flush();
 				}
 			} catch (Exception ex) {
 				ex.printStackTrace(System.err);

@@ -54,6 +54,7 @@ public class NXTMain {
 	}
 	
 	public static void runCode(byte b, NXTConnection conn) {
+		drawString("recieved" + b);
 		switch (b) {
 		case 1: // open de door
 			turnTo(POSITION_OPEN);
@@ -113,6 +114,7 @@ public class NXTMain {
 	public static void drawString(String s) {
 		LCD.clear();
 		LCD.drawString(s, 0, 0);
+		Delay.msDelay(500);
 	}
 
 	public static void calibrate() {
@@ -140,15 +142,19 @@ public class NXTMain {
 	}
 
 	public static void sendStatus(NXTConnection conn) {
+		drawString("waiting for stream");
 		DataOutputStream dos = conn.openDataOutputStream();
+		drawString("outputstream opened");
 		byte b = 0;
 		if (status == Status.CLOSED) {
 			b = 1;
 		}
+		Delay.msDelay(1000);
 		try {
 			dos.write(b);
 			dos.flush();
 			dos.close();
+			drawString("byte sent");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
