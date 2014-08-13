@@ -12,6 +12,7 @@ def has_auth_key():
     # Token support for slack, because it doesn't support customizing headers out of the box
     auth_key = (request.headers.get('Authorization') or
                 request.args.get('token') or
+                request.form.get('token') or
                 request.get_json(force=True).get('token')) # token in POST payload
     try:
         return AuthKey.get(AuthKey.key == auth_key)
