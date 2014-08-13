@@ -11,7 +11,15 @@ class AuthKey(db.Model):
         return '%s' % self.service
 
 
+class AcceptedUser(db.Model):
+    username = TextField()
+
+    def __unicode__(self):
+        return '%s' % self.username
+
+
 class LogAction(db.Model):
     auth_key = ForeignKeyField(AuthKey, related_name='actions')
+    user = ForeignKeyField(AcceptedUser, related_name='actions')
     action = TextField()
     logged_on = DateTimeField()
