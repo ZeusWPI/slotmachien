@@ -4,7 +4,7 @@ from subprocess import Popen, PIPE
 from flask import jsonify
 
 from app import app
-from auth import has_auth_key
+from auth import has_auth_key, has_username
 from models import LogAction
 
 
@@ -29,4 +29,4 @@ def send_command(command):
 
 
 def log_action(action):
-    LogAction.create(auth_key=has_auth_key(), action=action, logged_on=dt.now())
+    LogAction.create(auth_key=has_auth_key(), user=has_username(), action=action, logged_on=dt.now())

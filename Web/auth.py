@@ -2,7 +2,7 @@ from flask import abort, request
 from flask_peewee.auth import Auth
 
 from app import app, db
-from models import AuthKey
+from models import AuthKey, AcceptedUser
 
 def create_auth(app, db):
    return Auth(app, db)
@@ -20,9 +20,19 @@ def has_auth_key():
         return None
 
 
+def has_username():
+    username = (request.args.get('user_name') or
+                request.form.get('user_name') or
+                request.get_json(force=True).get('user_name'))
+    try:
+        print AcceptedUser.get(AcceptedUser.username == username)
+        return AcceptedUser.get(AcceptedUser.username == username)
+    except AcceptedUser.DoesNotExist:
+        return None
+
 # Method before request to check if allowed to make request
 def before_slotmachien_request():
-    if not has_auth_key():
+    if not has_auth_key() or not has_username():
         abort(401)
 
 
