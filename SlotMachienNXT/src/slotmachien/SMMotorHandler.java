@@ -36,7 +36,11 @@ public class SMMotorHandler {
             //wait for the motors to stop moving
         }
         //if the motor is not in the projected area after turning, undo the turn
+<<<<<<< HEAD
         if (( motorblock.getTachoCount() > turn + ALLOWED_TACHO_MARGIN ||
+=======
+        if ( ( motorblock.getTachoCount() > turn + ALLOWED_TACHO_MARGIN ||
+>>>>>>> 81715391208f049ca84df07f96f84b9098e2dada
                 motorblock.getTachoCount() < turn - ALLOWED_TACHO_MARGIN ) &&
                 allowUndoTurn) {
             turnTo(prevPos,false);
@@ -53,7 +57,11 @@ public class SMMotorHandler {
 
         motorblock.resetTachoCount();
         
+<<<<<<< HEAD
         turnTo(EXTREMUM_TO_OPEN, false);
+=======
+        turnTo(EXTREMUM_TO_OPEN,false);
+>>>>>>> 81715391208f049ca84df07f96f84b9098e2dada
         
         motorblock.resetTachoCount();
         

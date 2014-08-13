@@ -12,4 +12,5 @@ public enum Status {
     public byte toByte() {
         return b;
     }
+
 }

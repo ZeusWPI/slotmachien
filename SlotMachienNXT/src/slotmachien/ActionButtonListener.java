@@ -7,7 +7,7 @@ import lejos.nxt.ButtonListener;
 public class ActionButtonListener implements ButtonListener {
     private Action action;
     
-    public ActionButtonListener(Action action){
+    public ActionButtonListener(Action action) {
         this.action = action;
     }
 
