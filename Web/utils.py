@@ -17,7 +17,7 @@ def send_command(command):
         p = Popen(['cd ../SlotMachienPC/src && ' +
                    'java -cp /opt/leJOS_NXJ/lib/pc/pccomm.jar:. PCMain ' +
                    command], stdin=PIPE, stdout=PIPE, shell=True)
-        rc = p.wait(timeout=10)  # 10 seconds
+        rc = p.wait()
         output, error = p.communicate()
         if rc == 0 and len(output) > 0:
             # success
