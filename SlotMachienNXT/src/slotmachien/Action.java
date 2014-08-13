@@ -1,5 +1,5 @@
 package slotmachien;
 
 public interface Action {
-	public void performAction();
+    public void performAction();
 }
