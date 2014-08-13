@@ -25,7 +25,6 @@ def has_username():
                 request.form.get('user_name') or
                 request.get_json(force=True).get('user_name'))
     try:
-        print AcceptedUser.get(AcceptedUser.username == username)
         return AcceptedUser.get(AcceptedUser.username == username)
     except AcceptedUser.DoesNotExist:
         return None
