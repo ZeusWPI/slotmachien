@@ -33,6 +33,8 @@ public class NXTMain {
                 new TurnToAction(MOTORS, POSITION_CLOSED)));
         Button.ENTER.addButtonListener(new ActionButtonListener(
                 new CenterAction()));
+        Button.ESCAPE.addButtonListener(new ActionButtonListener(
+                new EscapeAction()));
 
         // initial calibration
         drawString("calibrating");
