@@ -24,10 +24,10 @@ public class PCMain {
 	};
 
 	private static final Map<Byte, String> IN_TOLK = new HashMap<Byte, String>() {
-
 		{
 			put((byte) 0, "open");
 			put((byte) 1, "closed");
+			put((byte) 2, "deadzoned");
 		}
 	};
 
