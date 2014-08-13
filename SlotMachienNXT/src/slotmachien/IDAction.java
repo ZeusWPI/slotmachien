@@ -1,11 +1,10 @@
 package slotmachien;
 
 //Identity Action
-public class IDAction implements Action{
+public class IDAction implements Action {
 
-	@Override
-	public void performAction() {
-		//Do Nothing
-	}
-
+    @Override
+    public void performAction() {
+        //Do Nothing
+    }
 }
