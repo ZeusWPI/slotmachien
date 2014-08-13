@@ -20,8 +20,8 @@ def close_door():
 
 @slotmachien_bp.route('/', methods=['POST'])
 def update_door():
-    return send_command(request.get_json(force=True)['action'])
-
+    return send_command((request.form.get('text') or # slack support
+                         request.get_json(force=True)['action']))
 
 @slotmachien_bp.route('/')
 def status_door():

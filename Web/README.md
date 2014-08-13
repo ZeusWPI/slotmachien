@@ -35,7 +35,9 @@ Header set the `Content-Type: application/json`
 With payload
 ```javascript
 {
-    "action": "open"
+    "action": "open",
+    "token": "<secret-token>",
+    "user_name": "<whitelisted username>"
 }
 ```
 Possible action keywords are: open, close
