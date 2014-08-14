@@ -36,7 +36,7 @@ public class NXTMain {
         Button.ENTER.addButtonListener(new ActionButtonListener(
                 new CenterAction()));
         Button.ESCAPE.addButtonListener(new ActionButtonListener(
-                new EscapeAction(MOTORS, POSITION_CLOSED, DELAY_BEFORE_DELAYED_CLOSE)));
+                new DelayedCloseAction(MOTORS, POSITION_CLOSED, DELAY_BEFORE_DELAYED_CLOSE)));
 
         // initial calibration
         drawString("calibrating");
