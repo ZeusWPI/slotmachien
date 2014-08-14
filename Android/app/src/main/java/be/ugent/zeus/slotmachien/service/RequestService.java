@@ -16,11 +16,19 @@ import java.util.Properties;
 public abstract class RequestService extends IntentService {
 
     public static final String MESSAGE = "msg";
+    public static final String RESPONSE = "RESPONSE";
+    public static final String SUCCESS = "SUCCESS";
+
     public static final String SLOTMACHIEN_URL;
     public static final String AUTHORIZATION;
     public static final String CONTENT_TYPE;
+    //TEMPORARY USER_NAME CONSTANT
+    public static final String USER_NAME;
+
     private static final int CONNECTION_TIMEOUT = 3000;
     private static final int SOCKET_TIMEOUT = 5000;
+
+
     protected final HttpClient client;
 
     public RequestService() {
@@ -32,6 +40,7 @@ public abstract class RequestService extends IntentService {
 
         this.client = new DefaultHttpClient(params);
     }
+
 
     // TODO Fix this horrible shit
     static {
@@ -45,5 +54,6 @@ public abstract class RequestService extends IntentService {
         SLOTMACHIEN_URL = p.getProperty("slotmachien_url");
         AUTHORIZATION = p.getProperty("authorization");
         CONTENT_TYPE = p.getProperty("content_type");
+        USER_NAME = p.getProperty("user_name");
     }
 }

@@ -8,16 +8,19 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import be.ugent.zeus.slotmachien.service.GetRequestService;
 import be.ugent.zeus.slotmachien.service.PostRequestService;
 import be.ugent.zeus.slotmachien.service.RequestService;
 
 public class MainActivity extends Activity {
 
-    private ProgressBar requestProgressBar;
     private ResponseReceiver receiver;
     private IntentFilter filter;
 
@@ -25,7 +28,6 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        requestProgressBar = (ProgressBar) findViewById(R.id.requestProgressBar);
 
         filter = new IntentFilter(ResponseReceiver.PROCESSED);
         filter.addCategory(Intent.CATEGORY_DEFAULT);
@@ -59,13 +61,18 @@ public class MainActivity extends Activity {
         startProgressBar();
     }
 
+    private void getRequest(String msg) {
+        Intent intent = new Intent(this, GetRequestService.class);
+        intent.putExtra(RequestService.MESSAGE, msg);
+        startService(intent);
+        startProgressBar();
+    }
 
     public void onStatus(View view) {
-        //TODO
+        getRequest("status");
     }
 
     private AlertDialog createErrorDialog(String msg) {
-        System.out.println(msg);
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
                 .setMessage(msg)
                 .setNegativeButton(getString(android.R.string.cancel),
@@ -80,12 +87,24 @@ public class MainActivity extends Activity {
         return builder.create();
     }
 
+    private void changeText(String s, Status status) {
+        TextView t = (TextView) findViewById(R.id.statusText);
+        t.setText(s);
+
+        t.setTextColor(status.getColor());
+    }
+
+    private ProgressBar getRequestProgressBar() {
+        return (ProgressBar) findViewById(R.id.requestProgressBar);
+    }
+
     private void startProgressBar() {
-        requestProgressBar.setVisibility(View.VISIBLE);
+        changeText("Processing...", Status.PROCESSING);
+        getRequestProgressBar().setVisibility(View.VISIBLE);
     }
 
     private void stopProgressBar() {
-        requestProgressBar.setVisibility(View.GONE);
+        getRequestProgressBar().setVisibility(View.GONE);
     }
 
     public class ResponseReceiver extends BroadcastReceiver {
@@ -94,7 +113,9 @@ public class MainActivity extends Activity {
         @Override
         public void onReceive(Context context, Intent intent) {
             stopProgressBar();
-            createErrorDialog(intent.getStringExtra(PostRequestService.RESPONSE)).show();
+            String res = intent.getStringExtra(PostRequestService.RESPONSE);
+            boolean b = intent.getBooleanExtra(RequestService.SUCCESS, false);
+            changeText(res, b ? Status.OK : Status.ERROR);
         }
     }
 }
