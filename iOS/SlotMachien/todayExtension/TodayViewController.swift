@@ -24,18 +24,7 @@ class TodayViewController: UIViewController {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        Settings.sharedInstance.doRequest("status", succes: { (response) -> () in
-            self.label?.text = response
-            var responseStatus = Status(status: response)
-            responseStatus.next()
-            self.toggleButton?.setTitle(responseStatus.asAction(), forState: UIControlState.Normal)
-            self.status = Status(status: response)
-            return
-        }) { (error) -> () in
-            self.label?.text = error
-            self.status = .error
-            return
-        }
+        Settings.sharedInstance.doRequest("status", succes: setResponse, error: setError)
     }
     
     override func didReceiveMemoryWarning() {
@@ -55,19 +44,22 @@ class TodayViewController: UIViewController {
     
     @IBAction func toggleDoorStatus() {
         self.status.next()
-        Settings.sharedInstance.doRequest(status.asAction(), succes: { (response) -> () in
-            self.label?.text = response
-            var responseStatus = Status(status: response)
-            responseStatus.next()
-            self.toggleButton?.setTitle(responseStatus.asAction(), forState: UIControlState.Normal)
-            self.status = Status(status: response)
-            return
-        }) { (error) -> () in
-            self.label?.text = error
-            self.status = .error
-            self.toggleButton?.setTitle("refresh", forState: UIControlState.Normal)
-            return
-        }
+        Settings.sharedInstance.doRequest(status.asAction(), succes: setResponse, error: setError)
     }
     
+    func setResponse(response: String) -> () {
+        self.label?.text = response
+        var responseStatus = Status(status: response)
+        responseStatus.next()
+        self.toggleButton?.setTitle(responseStatus.asAction(), forState: UIControlState.Normal)
+        self.status = Status(status: response)
+        return
+    }
+    
+    func setError(error: String) -> () {
+        self.label?.text = error
+        self.status = .error
+        self.toggleButton?.setTitle("refresh", forState: UIControlState.Normal)
+        return
+    }
 }
