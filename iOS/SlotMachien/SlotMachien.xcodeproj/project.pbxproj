@@ -56,24 +56,6 @@
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		90EFB75D199EB5D200A40C2D /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "include/$(PRODUCT_NAME)";
-			dstSubfolderSpec = 16;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		90EFB775199EB63400A40C2D /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "include/$(PRODUCT_NAME)";
-			dstSubfolderSpec = 16;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -94,10 +76,6 @@
 		90EFB74B199EAA5700A40C2D /* TodayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayViewController.swift; sourceTree = "<group>"; };
 		90EFB74D199EAA5700A40C2D /* MainInterface.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MainInterface.storyboard; sourceTree = "<group>"; };
 		90EFB75A199EB14800A40C2D /* slotmachien.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = slotmachien.entitlements; sourceTree = "<group>"; };
-		90EFB75F199EB5D300A40C2D /* libslotmachienFramework.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libslotmachienFramework.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		90EFB769199EB5D300A40C2D /* slotmachienFrameworkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = slotmachienFrameworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		90EFB777199EB63400A40C2D /* libslotmachien.framework.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libslotmachien.framework.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		90EFB781199EB63400A40C2D /* slotmachien.frameworkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = slotmachien.frameworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,34 +101,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		90EFB75C199EB5D200A40C2D /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		90EFB766199EB5D300A40C2D /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		90EFB774199EB63400A40C2D /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		90EFB77E199EB63400A40C2D /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -171,10 +121,6 @@
 				900C497F199E7B7F00504B05 /* slotmachien.app */,
 				900C4991199E7B7F00504B05 /* slotmachienTests.xctest */,
 				90EFB744199EAA5700A40C2D /* todayExtension.appex */,
-				90EFB75F199EB5D300A40C2D /* libslotmachienFramework.a */,
-				90EFB769199EB5D300A40C2D /* slotmachienFrameworkTests.xctest */,
-				90EFB777199EB63400A40C2D /* libslotmachien.framework.a */,
-				90EFB781199EB63400A40C2D /* slotmachien.frameworkTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -303,74 +249,6 @@
 			productReference = 90EFB744199EAA5700A40C2D /* todayExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
-		90EFB75E199EB5D200A40C2D /* slotmachienFramework */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 90EFB76D199EB5D300A40C2D /* Build configuration list for PBXNativeTarget "slotmachienFramework" */;
-			buildPhases = (
-				90EFB75B199EB5D200A40C2D /* Sources */,
-				90EFB75C199EB5D200A40C2D /* Frameworks */,
-				90EFB75D199EB5D200A40C2D /* CopyFiles */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = slotmachienFramework;
-			productName = slotmachienFramework;
-			productReference = 90EFB75F199EB5D300A40C2D /* libslotmachienFramework.a */;
-			productType = "com.apple.product-type.library.static";
-		};
-		90EFB768199EB5D300A40C2D /* slotmachienFrameworkTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 90EFB770199EB5D300A40C2D /* Build configuration list for PBXNativeTarget "slotmachienFrameworkTests" */;
-			buildPhases = (
-				90EFB765199EB5D300A40C2D /* Sources */,
-				90EFB766199EB5D300A40C2D /* Frameworks */,
-				90EFB767199EB5D300A40C2D /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = slotmachienFrameworkTests;
-			productName = slotmachienFrameworkTests;
-			productReference = 90EFB769199EB5D300A40C2D /* slotmachienFrameworkTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		90EFB776199EB63400A40C2D /* slotmachien.framework */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 90EFB785199EB63400A40C2D /* Build configuration list for PBXNativeTarget "slotmachien.framework" */;
-			buildPhases = (
-				90EFB773199EB63400A40C2D /* Sources */,
-				90EFB774199EB63400A40C2D /* Frameworks */,
-				90EFB775199EB63400A40C2D /* CopyFiles */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = slotmachien.framework;
-			productName = slotmachien.framework;
-			productReference = 90EFB777199EB63400A40C2D /* libslotmachien.framework.a */;
-			productType = "com.apple.product-type.library.static";
-		};
-		90EFB780199EB63400A40C2D /* slotmachien.frameworkTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 90EFB788199EB63400A40C2D /* Build configuration list for PBXNativeTarget "slotmachien.frameworkTests" */;
-			buildPhases = (
-				90EFB77D199EB63400A40C2D /* Sources */,
-				90EFB77E199EB63400A40C2D /* Frameworks */,
-				90EFB77F199EB63400A40C2D /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = slotmachien.frameworkTests;
-			productName = slotmachien.frameworkTests;
-			productReference = 90EFB781199EB63400A40C2D /* slotmachien.frameworkTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -396,18 +274,6 @@
 					90EFB743199EAA5700A40C2D = {
 						CreatedOnToolsVersion = 6.0;
 					};
-					90EFB75E199EB5D200A40C2D = {
-						CreatedOnToolsVersion = 6.0;
-					};
-					90EFB768199EB5D300A40C2D = {
-						CreatedOnToolsVersion = 6.0;
-					};
-					90EFB776199EB63400A40C2D = {
-						CreatedOnToolsVersion = 6.0;
-					};
-					90EFB780199EB63400A40C2D = {
-						CreatedOnToolsVersion = 6.0;
-					};
 				};
 			};
 			buildConfigurationList = 900C497A199E7B7F00504B05 /* Build configuration list for PBXProject "slotmachien" */;
@@ -426,10 +292,6 @@
 				900C497E199E7B7F00504B05 /* slotmachien */,
 				900C4990199E7B7F00504B05 /* slotmachienTests */,
 				90EFB743199EAA5700A40C2D /* todayExtension */,
-				90EFB75E199EB5D200A40C2D /* slotmachienFramework */,
-				90EFB768199EB5D300A40C2D /* slotmachienFrameworkTests */,
-				90EFB776199EB63400A40C2D /* slotmachien.framework */,
-				90EFB780199EB63400A40C2D /* slotmachien.frameworkTests */,
 			);
 		};
 /* End PBXProject section */
@@ -460,20 +322,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		90EFB767199EB5D300A40C2D /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		90EFB77F199EB63400A40C2D /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -500,34 +348,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				90EFB74C199EAA5700A40C2D /* TodayViewController.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		90EFB75B199EB5D200A40C2D /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		90EFB765199EB5D300A40C2D /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		90EFB773199EB63400A40C2D /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		90EFB77D199EB63400A40C2D /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -728,110 +548,6 @@
 			};
 			name = Release;
 		};
-		90EFB76E199EB5D300A40C2D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-		90EFB76F199EB5D300A40C2D /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-			};
-			name = Release;
-		};
-		90EFB771199EB5D300A40C2D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = slotmachienFrameworkTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		90EFB772199EB5D300A40C2D /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = slotmachienFrameworkTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
-		90EFB786199EB63400A40C2D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-		90EFB787199EB63400A40C2D /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-			};
-			name = Release;
-		};
-		90EFB789199EB63400A40C2D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = slotmachien.frameworkTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		90EFB78A199EB63400A40C2D /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = slotmachien.frameworkTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -869,38 +585,7 @@
 				90EFB756199EAA5700A40C2D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-		};
-		90EFB76D199EB5D300A40C2D /* Build configuration list for PBXNativeTarget "slotmachienFramework" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				90EFB76E199EB5D300A40C2D /* Debug */,
-				90EFB76F199EB5D300A40C2D /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-		};
-		90EFB770199EB5D300A40C2D /* Build configuration list for PBXNativeTarget "slotmachienFrameworkTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				90EFB771199EB5D300A40C2D /* Debug */,
-				90EFB772199EB5D300A40C2D /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-		};
-		90EFB785199EB63400A40C2D /* Build configuration list for PBXNativeTarget "slotmachien.framework" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				90EFB786199EB63400A40C2D /* Debug */,
-				90EFB787199EB63400A40C2D /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-		};
-		90EFB788199EB63400A40C2D /* Build configuration list for PBXNativeTarget "slotmachien.frameworkTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				90EFB789199EB63400A40C2D /* Debug */,
-				90EFB78A199EB63400A40C2D /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
