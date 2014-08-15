@@ -68,5 +68,9 @@ public class MotorBlock {
         }
         return false;
     }
+    
+    public void waitComplete() {
+        motors[0].waitComplete();
+    }
 
 }
