@@ -27,8 +27,10 @@ public class MotorBlock {
 
     public void rotateTo(int turn, boolean b) {
         for (NXTRegulatedMotor m : motors) {
-            m.rotateTo(turn, b);
+            m.rotateTo(turn, true);
         }
+
+        if(!b) { motors[0].waitComplete(); }
     }
 
     public void flt() {
