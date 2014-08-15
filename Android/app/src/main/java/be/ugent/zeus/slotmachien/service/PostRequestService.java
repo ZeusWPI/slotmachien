@@ -3,12 +3,14 @@ package be.ugent.zeus.slotmachien.service;
 import android.content.Intent;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.auth.AUTH;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.json.JSONObject;
 
+import be.ugent.zeus.slotmachien.DoorState;
+import be.ugent.zeus.slotmachien.LocalConstants;
 import be.ugent.zeus.slotmachien.MainActivity;
+import be.ugent.zeus.slotmachien.R;
 
 /**
  * Created by Lorin.
@@ -17,6 +19,10 @@ public class PostRequestService extends RequestService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        Intent broadcastIntent = new Intent();
+        broadcastIntent.setAction(LocalConstants.INTENT_ACTION_PROCESSING);
+        sendBroadcast(broadcastIntent);
+
         HttpPost post = new HttpPost(SLOTMACHIEN_URL);
 
         post.addHeader("Content-Type", CONTENT_TYPE);
@@ -38,10 +44,21 @@ public class PostRequestService extends RequestService {
             e.printStackTrace();
         }
 
-        Intent broadcastIntent = new Intent();
-        broadcastIntent.setAction(MainActivity.ResponseReceiver.PROCESSED);
-        broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+        DoorState doorState;
+        if(success) {
+            if(intent.getStringExtra(MESSAGE).equals(getResources().getString(R.string.close))){
+                doorState = DoorState.CLOSED;
+            } else {
+                doorState = DoorState.OPEN;
+            }
+        } else {
+            doorState = DoorState.ERROR;
+        }
+
+        broadcastIntent = new Intent();
+        broadcastIntent.setAction(LocalConstants.INTENT_ACTION_PROCESSED);
         broadcastIntent.putExtra(RESPONSE, s);
+        broadcastIntent.putExtra(STATE, doorState.ordinal());
         broadcastIntent.putExtra(SUCCESS, success);
         sendBroadcast(broadcastIntent);
     }

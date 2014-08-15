@@ -6,6 +6,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.params.BasicHttpParams;
 
+import be.ugent.zeus.slotmachien.LocalConstants;
 import be.ugent.zeus.slotmachien.MainActivity;
 
 /**
@@ -30,7 +31,7 @@ public class GetRequestService extends RequestService {
         }
 
         Intent broadcastIntent = new Intent();
-        broadcastIntent.setAction(MainActivity.ResponseReceiver.PROCESSED);
+        broadcastIntent.setAction(LocalConstants.INTENT_ACTION_PROCESSED);
         broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
         broadcastIntent.putExtra(RESPONSE, s);
         sendBroadcast(broadcastIntent);

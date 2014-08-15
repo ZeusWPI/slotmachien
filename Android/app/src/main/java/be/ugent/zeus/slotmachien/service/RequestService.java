@@ -17,6 +17,8 @@ public abstract class RequestService extends IntentService {
 
     public static final String MESSAGE = "msg";
     public static final String RESPONSE = "RESPONSE";
+    public static final String STATE = "STATE";
+
     public static final String SUCCESS = "SUCCESS";
 
     public static final String SLOTMACHIEN_URL;

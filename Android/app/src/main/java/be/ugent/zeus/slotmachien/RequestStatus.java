@@ -5,11 +5,11 @@ import android.graphics.Color;
 /**
  * Created by Lorin.
  */
-public enum Status {
+public enum RequestStatus {
     OK(Color.GREEN), ERROR(Color.RED), PROCESSING(Color.BLUE);
     private final int color;
 
-    private Status(int color) {
+    private RequestStatus(int color) {
         this.color = color;
     }
 
