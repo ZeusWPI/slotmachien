@@ -8,8 +8,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -29,7 +27,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        filter = new IntentFilter(ResponseReceiver.PROCESSED);
+        filter = new IntentFilter(LocalConstants.INTENT_ACTION_PROCESSED);
         filter.addCategory(Intent.CATEGORY_DEFAULT);
         receiver = new ResponseReceiver();
     }
@@ -87,11 +85,11 @@ public class MainActivity extends Activity {
         return builder.create();
     }
 
-    private void changeText(String s, Status status) {
+    private void changeText(String s, RequestStatus requestStatus) {
         TextView t = (TextView) findViewById(R.id.statusText);
         t.setText(s);
 
-        t.setTextColor(status.getColor());
+        t.setTextColor(requestStatus.getColor());
     }
 
     private ProgressBar getRequestProgressBar() {
@@ -99,7 +97,7 @@ public class MainActivity extends Activity {
     }
 
     private void startProgressBar() {
-        changeText("Processing...", Status.PROCESSING);
+        changeText("Processing...", RequestStatus.PROCESSING);
         getRequestProgressBar().setVisibility(View.VISIBLE);
     }
 
@@ -108,14 +106,12 @@ public class MainActivity extends Activity {
     }
 
     public class ResponseReceiver extends BroadcastReceiver {
-        public static final String PROCESSED = "be.ugent.zeus.slotmachien.PROCESSED";
-
         @Override
         public void onReceive(Context context, Intent intent) {
             stopProgressBar();
             String res = intent.getStringExtra(PostRequestService.RESPONSE);
             boolean b = intent.getBooleanExtra(RequestService.SUCCESS, false);
-            changeText(res, b ? Status.OK : Status.ERROR);
+            changeText(res, b ? RequestStatus.OK : RequestStatus.ERROR);
         }
     }
 }

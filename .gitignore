@@ -8,4 +8,6 @@
 .metadata/
 .project
 .classpath
+*.iml
+
 *.xcuserstate

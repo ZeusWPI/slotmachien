@@ -25,15 +25,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
-                <action android:name="be.ugent.zeus.slotmachien.PROCESSED" />
+                <action android:name="be.ugent.zeus.slotmachien.ACTION.PROCESSED" />
             </intent-filter>
         </activity>
         <service
             android:name=".service.PostRequestService"
-            android:exported="false" />
+            android:exported="true" />
         <service
             android:name=".service.GetRequestService"
-            android:exported="false" />
+            android:exported="true" />
+        <receiver android:name=".WidgetProvider" >
+            <intent-filter >
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="be.ugent.zeus.slotmachien.ACTION.PROCESSED" />
+                <action android:name="be.ugent.zeus.slotmachien.ACTION.PROCESSING" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget" />
+        </receiver>
     </application>
 
 </manifest>
