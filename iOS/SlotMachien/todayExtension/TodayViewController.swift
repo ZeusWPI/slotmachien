@@ -38,7 +38,7 @@ class TodayViewController: UIViewController {
         // If an error is encoutered, use NCUpdateResult.Failed
         // If there's no update required, use NCUpdateResult.NoData
         // If there's an update, use NCUpdateResult.NewData
-
+        Settings.sharedInstance.doRequest("status", succes: setResponse, error: setError)
         completionHandler(NCUpdateResult.NewData)
     }
     
