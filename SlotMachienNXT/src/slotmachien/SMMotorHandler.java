@@ -31,18 +31,11 @@ public class SMMotorHandler {
         // IK GA HARD MAN
         int prevPos = motorblock.getTachoCount();
         motorblock.setSpeed(900);
-        motorblock.rotateTo(turn, true);
-        while ((motorblock.isMoving())) {
-            //wait for the motors to stop moving
-        }
+        motorblock.rotateTo(turn, false);
         //if the motor is not in the projected area after turning, undo the turn
-<<<<<<< HEAD
-        if (( motorblock.getTachoCount() > turn + ALLOWED_TACHO_MARGIN ||
-=======
-        if ( ( motorblock.getTachoCount() > turn + ALLOWED_TACHO_MARGIN ||
->>>>>>> 81715391208f049ca84df07f96f84b9098e2dada
-                motorblock.getTachoCount() < turn - ALLOWED_TACHO_MARGIN ) &&
-                allowUndoTurn) {
+        if (( allowUndoTurn && 
+                (motorblock.getTachoCount() > turn + ALLOWED_TACHO_MARGIN ||
+                motorblock.getTachoCount() < turn - ALLOWED_TACHO_MARGIN) )) {
             turnTo(prevPos,false);
         }
         motorblock.flt();
@@ -51,18 +44,12 @@ public class SMMotorHandler {
     public void calibrate() {
         motorblock.setSpeed(400);
         motorblock.forward();
-        while (!(motorblock.isStalled())) {
-            //wait for the motors to stall
-        }
+        motorblock.waitComplete();
 
         motorblock.resetTachoCount();
         
-<<<<<<< HEAD
         turnTo(EXTREMUM_TO_OPEN, false);
-=======
-        turnTo(EXTREMUM_TO_OPEN,false);
->>>>>>> 81715391208f049ca84df07f96f84b9098e2dada
-        
+
         motorblock.resetTachoCount();
         
         motorblock.flt();
