@@ -14,11 +14,28 @@ class TodayViewController: UIViewController {
     @IBOutlet var label: UILabel?
     @IBOutlet var toggleButton: UIButton?
     
-    //let status = Status.error
+    var status = Status.error
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view from its nib.
+        Settings.sharedInstance.username = "felikaan" // temporary fix //TODO: fix it
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        Settings.sharedInstance.doRequest("status", succes: { (response) -> () in
+            self.label?.text = response
+            var responseStatus = Status(status: response)
+            responseStatus.next()
+            self.toggleButton?.setTitle(responseStatus.asAction(), forState: UIControlState.Normal)
+            self.status = Status(status: response)
+            return
+        }) { (error) -> () in
+            self.label?.text = error
+            self.status = .error
+            return
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -37,7 +54,20 @@ class TodayViewController: UIViewController {
     }
     
     @IBAction func toggleDoorStatus() {
-        
+        self.status.next()
+        Settings.sharedInstance.doRequest(status.asAction(), succes: { (response) -> () in
+            self.label?.text = response
+            var responseStatus = Status(status: response)
+            responseStatus.next()
+            self.toggleButton?.setTitle(responseStatus.asAction(), forState: UIControlState.Normal)
+            self.status = Status(status: response)
+            return
+        }) { (error) -> () in
+            self.label?.text = error
+            self.status = .error
+            self.toggleButton?.setTitle("refresh", forState: UIControlState.Normal)
+            return
+        }
     }
     
 }

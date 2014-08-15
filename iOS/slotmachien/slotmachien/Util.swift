@@ -31,6 +31,7 @@ class Settings {
         set(newUsername) {
             let defaults = NSUserDefaults.standardUserDefaults()
             defaults.setValue(newUsername, forKey: _defaultsUsername)
+            defaults.synchronize()
         }
     }
     
@@ -72,6 +73,13 @@ class Settings {
         }
     }
     
+    private func createUserDefaults() -> NSUserDefaults {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        defaults.addSuiteNamed("group.be.ugent.zeus.TodayExtensionSharingDefaults");
+        
+        return defaults
+    }
+    
 }
 
 enum Status {
@@ -87,14 +95,14 @@ enum Status {
         }
     }
     
-    func asString() -> String {
+    func asAction() -> String {
         switch self {
         case .open:
             return "open"
         case .closed:
-            return "closed"
+            return "close"
         case .error:
-            return "error"
+            return "status"
         }
     }
     

@@ -28,6 +28,9 @@
                                 <state key="normal" title="Button">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="toggleDoorStatus" destination="M4Y-Lb-cyx" eventType="touchUpInside" id="55A-wR-XRu"/>
+                                </connections>
                             </button>
                         </subviews>
                         <constraints>

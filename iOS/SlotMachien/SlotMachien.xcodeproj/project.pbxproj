@@ -18,6 +18,8 @@
 		90EFB74C199EAA5700A40C2D /* TodayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90EFB74B199EAA5700A40C2D /* TodayViewController.swift */; };
 		90EFB74E199EAA5700A40C2D /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 90EFB74D199EAA5700A40C2D /* MainInterface.storyboard */; };
 		90EFB751199EAA5700A40C2D /* todayExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 90EFB744199EAA5700A40C2D /* todayExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		90EFB7AF199EBE4400A40C2D /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90EFB73E199E9A0000A40C2D /* Util.swift */; };
+		90EFB7B0199EBF2500A40C2D /* slotmachien.plist in Resources */ = {isa = PBXBuildFile; fileRef = 90EFB73C199E929F00A40C2D /* slotmachien.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -318,6 +320,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				90EFB7B0199EBF2500A40C2D /* slotmachien.plist in Resources */,
 				90EFB74E199EAA5700A40C2D /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -348,6 +351,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				90EFB74C199EAA5700A40C2D /* TodayViewController.swift in Sources */,
+				90EFB7AF199EBE4400A40C2D /* Util.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
