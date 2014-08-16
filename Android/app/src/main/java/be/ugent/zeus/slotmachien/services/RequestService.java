@@ -1,7 +1,10 @@
 package be.ugent.zeus.slotmachien.services;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 import org.apache.http.HttpResponse;
@@ -47,6 +50,14 @@ public class RequestService extends IntentService {
             Intent broadcastIntent = new Intent();
             broadcastIntent.setAction(IntentConstants.INTENT_ACTION_PROCESSING_ERROR);
             broadcastIntent.putExtra(IntentConstants.INTENT_EXTRA_RESPONSE, RequestResponse.UNSPECIFIED_REQUEST.ordinal());
+            sendBroadcast(broadcastIntent);
+            return;
+        }
+
+        if(!isNetworkAvailable(this)){
+            Intent broadcastIntent = new Intent();
+            broadcastIntent.setAction(IntentConstants.INTENT_ACTION_PROCESSING_ERROR);
+            broadcastIntent.putExtra(IntentConstants.INTENT_EXTRA_RESPONSE, RequestResponse.NO_CONNECTION.ordinal());
             sendBroadcast(broadcastIntent);
             return;
         }
@@ -114,5 +125,12 @@ public class RequestService extends IntentService {
             broadcastIntent.putExtra(IntentConstants.INTENT_EXTRA_RESPONSE, response.ordinal());
             sendBroadcast(broadcastIntent);
         }
+    }
+
+    public static boolean isNetworkAvailable(Context c) {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

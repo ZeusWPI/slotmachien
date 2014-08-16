@@ -51,12 +51,11 @@ public class WidgetProvider extends AppWidgetProvider {
         } else if (intent.getAction().equals(IntentConstants.INTENT_ACTION_PROCESSING)) {
             setLoadingView(c);
         } else if (intent.getAction().equals(IntentConstants.INTENT_ACTION_PROCESSING_ERROR)) {
-            String msg = "";
-            if(intent.hasExtra(IntentConstants.INTENT_EXTRA_RESPONSE)) {
-                int resp = intent.getIntExtra(IntentConstants.INTENT_EXTRA_RESPONSE, RequestResponse.UNKNOWN_ERROR.ordinal());
-                msg = RequestResponse.values()[resp].getText();
+            int value = intent.getIntExtra(IntentConstants.INTENT_EXTRA_RESPONSE, RequestResponse.UNKNOWN_ERROR.ordinal());
+            RequestResponse response = RequestResponse.values()[value];
+            if(response != RequestResponse.NO_CONNECTION) {
+                setErrorView(c, response.toString());
             }
-            setErrorView(c, msg);
         }
     }
 

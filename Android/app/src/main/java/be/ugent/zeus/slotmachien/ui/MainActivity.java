@@ -125,7 +125,7 @@ public class MainActivity extends Activity {
                 String msg = "";
                 if(intent.hasExtra(IntentConstants.INTENT_EXTRA_RESPONSE)) {
                     int resp = intent.getIntExtra(IntentConstants.INTENT_EXTRA_RESPONSE, RequestResponse.UNKNOWN_ERROR.ordinal());
-                    msg = RequestResponse.values()[resp].getText();
+                    msg = RequestResponse.values()[resp].toString();
                 }
 
                 if(!msg.isEmpty()){
