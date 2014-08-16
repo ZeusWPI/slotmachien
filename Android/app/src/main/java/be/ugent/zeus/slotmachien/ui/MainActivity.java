@@ -1,13 +1,17 @@
 package be.ugent.zeus.slotmachien.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -29,11 +33,31 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // TODO - Show a dialog requesting the user to fill in this information
-        // TODO - The user should be able to change these settings later
-        Model.setToken(this, "..............token..........");
         Model.setURL(this, "http://kelder.zeus.ugent.be/slotmachien/");
-        Model.setUsername(this, "...............username........");
+
+        if(Model.getToken(this).isEmpty() || Model.getUsername(this).isEmpty()) {
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.setTitle("Sign in please.");
+            alert.setMessage("SIGN IN!!!");
+            LayoutInflater inflater = getLayoutInflater();
+            final View view = inflater.inflate(R.layout.dialog, null);
+            alert.setView(view);
+            alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    EditText username = (EditText) view.findViewById(R.id.username);
+                    EditText token = (EditText) view.findViewById(R.id.token);
+                    Model.setUsername(MainActivity.this, username.getText().toString());
+                    Model.setToken(MainActivity.this, token.getText().toString());
+                }
+            });
+            alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    MainActivity.this.finish();
+                }
+            });
+
+            alert.show();
+        }
 
         receiver = new ResponseReceiver();
         progressBar = (ProgressBar) findViewById(R.id.requestProgressBar);

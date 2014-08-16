@@ -8,4 +8,11 @@
     <string name="open">open</string>
     <string name="close">close</string>
     <string name="status">status</string>
+
+
+    <string name="username">username</string>
+    <string name="token">token</string>
+    <string name="url">url</string>
+    <string name="signin">Sign in</string>
+    <string name="cancel">Cancel</string>
 </resources>
