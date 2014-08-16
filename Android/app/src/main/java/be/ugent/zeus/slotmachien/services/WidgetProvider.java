@@ -51,7 +51,12 @@ public class WidgetProvider extends AppWidgetProvider {
         } else if (intent.getAction().equals(IntentConstants.INTENT_ACTION_PROCESSING)) {
             setLoadingView(c);
         } else if (intent.getAction().equals(IntentConstants.INTENT_ACTION_PROCESSING_ERROR)) {
-            setErrorView(c);
+            String msg = "";
+            if(intent.hasExtra(IntentConstants.INTENT_EXTRA_RESPONSE)) {
+                int resp = intent.getIntExtra(IntentConstants.INTENT_EXTRA_RESPONSE, RequestResponse.UNKNOWN_ERROR.ordinal());
+                msg = RequestResponse.values()[resp].getText();
+            }
+            setErrorView(c, msg);
         }
     }
 
@@ -95,12 +100,15 @@ public class WidgetProvider extends AppWidgetProvider {
         }
     }
 
-    private void setErrorView(Context c) {
+    private void setErrorView(Context c, String msg) {
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(c.getApplicationContext());
         ComponentName thisWidget = new ComponentName(c, WidgetProvider.class);
         int[] allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
         for (int widgetId : allWidgetIds) {
             RemoteViews remoteViews = new RemoteViews(c.getPackageName(), R.layout.widget_error);
+            if(!msg.isEmpty()){
+                remoteViews.setTextViewText(R.id.errorText, msg);
+            }
             appWidgetManager.updateAppWidget(widgetId, remoteViews);
         }
     }

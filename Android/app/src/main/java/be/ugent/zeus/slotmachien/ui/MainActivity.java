@@ -19,6 +19,7 @@ import be.ugent.zeus.slotmachien.R;
 import be.ugent.zeus.slotmachien.data.IntentConstants;
 import be.ugent.zeus.slotmachien.data.Model;
 import be.ugent.zeus.slotmachien.data.State;
+import be.ugent.zeus.slotmachien.services.RequestResponse;
 import be.ugent.zeus.slotmachien.services.RequestService;
 import be.ugent.zeus.slotmachien.services.RequestType;
 
@@ -121,7 +122,17 @@ public class MainActivity extends Activity {
                 changeText("Processing...", Color.BLUE);
                 progressBar.setVisibility(View.VISIBLE);
             } else if (intent.getAction().equals(IntentConstants.INTENT_ACTION_PROCESSING_ERROR)) {
-                changeText("An error occurred.", Color.RED);
+                String msg = "";
+                if(intent.hasExtra(IntentConstants.INTENT_EXTRA_RESPONSE)) {
+                    int resp = intent.getIntExtra(IntentConstants.INTENT_EXTRA_RESPONSE, RequestResponse.UNKNOWN_ERROR.ordinal());
+                    msg = RequestResponse.values()[resp].getText();
+                }
+
+                if(!msg.isEmpty()){
+                    changeText(msg, Color.RED);
+                } else {
+                    changeText("An error occurred.", Color.RED);
+                }
                 progressBar.setVisibility(View.GONE);
             }
         }

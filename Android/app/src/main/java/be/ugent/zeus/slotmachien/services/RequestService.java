@@ -15,6 +15,8 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
+import java.net.SocketTimeoutException;
+
 import be.ugent.zeus.slotmachien.data.IntentConstants;
 import be.ugent.zeus.slotmachien.data.Model;
 import be.ugent.zeus.slotmachien.data.State;
@@ -44,6 +46,7 @@ public class RequestService extends IntentService {
         if (!intent.hasExtra(IntentConstants.INTENT_EXTRA_REQUEST)) {
             Intent broadcastIntent = new Intent();
             broadcastIntent.setAction(IntentConstants.INTENT_ACTION_PROCESSING_ERROR);
+            broadcastIntent.putExtra(IntentConstants.INTENT_EXTRA_RESPONSE, RequestResponse.UNSPECIFIED_REQUEST.ordinal());
             sendBroadcast(broadcastIntent);
             return;
         }
@@ -59,7 +62,7 @@ public class RequestService extends IntentService {
         HttpResponse res;
         JSONObject json = new JSONObject();
 
-        RequestResponse response = null;
+        RequestResponse response = RequestResponse.UNKNOWN_ERROR;
         try {
             int requestValue = intent.getIntExtra(IntentConstants.INTENT_EXTRA_REQUEST, State.UNKNOWN.ordinal());
             RequestType requestType = RequestType.values()[requestValue];
@@ -92,20 +95,24 @@ public class RequestService extends IntentService {
                 case 500:
                     response = RequestResponse.INTERNAL_SERVER_ERROR;
                     break;
-                default:
-                    response = RequestResponse.UNKNOWN_ERROR;
-                    break;
             }
+            broadcastIntent = new Intent();
+            broadcastIntent.setAction(IntentConstants.INTENT_ACTION_PROCESSED);
+            broadcastIntent.putExtra(IntentConstants.INTENT_EXTRA_RESPONSE, response.ordinal());
+            sendBroadcast(broadcastIntent);
+
+        } catch (SocketTimeoutException e){
+            response = RequestResponse.TIMEOUT;
+            broadcastIntent = new Intent();
+            broadcastIntent.setAction(IntentConstants.INTENT_ACTION_PROCESSING_ERROR);
+            broadcastIntent.putExtra(IntentConstants.INTENT_EXTRA_RESPONSE, response.ordinal());
+            sendBroadcast(broadcastIntent);
+
         } catch (Exception e) {
             broadcastIntent = new Intent();
             broadcastIntent.setAction(IntentConstants.INTENT_ACTION_PROCESSING_ERROR);
+            broadcastIntent.putExtra(IntentConstants.INTENT_EXTRA_RESPONSE, response.ordinal());
             sendBroadcast(broadcastIntent);
-            return;
         }
-
-        broadcastIntent = new Intent();
-        broadcastIntent.setAction(IntentConstants.INTENT_ACTION_PROCESSED);
-        broadcastIntent.putExtra(IntentConstants.INTENT_EXTRA_RESPONSE, response.ordinal());
-        sendBroadcast(broadcastIntent);
     }
 }
