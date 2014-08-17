@@ -16,6 +16,8 @@ public class NXTMain {
 
     private static final int POSITION_OPEN = 0;
     private static final int POSITION_CLOSED = 180;
+    
+    private static final int DELAY_BEFORE_DELAYED_CLOSE = 60;
 
     static final SMMotorHandler MOTORS = new SMMotorHandler(Motor.B, Motor.C);
     private static final Map<Byte, Action> ACTIONS = new HashMap<Byte, Action>();
@@ -33,6 +35,8 @@ public class NXTMain {
                 new TurnToAction(MOTORS, POSITION_CLOSED)));
         Button.ENTER.addButtonListener(new ActionButtonListener(
                 new CenterAction()));
+        Button.ESCAPE.addButtonListener(new ActionButtonListener(
+                new DelayedCloseAction(MOTORS, POSITION_CLOSED, DELAY_BEFORE_DELAYED_CLOSE)));
 
         // initial calibration
         drawString("calibrating");
