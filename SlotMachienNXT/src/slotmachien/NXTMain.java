@@ -14,13 +14,14 @@ import lejos.nxt.comm.USB;
 
 public class NXTMain {
 
-    private static final int POSITION_OPEN = 0;
-    private static final int POSITION_CLOSED = 180;
+    private static final int POSITION_OPEN = -180;
+    private static final int POSITION_CLOSED = 0;
 
-    static final SMMotorHandler MOTORS = new SMMotorHandler(Motor.B, Motor.C);
-    private static final Map<Byte, Action> ACTIONS = new HashMap<Byte, Action>();
+    public static final SMMotorHandler MOTORS = new SMMotorHandler(Motor.B, Motor.C);
+    private static final Map<Byte, Action> ACTIONS = new HashMap<>();
 
     public static void main(String[] args) throws Exception {
+    	MOTORS.addObserver(new LCDObserver());
 
         // Define actions.
         ACTIONS.put((byte) 1, new TurnToAction(MOTORS, POSITION_OPEN));
@@ -59,7 +60,6 @@ public class NXTMain {
         ACTIONS.get(b).performAction();
         Status status = MOTORS.getStatus();
         sendStatus(conn, status);
-        drawString(status.toString());
     }
 
     public static void sendStatus(NXTConnection conn, Status status) {
@@ -78,4 +78,5 @@ public class NXTMain {
         LCD.clear();
         LCD.drawString(s, 0, 0);
     }
+    
 }
