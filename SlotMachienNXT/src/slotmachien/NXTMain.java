@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import lejos.nxt.Button;
-import lejos.nxt.LCD;
 import lejos.nxt.Motor;
 import lejos.nxt.comm.NXTConnection;
 import lejos.nxt.comm.USB;
@@ -21,6 +20,16 @@ public class NXTMain {
     private static final Map<Byte, Action> ACTIONS = new HashMap<>();
 
     public static void main(String[] args) throws Exception {
+    	try {
+			run();
+		} catch (Exception e) {
+			System.exit(1);
+		}
+    }
+    
+    private static void run() throws IOException {
+    	Thread manual = new Thread(new ManualChecker());
+    	manual.start();
     	MOTORS.addObserver(new LCDObserver());
 
         // Define actions.
@@ -35,10 +44,7 @@ public class NXTMain {
         Button.ENTER.addButtonListener(new ActionButtonListener(
                 new CenterAction()));
 
-        // initial calibration
-        drawString("calibrating");
         MOTORS.calibrate();
-        drawString(MOTORS.getStatus().toString());
 
         while (true) {
             // Wait for incoming command
@@ -53,7 +59,6 @@ public class NXTMain {
             dis.close();
             conn.close();
         }
-
     }
 
     public static void runCode(byte b, NXTConnection conn) {
@@ -63,20 +68,11 @@ public class NXTMain {
     }
 
     public static void sendStatus(NXTConnection conn, Status status) {
-        drawString("waiting for stream");
         try (DataOutputStream dos = conn.openDataOutputStream()) {
-            drawString("outputstream opened");
             dos.write(status.toByte());
             dos.flush();
-            drawString("byte sent");
         } catch (IOException | NullPointerException e) {
-            drawString("could not send status");
         }
-    }
-
-    public static void drawString(String s) {
-        LCD.clear();
-        LCD.drawString(s, 0, 0);
     }
     
 }
