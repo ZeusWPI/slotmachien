@@ -1,14 +1,26 @@
 package slotmachien;
 
-import java.io.File;
+import lejos.nxt.LCD;
+import time.Countdown;
+import time.Countdown.Ticker;
 
-import lejos.nxt.Sound;
-import lejos.util.Delay;
-
-public class CenterAction implements Action {
-
+public class CenterAction extends Action {
+	
     @Override
     public void performAction() {
-        //TODO iets dat productief is
+    	
+        Countdown cd = new Countdown(10, 1000, new Ticker() {
+        	@Override
+        	public void doTick(int tick) {
+        		LCD.clear();
+        		LCD.drawInt(tick, 0, 0);
+        	}
+        }, new Action () {
+        	@Override
+        	public void performAction() {
+        		NXTMain.MOTORS.turnTo(NXTMain.POSITION_CLOSED);
+        	}
+        });
+        cd.start();
     }
 }

@@ -13,8 +13,8 @@ import lejos.nxt.comm.USB;
 
 public class NXTMain {
 
-    private static final int POSITION_OPEN = -180;
-    private static final int POSITION_CLOSED = 0;
+    public static final int POSITION_OPEN = -180;
+    public static final int POSITION_CLOSED = 0;
 
     public static final SMMotorHandler MOTORS = new SMMotorHandler(Motor.B, Motor.C);
     private static final Map<Byte, Action> ACTIONS = new HashMap<>();

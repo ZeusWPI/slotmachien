@@ -1,6 +1,6 @@
 package slotmachien;
 
-public class TurnToAction implements Action {
+public class TurnToAction extends Action {
     
     private int target;
     private SMMotorHandler smmh;

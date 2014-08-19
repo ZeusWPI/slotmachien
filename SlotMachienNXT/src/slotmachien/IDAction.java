@@ -1,7 +1,7 @@
 package slotmachien;
 
 //Identity Action
-public class IDAction implements Action {
+public class IDAction extends Action {
 
     @Override
     public void performAction() {
