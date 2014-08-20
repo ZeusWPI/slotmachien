@@ -14,7 +14,7 @@ private let _defaultsUsername = "SMUserName"
 class Settings {
     
     class var sharedInstance : Settings {
-        return _SettingsSharedInstance
+    return _SettingsSharedInstance
     }
     
     let url: NSURL
@@ -58,35 +58,40 @@ class Settings {
     
     func doRequest(action: String, succes: (response: String) -> (), error: (error: String) -> ()) {
         let request = createRequest(action)
-        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, requestError) in
-            if !requestError {
-                let httpResponse = response as NSHTTPURLResponse
-                if httpResponse.statusCode == 200 {
-                    var jsonError: NSError?
-                    let dict: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: &jsonError) as NSDictionary
-                    if let jsonParseError = jsonError {
-                        error(error: "Error: json parsing failed")
+        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue())
+            {(response, data, requestError) in
+                if !requestError {
+                    let httpResponse = response as NSHTTPURLResponse
+                    if httpResponse.statusCode == 200 {
+                        switch self.parseJson(data) {
+                        case let .Succes(status):
+                            succes(response: status)
+                        case let .Error(jsonError):
+                            error(error: jsonError)
+                        }
+                        return // return here because the rest of the code shouldn't be executed
                     }
-                    else if let status:String = dict.objectForKey("status") as? String {
-                        succes(response: status)
-                    }
-                    else {
-                        error(error: "Error: json parsing failed")
+                    else if httpResponse.statusCode == 401 {
+                        error(error: "An authorization error occured")
+                        return
                     }
                 }
-                else if httpResponse.statusCode == 401 {
-                    error(error: "An authorization error occured")
-                }
-                else {
-                    error(error: "An error occured during the request")
-                }
-            }
-            else {
                 error(error: "An error occured during the request")
-            }
         }
     }
     
+    private func parseJson(data: NSData) -> JsonParseResult {
+        var jsonError: NSError?
+        let dict = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: &jsonError) as NSDictionary
+        if let jsonParseError = jsonError {
+            return .Error("Error: json parsing failed")
+        }
+        else if let status:String = dict.objectForKey("status") as? String {
+            return .Succes(status)
+        }
+        
+        return .Error("Error: json parsing failed")
+    }
 }
 
 enum Status {
@@ -125,4 +130,9 @@ enum Status {
             self = .error
         }
     }
+}
+
+enum JsonParseResult {
+    case Succes(String)
+    case Error(String)
 }
