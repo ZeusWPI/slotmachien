@@ -99,8 +99,3 @@ enum Status {
         }
     }
 }
-
-enum JsonParseResult {
-    case Succes(String)
-    case Error(String)
-}
