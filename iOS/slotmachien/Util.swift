@@ -12,12 +12,12 @@ private let _SettingsSharedInstance = Settings()
 private let _defaultsUsername = "SMUserName"
 
 class Settings {
-    
+
     class var sharedInstance : Settings {
     return _SettingsSharedInstance
     }
-    
-    let url: NSURL
+
+    let url: String
     let token: String
     var username: String {
         get {
@@ -32,71 +32,39 @@ class Settings {
             defaults.synchronize()
         }
     }
-    
+
     let defaults = NSUserDefaults(suiteName: "group.be.ugent.zeus")
-    
+
     init() {
         var path = NSBundle.mainBundle().pathForResource("slotmachien", ofType: "plist")
-        var dict = NSDictionary(contentsOfFile: path)
-        self.url = NSURL(string: dict["url"] as String)
+        var dict = NSDictionary(contentsOfFile: path!)
+        self.url = dict["url"] as String
         self.token = dict["token"] as String
     }
-    
-    private func createRequest(action: String) -> NSURLRequest{
-        let options = ["token": token, "user_name": username, "action": action]
-        
-        let data = NSJSONSerialization.dataWithJSONObject(options, options: nil, error: nil)
-        
-        var request = NSMutableURLRequest(URL: url)
-        request.HTTPMethod = "POST"
-        request.HTTPBody = data;
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.timeoutInterval = 10.0 //10 seconds
-        
-        return request
-    }
-    
+
     func doRequest(action: String, succes: (response: String) -> (), error: (error: String) -> ()) {
-        let request = createRequest(action)
-        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue())
-            {(response, data, requestError) in
-                if !requestError {
-                    let httpResponse = response as NSHTTPURLResponse
-                    if httpResponse.statusCode == 200 {
-                        switch self.parseJson(data) {
-                        case let .Succes(status):
+        let options = ["token": token, "user_name": username, "action": action]
+        Alamofire.request(Alamofire.Method.POST, self.url, parameters:options, encoding: Alamofire.ParameterEncoding.JSON(nil))
+            .responseJSON { (request, response, JSON, requestError) in
+                if requestError == nil && response?.statusCode == 200 {
+                    if let jsonDict = JSON as? NSDictionary {
+                        if let status = jsonDict.objectForKey("status") as? String {
                             succes(response: status)
-                        case let .Error(jsonError):
-                            error(error: jsonError)
+                            return
                         }
-                        return // return here because the rest of the code shouldn't be executed
                     }
-                    else if httpResponse.statusCode == 401 {
-                        error(error: "An authorization error occured")
-                        return
-                    }
+                } else if response?.statusCode == 401 {
+                    error(error: "An authorization error occured")
+                    return
                 }
                 error(error: "An error occured during the request")
         }
-    }
-    
-    private func parseJson(data: NSData) -> JsonParseResult {
-        var jsonError: NSError?
-        let dict = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: &jsonError) as NSDictionary
-        if let jsonParseError = jsonError {
-            return .Error("Error: json parsing failed")
-        }
-        else if let status:String = dict.objectForKey("status") as? String {
-            return .Succes(status)
-        }
-        
-        return .Error("Error: json parsing failed")
     }
 }
 
 enum Status {
     case closed, open, error
-    
+
     // create enum from string
     init(status:String) {
         switch status {
@@ -108,7 +76,7 @@ enum Status {
             self = .error
         }
     }
-    
+
     func asAction() -> String {
         switch self {
         case .open:
@@ -119,7 +87,7 @@ enum Status {
             return "status"
         }
     }
-    
+
     mutating func next() {
         switch self {
         case .open:

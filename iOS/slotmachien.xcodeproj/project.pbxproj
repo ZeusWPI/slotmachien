@@ -12,6 +12,8 @@
 		900C498A199E7B7F00504B05 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 900C4988199E7B7F00504B05 /* Main.storyboard */; };
 		900C498C199E7B7F00504B05 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 900C498B199E7B7F00504B05 /* Images.xcassets */; };
 		900C4998199E7B7F00504B05 /* slotmachienTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 900C4997199E7B7F00504B05 /* slotmachienTests.swift */; };
+		907DE04019A5276D0004C02B /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 907DE03F19A5276D0004C02B /* Alamofire.swift */; };
+		907DE04119A5276D0004C02B /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 907DE03F19A5276D0004C02B /* Alamofire.swift */; };
 		90EFB73D199E929F00A40C2D /* slotmachien.plist in Resources */ = {isa = PBXBuildFile; fileRef = 90EFB73C199E929F00A40C2D /* slotmachien.plist */; };
 		90EFB73F199E9A0000A40C2D /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90EFB73E199E9A0000A40C2D /* Util.swift */; };
 		90EFB747199EAA5700A40C2D /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90EFB746199EAA5700A40C2D /* NotificationCenter.framework */; };
@@ -70,6 +72,7 @@
 		900C4991199E7B7F00504B05 /* slotmachienTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = slotmachienTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		900C4996199E7B7F00504B05 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		900C4997199E7B7F00504B05 /* slotmachienTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = slotmachienTests.swift; sourceTree = "<group>"; };
+		907DE03F19A5276D0004C02B /* Alamofire.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Alamofire.swift; path = Alamofire/Source/Alamofire.swift; sourceTree = "<group>"; };
 		90EFB73C199E929F00A40C2D /* slotmachien.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = slotmachien.plist; sourceTree = "<group>"; };
 		90EFB73E199E9A0000A40C2D /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		90EFB744199EAA5700A40C2D /* todayExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = todayExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -170,6 +173,7 @@
 		90EFB745199EAA5700A40C2D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				907DE03F19A5276D0004C02B /* Alamofire.swift */,
 				90EFB746199EAA5700A40C2D /* NotificationCenter.framework */,
 			);
 			name = Frameworks;
@@ -334,6 +338,7 @@
 			files = (
 				90EFB73F199E9A0000A40C2D /* Util.swift in Sources */,
 				900C4987199E7B7F00504B05 /* ViewController.swift in Sources */,
+				907DE04019A5276D0004C02B /* Alamofire.swift in Sources */,
 				900C4985199E7B7F00504B05 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -350,6 +355,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				907DE04119A5276D0004C02B /* Alamofire.swift in Sources */,
 				90EFB74C199EAA5700A40C2D /* TodayViewController.swift in Sources */,
 				90EFB7AF199EBE4400A40C2D /* Util.swift in Sources */,
 			);
