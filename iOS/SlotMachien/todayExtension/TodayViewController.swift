@@ -19,7 +19,6 @@ class TodayViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view from its nib.
-        Settings.sharedInstance.username = "felikaan" // temporary fix //TODO: fix it
     }
     
     override func viewDidAppear(animated: Bool) {

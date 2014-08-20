@@ -21,7 +21,6 @@ class Settings {
     let token: String
     var username: String {
         get {
-            let defaults = NSUserDefaults.standardUserDefaults()
             let u:String? = defaults.objectForKey(_defaultsUsername) as String?
             if let un = u {
                 return un
@@ -29,11 +28,12 @@ class Settings {
             return ""
         }
         set(newUsername) {
-            let defaults = NSUserDefaults.standardUserDefaults()
             defaults.setValue(newUsername, forKey: _defaultsUsername)
             defaults.synchronize()
         }
     }
+    
+    let defaults = NSUserDefaults(suiteName: "group.be.ugent.zeus")
     
     init() {
         var path = NSBundle.mainBundle().pathForResource("slotmachien", ofType: "plist")
@@ -51,6 +51,7 @@ class Settings {
         request.HTTPMethod = "POST"
         request.HTTPBody = data;
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.timeoutInterval = 10.0 //10 seconds
         
         return request
     }
@@ -59,12 +60,25 @@ class Settings {
         let request = createRequest(action)
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, requestError) in
             if !requestError {
-                let dict: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: nil) as NSDictionary
-                if let status:String = dict.objectForKey("status") as? String {
-                    succes(response: status)
+                let httpResponse = response as NSHTTPURLResponse
+                if httpResponse.statusCode == 200 {
+                    var jsonError: NSError?
+                    let dict: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: &jsonError) as NSDictionary
+                    if let jsonParseError = jsonError {
+                        error(error: "Error: json parsing failed")
+                    }
+                    else if let status:String = dict.objectForKey("status") as? String {
+                        succes(response: status)
+                    }
+                    else {
+                        error(error: "Error: json parsing failed")
+                    }
+                }
+                else if httpResponse.statusCode == 401 {
+                    error(error: "An authorization error occured")
                 }
                 else {
-                    error(error: "Error: json parsing failed")
+                    error(error: "An error occured during the request")
                 }
             }
             else {
@@ -73,17 +87,12 @@ class Settings {
         }
     }
     
-    private func createUserDefaults() -> NSUserDefaults {
-        let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.addSuiteNamed("group.be.ugent.zeus.TodayExtensionSharingDefaults");
-        
-        return defaults
-    }
-    
 }
 
 enum Status {
     case closed, open, error
+    
+    // create enum from string
     init(status:String) {
         switch status {
         case "open":
