@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 
 from app import app
 from auth import auth, before_slotmachien_request
@@ -20,8 +20,12 @@ def close_door():
 
 @slotmachien_bp.route('/', methods=['POST'])
 def update_door():
-    return send_command((request.form.get('text') or # slack support
-                         request.get_json(force=True)['action']))
+    action = (request.form.get('text') or # slack support
+                         request.get_json(force=True)['action'])
+    if action in ['open', 'close', 'status']:
+        return send_command(action)
+    else:
+        return jsonify({'error': 'command: ' + action + ' unknown'})
 
 @slotmachien_bp.route('/')
 def status_door():
