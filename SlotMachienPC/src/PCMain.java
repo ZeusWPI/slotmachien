@@ -34,6 +34,12 @@ public class PCMain {
     public static void main(String[] args) throws NXTCommException,
             IOException, InterruptedException {
 
+        String commando = args[0].toLowerCase();
+        if(!OUT_TOLK.contains(commando)) {
+            System.err.println("Wrong command");
+            System.exit(1);
+        }
+        
         // communicatie opstellen met de brick
         PrintStream oldOut = System.out;
         System.setOut(System.err);
@@ -44,20 +50,16 @@ public class PCMain {
 
         // datastream richting brick opstellen op basis van de stdin
         try (OutputStream oStream = nxtComm.getOutputStream()) {
-            String commando = args[0].toLowerCase();
-            if (OUT_TOLK.containsKey(commando)) {
-                oStream.write(OUT_TOLK.get(commando));
-                oStream.flush();
-                try (InputStream iStream = nxtComm.getInputStream()) {
-                    byte b = (byte) iStream.read();
-                    System.out.println(IN_TOLK.get(b));
-                }
+            oStream.write(OUT_TOLK.get(commando));
+            oStream.flush();
+            try (InputStream iStream = nxtComm.getInputStream()) {
+                byte b = (byte) iStream.read();
+                System.out.println(IN_TOLK.get(b));
             }
         } catch (Exception ex) {
             ex.printStackTrace(System.err);
-            System.exit(1);
+        } finally { 
+            nxtComm.close();
         }
-
-        nxtComm.close();
     }
 }
