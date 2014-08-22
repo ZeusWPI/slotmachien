@@ -23,6 +23,14 @@
 		90B7876F19A545DE00F2EF2A /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90EFB73E199E9A0000A40C2D /* Util.swift */; };
 		90B7877119A545E500F2EF2A /* slotmachien.plist in Resources */ = {isa = PBXBuildFile; fileRef = 90EFB73C199E929F00A40C2D /* slotmachien.plist */; };
 		90B7877219A545EF00F2EF2A /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 907DE03F19A5276D0004C02B /* Alamofire.swift */; };
+		90B7877819A5512400F2EF2A /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90EFB746199EAA5700A40C2D /* NotificationCenter.framework */; };
+		90B7877F19A5512400F2EF2A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 90B7877D19A5512400F2EF2A /* InfoPlist.strings */; };
+		90B7878119A5512400F2EF2A /* TodayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B7878019A5512400F2EF2A /* TodayViewController.swift */; };
+		90B7878319A5512400F2EF2A /* TodayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90B7878219A5512400F2EF2A /* TodayViewController.xib */; };
+		90B7878619A5512400F2EF2A /* extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 90B7877719A5512400F2EF2A /* extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		90B7878D19A552ED00F2EF2A /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90EFB73E199E9A0000A40C2D /* Util.swift */; };
+		90B7878E19A552F200F2EF2A /* slotmachien.plist in Resources */ = {isa = PBXBuildFile; fileRef = 90EFB73C199E929F00A40C2D /* slotmachien.plist */; };
+		90B7878F19A552F600F2EF2A /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 907DE03F19A5276D0004C02B /* Alamofire.swift */; };
 		90EFB73D199E929F00A40C2D /* slotmachien.plist in Resources */ = {isa = PBXBuildFile; fileRef = 90EFB73C199E929F00A40C2D /* slotmachien.plist */; };
 		90EFB73F199E9A0000A40C2D /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90EFB73E199E9A0000A40C2D /* Util.swift */; };
 		90EFB747199EAA5700A40C2D /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90EFB746199EAA5700A40C2D /* NotificationCenter.framework */; };
@@ -48,6 +56,20 @@
 			remoteGlobalIDString = 90B7874D19A5452900F2EF2A;
 			remoteInfo = slotmachien.osx;
 		};
+		90B7878419A5512400F2EF2A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 900C4977199E7B7F00504B05 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 90B7877619A5512400F2EF2A;
+			remoteInfo = extension;
+		};
+		90B7878719A5512400F2EF2A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 900C4977199E7B7F00504B05 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 90B7877619A5512400F2EF2A;
+			remoteInfo = extension;
+		};
 		90EFB74F199EAA5700A40C2D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 900C4977199E7B7F00504B05 /* Project object */;
@@ -65,6 +87,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		90B7878C19A5512400F2EF2A /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				90B7878619A5512400F2EF2A /* extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		90EFB757199EAA5700A40C2D /* Embed App Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -99,6 +132,12 @@
 		90B7876119A5452900F2EF2A /* slotmachien.osxTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = slotmachien.osxTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		90B7876619A5452900F2EF2A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		90B7876719A5452900F2EF2A /* slotmachien_osxTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = slotmachien_osxTests.swift; sourceTree = "<group>"; };
+		90B7877719A5512400F2EF2A /* extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = extension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		90B7877B19A5512400F2EF2A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		90B7877C19A5512400F2EF2A /* extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = extension.entitlements; sourceTree = "<group>"; };
+		90B7877E19A5512400F2EF2A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		90B7878019A5512400F2EF2A /* TodayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayViewController.swift; sourceTree = "<group>"; };
+		90B7878219A5512400F2EF2A /* TodayViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TodayViewController.xib; sourceTree = "<group>"; };
 		90EFB73C199E929F00A40C2D /* slotmachien.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = slotmachien.plist; sourceTree = "<group>"; };
 		90EFB73E199E9A0000A40C2D /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		90EFB744199EAA5700A40C2D /* todayExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = todayExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -138,6 +177,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		90B7877419A5512400F2EF2A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				90B7877819A5512400F2EF2A /* NotificationCenter.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		90EFB741199EAA5700A40C2D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -157,6 +204,7 @@
 				90EFB748199EAA5700A40C2D /* todayExtension */,
 				90B7874F19A5452900F2EF2A /* slotmachien.osx */,
 				90B7876419A5452900F2EF2A /* slotmachien.osxTests */,
+				90B7877919A5512400F2EF2A /* extension */,
 				90EFB745199EAA5700A40C2D /* Frameworks */,
 				900C4980199E7B7F00504B05 /* Products */,
 			);
@@ -170,6 +218,7 @@
 				90EFB744199EAA5700A40C2D /* todayExtension.appex */,
 				90B7874E19A5452900F2EF2A /* slotmachien.osx.app */,
 				90B7876119A5452900F2EF2A /* slotmachien.osxTests.xctest */,
+				90B7877719A5512400F2EF2A /* extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -252,6 +301,26 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		90B7877919A5512400F2EF2A /* extension */ = {
+			isa = PBXGroup;
+			children = (
+				90B7878019A5512400F2EF2A /* TodayViewController.swift */,
+				90B7878219A5512400F2EF2A /* TodayViewController.xib */,
+				90B7877A19A5512400F2EF2A /* Supporting Files */,
+			);
+			path = extension;
+			sourceTree = "<group>";
+		};
+		90B7877A19A5512400F2EF2A /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				90B7877B19A5512400F2EF2A /* Info.plist */,
+				90B7877C19A5512400F2EF2A /* extension.entitlements */,
+				90B7877D19A5512400F2EF2A /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		90EFB745199EAA5700A40C2D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -327,10 +396,13 @@
 				90B7874A19A5452900F2EF2A /* Sources */,
 				90B7874B19A5452900F2EF2A /* Frameworks */,
 				90B7874C19A5452900F2EF2A /* Resources */,
+				90B7878C19A5512400F2EF2A /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				90B7878519A5512400F2EF2A /* PBXTargetDependency */,
+				90B7878819A5512400F2EF2A /* PBXTargetDependency */,
 			);
 			name = slotmachien.osx;
 			productName = slotmachien.osx;
@@ -354,6 +426,23 @@
 			productName = slotmachien.osxTests;
 			productReference = 90B7876119A5452900F2EF2A /* slotmachien.osxTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		90B7877619A5512400F2EF2A /* extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 90B7878919A5512400F2EF2A /* Build configuration list for PBXNativeTarget "extension" */;
+			buildPhases = (
+				90B7877319A5512400F2EF2A /* Sources */,
+				90B7877419A5512400F2EF2A /* Frameworks */,
+				90B7877519A5512400F2EF2A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = extension;
+			productName = extension;
+			productReference = 90B7877719A5512400F2EF2A /* extension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 		90EFB743199EAA5700A40C2D /* todayExtension */ = {
 			isa = PBXNativeTarget;
@@ -401,6 +490,9 @@
 						CreatedOnToolsVersion = 6.0;
 						TestTargetID = 90B7874D19A5452900F2EF2A;
 					};
+					90B7877619A5512400F2EF2A = {
+						CreatedOnToolsVersion = 6.0;
+					};
 					90EFB743199EAA5700A40C2D = {
 						CreatedOnToolsVersion = 6.0;
 					};
@@ -424,6 +516,7 @@
 				90EFB743199EAA5700A40C2D /* todayExtension */,
 				90B7874D19A5452900F2EF2A /* slotmachien.osx */,
 				90B7876019A5452900F2EF2A /* slotmachien.osxTests */,
+				90B7877619A5512400F2EF2A /* extension */,
 			);
 		};
 /* End PBXProject section */
@@ -460,6 +553,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		90B7877519A5512400F2EF2A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				90B7878319A5512400F2EF2A /* TodayViewController.xib in Resources */,
+				90B7877F19A5512400F2EF2A /* InfoPlist.strings in Resources */,
+				90B7878E19A552F200F2EF2A /* slotmachien.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -514,6 +617,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		90B7877319A5512400F2EF2A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				90B7878F19A552F600F2EF2A /* Alamofire.swift in Sources */,
+				90B7878119A5512400F2EF2A /* TodayViewController.swift in Sources */,
+				90B7878D19A552ED00F2EF2A /* Util.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		90EFB740199EAA5700A40C2D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -536,6 +649,16 @@
 			isa = PBXTargetDependency;
 			target = 90B7874D19A5452900F2EF2A /* slotmachien.osx */;
 			targetProxy = 90B7876219A5452900F2EF2A /* PBXContainerItemProxy */;
+		};
+		90B7878519A5512400F2EF2A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 90B7877619A5512400F2EF2A /* extension */;
+			targetProxy = 90B7878419A5512400F2EF2A /* PBXContainerItemProxy */;
+		};
+		90B7878819A5512400F2EF2A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 90B7877619A5512400F2EF2A /* extension */;
+			targetProxy = 90B7878719A5512400F2EF2A /* PBXContainerItemProxy */;
 		};
 		90EFB750199EAA5700A40C2D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -564,6 +687,14 @@
 				90B7875B19A5452900F2EF2A /* Base */,
 			);
 			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		90B7877D19A5512400F2EF2A /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				90B7877E19A5512400F2EF2A /* en */,
+			);
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -784,6 +915,41 @@
 			};
 			name = Release;
 		};
+		90B7878A19A5512400F2EF2A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = extension/extension.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = extension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		90B7878B19A5512400F2EF2A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = extension/extension.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				INFOPLIST_FILE = extension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 		90EFB755199EAA5700A40C2D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -851,6 +1017,14 @@
 			buildConfigurations = (
 				90B7876B19A5452900F2EF2A /* Debug */,
 				90B7876C19A5452900F2EF2A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		90B7878919A5512400F2EF2A /* Build configuration list for PBXNativeTarget "extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				90B7878A19A5512400F2EF2A /* Debug */,
+				90B7878B19A5512400F2EF2A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 		};

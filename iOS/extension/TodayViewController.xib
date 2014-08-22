@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6206.8" systemVersion="14A329f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment defaultVersion="101000" identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6206.8"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="TodayViewController" customModule="extension" customModuleProvider="target">
+            <connections>
+                <outlet property="button" destination="iTp-M2-dP8" id="6BL-Hv-AYg"/>
+                <outlet property="label" destination="KU6-MB-4x2" id="ej0-23-8NH"/>
+                <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView simulatedAppContext="notificationCenter" translatesAutoresizingMaskIntoConstraints="NO" id="Hz6-mo-xeY">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
+            <subviews>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="KU6-MB-4x2">
+                    <rect key="frame" x="0.0" y="22" width="106" height="28"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="28" id="4Yb-ZR-gMg"/>
+                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="200" id="gFl-Q5-Brs"/>
+                    </constraints>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Loading..." id="pgq-dU-GDk">
+                        <font key="font" metaFont="system" size="23"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iTp-M2-dP8">
+                    <rect key="frame" x="233" y="19" width="83" height="32"/>
+                    <buttonCell key="cell" type="push" title="refresh" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="u2v-X4-Kog">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="toggleDoorStatus:" target="-2" id="iPI-79-xIB"/>
+                    </connections>
+                </button>
+            </subviews>
+            <constraints>
+                <constraint firstItem="KU6-MB-4x2" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="2" id="AfO-ab-vWV"/>
+                <constraint firstAttribute="trailing" secondItem="iTp-M2-dP8" secondAttribute="trailing" constant="10" id="QMV-XD-6HR"/>
+                <constraint firstAttribute="bottom" secondItem="iTp-M2-dP8" secondAttribute="bottom" constant="26" id="SSQ-7r-GVw"/>
+                <constraint firstItem="iTp-M2-dP8" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="33" id="Zwa-Uq-ATl"/>
+                <constraint firstItem="KU6-MB-4x2" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="30" id="aFo-8G-i2m"/>
+                <constraint firstItem="iTp-M2-dP8" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="KU6-MB-4x2" secondAttribute="trailing" constant="10" id="hsp-bD-hWU"/>
+                <constraint firstAttribute="bottom" secondItem="KU6-MB-4x2" secondAttribute="bottom" constant="22" id="pP1-Fv-KED"/>
+            </constraints>
+        </customView>
+    </objects>
+</document>
