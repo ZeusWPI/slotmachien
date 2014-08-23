@@ -2,20 +2,16 @@ package slotmachien;
 
 public class TurnToAction extends Action {
     
-    private int target;
+    private Status status;
     private SMMotorHandler smmh;
     
-    public TurnToAction(SMMotorHandler smmh, int target) {
-        this.target = target;
+    public TurnToAction(SMMotorHandler smmh, Status status) {
         this.smmh = smmh;
-    }
-
-    public TurnToAction(SMMotorHandler smmh, Status s) {
-        TurnToAction(smmh, s.getPosition());
+        this.status = status;
     }
 
     @Override
     public void performAction() {
-        smmh.turnTo(target);
+        smmh.turnTo(status);
     }
 }
