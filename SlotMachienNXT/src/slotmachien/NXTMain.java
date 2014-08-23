@@ -33,14 +33,14 @@ public class NXTMain {
     	MOTORS.addObserver(new LCDObserver());
 
         // Define actions.
-        ACTIONS.put((byte) 1, new TurnToAction(MOTORS, POSITION_OPEN));
-        ACTIONS.put((byte) 2, new TurnToAction(MOTORS, POSITION_CLOSED));
+        ACTIONS.put((byte) 1, new TurnToAction(MOTORS, Status.OPEN));
+        ACTIONS.put((byte) 2, new TurnToAction(MOTORS, Status.CLOSED));
         ACTIONS.put((byte) 3, new IDAction());
 
         Button.LEFT.addButtonListener(new ActionButtonListener(
-                new TurnToAction(MOTORS, POSITION_OPEN)));
+                new TurnToAction(MOTORS, Status.OPEN)));
         Button.RIGHT.addButtonListener(new ActionButtonListener(
-                new TurnToAction(MOTORS, POSITION_CLOSED)));
+                new TurnToAction(MOTORS, Status.CLOSED)));
         Button.ENTER.addButtonListener(new ActionButtonListener(
                 new CenterAction()));
 

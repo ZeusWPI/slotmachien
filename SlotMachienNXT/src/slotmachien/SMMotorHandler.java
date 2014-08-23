@@ -45,6 +45,12 @@ public class SMMotorHandler implements Observable {
         motorblock.flt();
         notifyObservers();
     }
+
+    public void turnTo(Status s) {
+        if (s != getStatus()) {
+            turnTo(s.getPosition());
+        }
+    }
     
     public void calibrate() {
         motorblock.setSpeed(400);

@@ -10,6 +10,10 @@ public class TurnToAction extends Action {
         this.smmh = smmh;
     }
 
+    public TurnToAction(SMMotorHandler smmh, Status s) {
+        TurnToAction(smmh, s.getPosition());
+    }
+
     @Override
     public void performAction() {
         smmh.turnTo(target);
