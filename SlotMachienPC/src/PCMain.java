@@ -35,7 +35,7 @@ public class PCMain {
             IOException, InterruptedException {
 
         String commando = args[0].toLowerCase();
-        if(!OUT_TOLK.contains(commando)) {
+        if(!OUT_TOLK.containsKey(commando)) {
             System.err.println("Wrong command");
             System.exit(1);
         }
