@@ -60,9 +60,6 @@ public class StreamObserver {
             try{
                 while(true){
                     String line = conn.readLine();
-                    LCD.clear();
-                    LCD.drawString(line, 0, 0);
-                    Delay.msDelay(1000);
                     // commands should be shorter than 6 chars because leJOS
                     if (line.length() < 6 && lineMap.containsKey(line)){
                         lineMap.get(line).notifyObservers();
