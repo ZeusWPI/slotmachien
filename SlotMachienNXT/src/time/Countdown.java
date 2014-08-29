@@ -3,7 +3,7 @@ package time;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import slotmachien.Action;
+import slotmachien.actions.Action;
 
 public class Countdown {
     private int count;
@@ -17,23 +17,34 @@ public class Countdown {
         this.tick = tick;
         this.ticker = ticker;
         this.action = action;
-        this.timer = new Timer();
     }
 
     public void start(){
+        // restart if timer is running
+        if (running()){
+            cancel();
+        }
+        
+        timer = new Timer();
         for (int i = 1; i < count; i++){
             timer.schedule(new TickerTask(ticker, i) , i*tick);
         }
         timer.schedule(new TimerTask(){
             public void run(){
-                action.performAction();
-                timer.cancel();
+                action.perform();
+                cancel();
             }
         }, count*tick);
     }
 
     public void cancel(){
         timer.cancel();
+        // dereference timer
+        timer = null;
+    }
+    
+    public boolean running(){
+        return timer != null;
     }
 
     // Defines how to act when a tick occurs.

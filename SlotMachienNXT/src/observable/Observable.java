@@ -1,4 +1,4 @@
-package slotmachien;
+package observable;
 
 public interface Observable {
 
@@ -8,4 +8,5 @@ public interface Observable {
 	
 	public void removeObserver(Observer o);
 	
+	public int observerCount();
 }
