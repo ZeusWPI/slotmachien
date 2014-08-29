@@ -11,6 +11,7 @@ import java.util.Map;
 
 import lejos.nxt.LCD;
 import lejos.nxt.Sound;
+import lejos.util.Delay;
 import observable.AbstractObservable;
 import observable.Observable;
 import observable.Observer;
@@ -59,7 +60,11 @@ public class StreamObserver {
             try{
                 while(true){
                     String line = conn.readLine();
-                    if (lineMap.containsKey(line)){
+                    LCD.clear();
+                    LCD.drawString(line, 0, 0);
+                    Delay.msDelay(1000);
+                    // commands should be shorter than 6 chars because leJOS
+                    if (line.length() < 6 && lineMap.containsKey(line)){
                         lineMap.get(line).notifyObservers();
                     }
                 }
