@@ -17,14 +17,14 @@ class Process:
         self.inputProcessing = None
         self.heartbeat = None
         self.stopped = False
-        self.last_status = ""
+        self.last_status = ''
         self.create()
 
     def create(self):
         self.clean_process()
         if app.config['DEBUG']:
             self.process = Popen(['python test.py'], stdin=PIPE, stdout=PIPE,
-                            shell=True, universal_newlines=True)
+                            shell=True)
         else:
             self.process = Popen(['cd ../SlotMachienPC/src && ' +
                     'java -cp /opt/leJOS_NXT/lib/pc/pccomm.jar:. PCMain '],
@@ -51,22 +51,17 @@ class Process:
             self.process.terminate()
 
         if self.inputProcessing and self.inputProcessing.isAlive():
-            self.inputProcessing.join() #TODO: check if something better exists
-            self.inputProcessing = None
+            self.inputProcessing = None # does not need to be stopped because stdin is closed
 
         if self.heartbeat and self.heartbeat.isAlive():
             self.heartbeat.stop = True
-            self.heartbeat.join()
             self.heartbeat = None
         print("Closed all threads")
 
     def check_alive(self):
-        if self.process and not self.process.poll() and not self.stopped:
-            return True
-        else:
+        if not self.process or self.process.poll() or self.stopped:
             print("DEAD")
             self.create()
-            return True
 
     def stdin(self):
         self.check_alive()
@@ -90,11 +85,11 @@ class Process:
 
 class InputProcessingThread(Thread):
     def __init__(self, process):
+        super(InputProcessingThread, self).__init__()
         self.process = process
-        Thread.__init__(self)
 
     def run(self):
-        print("starting thread")
+        print('starting input processing')
         for line in iter(self.process.stdout().readline, ""):
             if len(line) > 1:
                 self.process.last_status = line
@@ -102,21 +97,23 @@ class InputProcessingThread(Thread):
                 print("received: " + line)
                 #TODO: add logging
                 #TODO: do webhooks (in new thread)
-        print("Thread is done")
+        print('thread: input processing stopped')
         self.process.stopped = True
 
 
 class HeartBeatThread(Thread):
     def __init__(self, process):
+        super(HeartBeatThread, self).__init__()
         self.process = process
         self.stop = False
-        Thread.__init__(self)
 
     def run(self):
+        print('starting heartbeat')
         while not self.stop:
             self.process._write_command_('PING')
             self.process.check_alive()
             time.sleep(5)
+        print('thread: heartbeat stopped')
 
 def send_command(command):
     global process
