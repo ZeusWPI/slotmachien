@@ -51,7 +51,7 @@ public class UsbIO {
         } catch (OutOfMemoryError e){
             // OutOfMemoryError implies a broken connection
             close();
-            new Thread(onBreak).start();;
+            new Thread(onBreak).start();
             throw new IOException();
         }
     }

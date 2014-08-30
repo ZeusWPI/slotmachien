@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.Scanner;
 
 // Connect streams!
 public class Pipe implements Runnable {
@@ -17,20 +18,22 @@ public class Pipe implements Runnable {
     }
 
     @Override
-    public void run() {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+    public void run(){
+        try (Scanner scanner = new Scanner(new InputStreamReader(in));
              BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out))) {
-            while (true) {
-                writer.write(reader.readLine());
+            while (scanner.hasNextLine()) {
+                writer.write(scanner.nextLine());
                 writer.newLine();
                 writer.flush();
             }
         } catch (IOException e) {
-            System.out.println("Something broke");
+            e.printStackTrace();
         }
     }
     
-    public static void make(InputStream in, OutputStream out){
-        new Thread(new Pipe(in, out)).start();
+    public static Thread make(InputStream in, OutputStream out){
+        Thread t = new Thread(new Pipe(in, out));
+        t.start();
+        return t;
     }
 }

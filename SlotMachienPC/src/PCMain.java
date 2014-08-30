@@ -11,15 +11,20 @@ public class PCMain {
 
     public static void main(String[] args) throws NXTCommException,
             IOException, InterruptedException {
-         
+        
         NXTComm nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
         NXTInfo[] nxtInfo = nxtComm.search(null);
+        if (nxtInfo.length == 0){
+            System.exit(1);
+        }
         nxtComm.open(nxtInfo[0]);
         
         OutputStream os = nxtComm.getOutputStream();
         InputStream is = nxtComm.getInputStream();
         
-        Pipe.make(System.in, os);
         Pipe.make(is, System.out);
+        Pipe.make(System.in, os).join();  // Wait for end of input
+        
+        nxtComm.close();
     }
 }
