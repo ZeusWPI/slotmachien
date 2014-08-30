@@ -13,6 +13,7 @@ from app import app
 from auth import has_auth_key, has_username
 from models import LogAction
 
+
 class Process:
     def __init__(self):
         self.process = None
@@ -26,11 +27,12 @@ class Process:
         self.clean_process()
         if app.config['DEBUG']:
             self.process = Popen(['python test.py'], stdin=PIPE, stdout=PIPE,
-                            shell=True)
+                                 shell=True)
         else:
             self.process = Popen(['cd ../SlotMachienPC/src && ' +
-                    'java -cp /opt/leJOS_NXT/lib/pc/pccomm.jar:. PCMain '],
-                    stdin=PIPE, stdout=PIPE, shell=True)
+                                 'java -cp /opt/leJOS_NXT/lib/pc/pccomm.jar:.'
+                                  + 'PCMain'], stdin=PIPE, stdout=PIPE,
+                                 shell=True)
 
         print('SlotMachienPC pid: ' + str(self.process.pid))
         self.stopped = False
@@ -53,7 +55,8 @@ class Process:
             self.process.terminate()
 
         if self.inputProcessing and self.inputProcessing.isAlive():
-            self.inputProcessing = None # does not need to be stopped because stdin is closed
+            self.inputProcessing = None
+            # does not need to be stopped because stdin is closed
 
         if self.heartbeat and self.heartbeat.isAlive():
             self.heartbeat.stop = True
@@ -78,12 +81,13 @@ class Process:
         command = command.upper()
         if command in ['OPEN', 'CLOSE']:
             self._write_command_(command)
-            time.sleep(1.5) # wait for a couple of seconds to return
+            time.sleep(1.5)  # wait for a couple of seconds to return
         return {'status': self.last_status.lower().strip()}
 
     def _write_command_(self, command):
         self.process.stdin.write(command + '\n')
         self.process.stdin.flush()
+
 
 class InputProcessingThread(Thread):
     def __init__(self, process):
@@ -97,14 +101,14 @@ class InputProcessingThread(Thread):
                 self.process.last_status = line
                 line = line.lower().strip()
                 print("received: " + line)
-                #TODO: add logging
+                # TODO: add logging
                 self.webhooks(line)
-                #TODO: do webhooks (in new thread)
+                # TODO: do webhooks (in new thread)
         print('thread: input processing stopped')
         self.process.stopped = True
 
     def webhooks(self, text):
-        js = json.dumps({'text':text})
+        js = json.dumps({'text': text})
         url = app.config['SLACK_WEBHOOK']
         if len(url) > 0:
             requests.post(url, data=js)
@@ -124,6 +128,7 @@ class HeartBeatThread(Thread):
             time.sleep(5)
         print('thread: heartbeat stopped')
 
+
 def send_command(command):
     global process
     log_action(command)
@@ -134,6 +139,7 @@ def send_command(command):
 
 process = Process()
 
+
 # Add signal handler because SlotMachienPC cannot be closed by ctrl+c
 def signal_handler(signal, frame):
         global process
@@ -141,7 +147,10 @@ def signal_handler(signal, frame):
         process.stdin().close()
         process.heartbeat.join()
         sys.exit(0)
+
 signal.signal(signal.SIGINT, signal_handler)
 
+
 def log_action(action):
-    LogAction.create(auth_key=has_auth_key(), user=has_username(), action=action, logged_on=dt.now())
+    LogAction.create(auth_key=has_auth_key(), user=has_username(),
+                     action=action, logged_on=dt.now())
