@@ -1,11 +1,13 @@
 from datetime import datetime as dt
 from subprocess import Popen, PIPE
 from threading import Thread
+import json
 import time
 import signal
 import sys
 
 from flask import jsonify
+import requests
 
 from app import app
 from auth import has_auth_key, has_username
@@ -96,9 +98,16 @@ class InputProcessingThread(Thread):
                 line = line.lower().strip()
                 print("received: " + line)
                 #TODO: add logging
+                self.webhooks(line)
                 #TODO: do webhooks (in new thread)
         print('thread: input processing stopped')
         self.process.stopped = True
+
+    def webhooks(self, text):
+        js = json.dumps({'text':text})
+        url = app.config['SLACK_WEBHOOK']
+        if len(url) > 0:
+            requests.post(url, data=js)
 
 
 class HeartBeatThread(Thread):
@@ -130,7 +139,7 @@ def signal_handler(signal, frame):
         global process
         print("SIGINT called")
         process.stdin().close()
-        time.sleep(5) # sleep 5 seconds to let it close
+        process.heartbeat.join()
         sys.exit(0)
 signal.signal(signal.SIGINT, signal_handler)
 

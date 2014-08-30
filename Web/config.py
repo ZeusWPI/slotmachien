@@ -8,3 +8,4 @@ class Configuration(object):
     }
     DEBUG = False
     SECRET_KEY = 'shhhh'
+    SLACK_WEBHOOK = ''
