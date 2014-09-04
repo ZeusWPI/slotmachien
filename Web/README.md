@@ -16,28 +16,63 @@ admin.save()
 
 After that you can go to localhost:<port>/admin, and login to the admin interface,
 and add an AuthKey for the requests.
+# API
+## Sending requests
+Get the authorization code by authenticating @ login
 
-# Sending requests
-All requests need to have an `Authorization` field with the AuthKey as param, or as ?token=<key>
-All requests respond
-## Open door
-Send a POST request to `/slotmachien/open`
+### Status door (without authorization)
+Send a GET request to `/slotmachien/` or send the send `status` with update door
 
-## Close door
-Send a POST request to `/slotmachien/close`
-
-## Status door
-Send a GET request to `/slotmachien/`
-
-## Update door
+### Update door
 Send a POST request to `/slotmachien/`
-Header set the `Content-Type: application/json`
+Header set the `Content-Type: application/json` and `Authorization: <token>`
 With payload
 ```javascript
 {
-    "action": "open",
-    "token": "<secret-token>",
-    "user_name": "<whitelisted username>"
+    "action": <action>
 }
 ```
-Possible action keywords are: open, close
+Possible action keywords are: open, close, status
+
+### Response
+If the HTTP status is 200, then we respond with a json, 2 kinds when succesfull:
+```javascript
+{
+    "status": <current status>
+}
+```
+Possibilities: `open` and `closed`
+Error:
+```javascript
+{
+    "error": "error message as string"
+}
+```
+
+If the HTTP status code is 401, authentication failed.
+
+## Login
+### Request
+Send a POST request to `/slotmachien/login`
+Header set the `Content-Type: application/json`
+```javascript
+{
+    "username": username,
+    "password": password
+}
+```
+
+### Response
+If the HTTP status is 200, then we respond with a json, when succesull:
+```javascript
+{
+    "token": <new generated token>
+}
+```
+Error:
+```javascript
+{
+    "error": "error message as string"
+}
+```
+If the HTTP status code is 401, authentication failed.

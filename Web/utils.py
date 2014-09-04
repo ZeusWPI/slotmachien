@@ -10,7 +10,7 @@ from flask import jsonify
 import requests
 
 from app import app
-from auth import has_auth_key, has_username
+from auth import has_slack_token, get_user
 from models import LogAction
 
 
@@ -152,5 +152,6 @@ signal.signal(signal.SIGINT, signal_handler)
 
 
 def log_action(action):
-    LogAction.create(auth_key=has_auth_key(), user=has_username(),
-                     action=action, logged_on=dt.now())
+    if action not in ["status"]:
+        LogAction.create(auth_key=has_slack_token(), user=get_user(),
+                         action=action, logged_on=dt.now())
