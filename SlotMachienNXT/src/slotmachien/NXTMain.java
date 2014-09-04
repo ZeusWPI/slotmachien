@@ -1,78 +1,73 @@
 package slotmachien;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
+import io.UsbIO;
 import lejos.nxt.Button;
 import lejos.nxt.Motor;
-import lejos.nxt.comm.NXTConnection;
-import lejos.nxt.comm.USB;
+import lejos.nxt.Sound;
+import observable.ObservableButton;
+import slotmachien.actions.Action;
+import slotmachien.actions.DelayedAction;
+import slotmachien.actions.DrawLcdAction;
+import slotmachien.actions.TurnToAction;
+import slotmachien.actions.WriteStatusAction;
+import time.Countdown;
 
 public class NXTMain {
 
-    public static final int POSITION_OPEN = -180;
-    public static final int POSITION_CLOSED = 0;
-
-    public static final SMMotorHandler MOTORS = new SMMotorHandler(Motor.B, Motor.C);
-    private static final Map<Byte, Action> ACTIONS = new HashMap<>();
-
-    public static void main(String[] args) throws Exception {
-    	try {
-			run();
-		} catch (Exception e) {
-			System.exit(1);
-		}
+    private static final int POSITION_OPEN = -180;
+    private static final int POSITION_CLOSED = 0;
+    
+    private Action openAction;
+    private Action closeAction;
+    private Action drawLcdAction;
+    private Action delayedCloseAction;
+    private SMMotorHandler motors;
+    
+    public static void main(String[] args) {
+        new NXTMain();
     }
     
-    private static void run() throws IOException {
-    	Thread manual = new Thread(new ManualChecker());
-    	manual.start();
-    	MOTORS.addObserver(new LCDObserver());
-
-        // Define actions.
-        ACTIONS.put((byte) 1, new TurnToAction(MOTORS, Status.OPEN));
-        ACTIONS.put((byte) 2, new TurnToAction(MOTORS, Status.CLOSED));
-        ACTIONS.put((byte) 3, new IDAction());
-
-        Button.LEFT.addButtonListener(new ActionButtonListener(
-                new TurnToAction(MOTORS, Status.OPEN)));
-        Button.RIGHT.addButtonListener(new ActionButtonListener(
-                new TurnToAction(MOTORS, Status.CLOSED)));
-        Button.ENTER.addButtonListener(new ActionButtonListener(
-                new CenterAction()));
-
-        MOTORS.calibrate();
-
-        while (true) {
-            // Wait for incoming command
-            NXTConnection conn = USB.waitForConnection();
-            DataInputStream dis = conn.openDataInputStream();
-
-            // read and run instruction code
-            byte b = dis.readByte();
-            runCode(b, conn);
-
-            // Terminate incoming connection
-            dis.close();
-            conn.close();
-        }
-    }
-
-    public static void runCode(byte b, NXTConnection conn) {
-        ACTIONS.get(b).performAction();
-        Status status = MOTORS.getStatus();
-        sendStatus(conn, status);
-    }
-
-    public static void sendStatus(NXTConnection conn, Status status) {
-        try (DataOutputStream dos = conn.openDataOutputStream()) {
-            dos.write(status.toByte());
-            dos.flush();
-        } catch (IOException | NullPointerException e) {
-        }
+    // DIT MOEST IK DOEN VAN T21
+    private NXTMain(){
+        motors = new SMMotorHandler(Motor.B, Motor.C);
+        
+        openAction = new TurnToAction(motors, POSITION_OPEN);
+        closeAction = new TurnToAction(motors, POSITION_CLOSED);
+        drawLcdAction = new DrawLcdAction(motors);
+        delayedCloseAction = new DelayedAction(10, new Countdown.Ticker(){
+            @Override
+            public void doTick(int tick) {
+                Sound.beep();
+            }
+        }, closeAction);
+        
+        openAction.performOnNotification(new ObservableButton(Button.LEFT));
+        closeAction.performOnNotification(new ObservableButton(Button.RIGHT));
+        delayedCloseAction.performOnNotification(new ObservableButton(Button.ENTER));
+        
+        drawLcdAction.performOnNotification(motors);
+        
+        new ConnectWithPC().run();
     }
     
+    class ConnectWithPC implements Runnable {
+        
+        @Override
+        public void run() {
+            UsbIO conn = UsbIO.waitForUsbIO();
+            conn.setOnBreak(this);
+
+            StreamObserver streamObserver = new StreamObserver(conn);      
+            Action writeStatusAction = new WriteStatusAction(motors, conn);
+            
+            openAction.performOnNotification(streamObserver.getObserver("OPEN"));
+            closeAction.performOnNotification(streamObserver.getObserver("CLOSE"));
+            
+            writeStatusAction.performOnNotification(motors);
+            
+            // Write initial status
+            writeStatusAction.perform();
+        }
+        
+    }
 }
