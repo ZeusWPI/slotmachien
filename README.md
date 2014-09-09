@@ -1,16 +1,18 @@
-SlotMachien
-===========
+# SlotMachien
+This repository contains all applications related to SlotMachien; a Lego MindStorms robot designed to turn a specific lock.
+## Dependencies
+[LeJOS NXJ](http://www.lejos.org/nxj.php)
+## Setup
+[LeJOS NXJ setup tutorial](http://www.lejos.org/nxt/nxj/tutorial/index.htm)
+## Components
+### SlotMachienNXT
+Software running on the MindStorms brick. Communicates with SlotMachienPC using a stable USB connection.
 
-Volg deze gidsen om aan de slag te kunnen
+### SlotMachienPC
+Software running on the RPi. Communicates with SlotMachienNXT using a stable USB connection. Takes commands from _stdin_ and sends status updates to _stdout_.
 
-http://www.lejos.org/nxt/nxj/tutorial/Preliminaries/GettingStarted.htm
+### Web
+Web server that handles POST requests to open/close the door, or can send the current status of the lock (open/closed/error). Runs on RPi in conjunction with SlotMachienPC.
 
-http://www.lejos.org/nxt/nxj/tutorial/Preliminaries/UsingEclipse.htm
-
-
-SlotMachienNXT is het deel dat op de lego-brick draait, informatie ontvangt en de motoren draait.
-API documentatie: http://www.lejos.org/nxt/nxj/api/
-
-
-SlotMachienPC is het deel dat op een computer en later op de pi draait, die informatie interpreteert en doorstuurt naar de brick.
-API documentatie: http://www.lejos.org/nxt/pc/api/
+### Android
+Android app that communicates with the webserver to open/close the door remotely.
