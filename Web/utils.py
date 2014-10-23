@@ -31,7 +31,7 @@ class Process:
         else:
             self.process = Popen(['cd ../SlotMachienPC/src && ' +
                                  'java -cp /opt/leJOS_NXT/lib/pc/pccomm.jar:.'
-                                  + 'PCMain'], stdin=PIPE, stdout=PIPE,
+                                  + ' PCMain'], stdin=PIPE, stdout=PIPE,
                                  shell=True)
 
         print('SlotMachienPC pid: ' + str(self.process.pid))
@@ -49,10 +49,12 @@ class Process:
         self.heartbeat.start()
 
     def clean_process(self):
+        print("Started cleaning")
         if self.process and not self.process.poll():
             self.process.stdin.close()
             self.process.stdout.close()
             self.process.terminate()
+            self.process = None
 
         if self.inputProcessing and self.inputProcessing.isAlive():
             self.inputProcessing = None
