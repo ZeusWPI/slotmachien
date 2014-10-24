@@ -53,7 +53,10 @@ class Process:
         if self.process and not self.process.poll():
             self.process.stdin.close()
             self.process.stdout.close()
-            self.process.terminate()
+            try:
+                self.process.terminate()
+            execept OSError:
+                print("No process to terminate")
             self.process = None
 
         if self.inputProcessing and self.inputProcessing.isAlive():
