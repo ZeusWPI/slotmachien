@@ -55,7 +55,7 @@ class Process:
             self.process.stdout.close()
             try:
                 self.process.terminate()
-            execept OSError:
+            except OSError:
                 print("No process to terminate")
             self.process = None
 
