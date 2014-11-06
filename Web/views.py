@@ -10,12 +10,13 @@ from kerberos import authenticate_user
 slotmachien_bp = Blueprint('slotmachien', __name__)
 slotmachien_bp.before_request(before_slotmachien_request)
 
+supported_actions = ['open', 'close', 'status']
+
 @slotmachien_bp.route('/', methods=['POST'])
 def update_door():
-    action = (request.form.get('text') or # slack support
-                         request.get_json(force=True)['action'])
-    if action in ['open', 'close', 'status']:
-        return send_command(action)
+    action = request.get_json(force=True)['action']
+    if action in supported_actions:
+        return jsonify(send_command(action))
     else:
         return jsonify({'error': 'command: ' + action + ' unknown'})
 
@@ -24,12 +25,17 @@ app.register_blueprint(slotmachien_bp, url_prefix='/slotmachien')
 
 @app.route('/slotmachien/')
 def status_door():
-    return send_command('status')
+    return jsonify(send_command('status'))
 
 @app.route('/slotmachien/slack/', methods=['POST'])
 def slack_update_door():
     before_slack_request()
-    return "The door is " + update_door()['status'] + "!"
+    action = request.form.get('text')
+    if action in supported_actions:
+        return 'The door is ' + send_command(action)['status'] + '!'
+    else:
+        return "This command "+ action + " is not supported!"
+
 
 @app.route('/slotmachien/login', methods=['POST'])
 def login():

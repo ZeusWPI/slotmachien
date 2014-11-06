@@ -1,12 +1,10 @@
 from datetime import datetime as dt
 from subprocess import Popen, PIPE
 from threading import Thread
-import json
 import time
 import signal
 import sys
 
-from flask import jsonify
 import requests
 
 from app import app
@@ -140,7 +138,7 @@ def send_command(command):
 
     response = process.send_command(command)
 
-    return jsonify(response)
+    return response
 
 process = Process()
 
