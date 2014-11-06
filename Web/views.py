@@ -29,7 +29,7 @@ def status_door():
 @app.route('/slotmachien/slack/', methods=['POST'])
 def slack_update_door():
     before_slack_request()
-    return update_door()
+    return "The door is " + update_door()['status'] + "!"
 
 @app.route('/slotmachien/login', methods=['POST'])
 def login():
