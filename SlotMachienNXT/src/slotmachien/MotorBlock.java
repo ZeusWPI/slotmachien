@@ -51,6 +51,7 @@ public class MotorBlock {
         }
     }
     
+    // The motorblock is moving only when both motors are moving
     public boolean isMoving() {
         for (NXTRegulatedMotor m : motors) {
             if(!m.isMoving()) {
@@ -60,6 +61,7 @@ public class MotorBlock {
         return true;
     }
     
+    // The motorblock is stalled when at least one motor is not moving
     public boolean isStalled() {
         for (NXTRegulatedMotor m : motors) {
             if(m.isStalled()) {
@@ -70,7 +72,9 @@ public class MotorBlock {
     }
     
     public void waitComplete() {
-        motors[0].waitComplete();
+        for (NXTRegulatedMotor m : motors) {
+            m.waitComplete();
+        }
     }
 
 }
