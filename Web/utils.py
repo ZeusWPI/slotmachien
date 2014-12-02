@@ -1,6 +1,7 @@
 from datetime import datetime as dt
 from subprocess import Popen, PIPE
 from threading import Thread
+import threading
 import json
 import time
 import signal
@@ -18,6 +19,7 @@ class Process:
         self.process = None
         self.inputProcessing = None
         self.heartbeat = None
+        self.write_lock = None
         self.stopped = False
         self.last_status = ''
         self.create()
@@ -46,6 +48,8 @@ class Process:
         self.heartbeat = HeartBeatThread(self)
         self.heartbeat.setDaemon(True)
         self.heartbeat.start()
+
+        self.write_lock = threading.Lock()
 
     def clean_process(self):
         print("Started cleaning")
@@ -89,8 +93,10 @@ class Process:
         return {'status': self.last_status.lower().strip()}
 
     def _write_command_(self, command):
+        self.write_lock.acquire()
         self.process.stdin.write(command + '\n')
         self.process.stdin.flush()
+        self.write_lock.release()
 
 
 class InputProcessingThread(Thread):
