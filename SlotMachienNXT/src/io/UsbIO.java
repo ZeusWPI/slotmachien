@@ -67,16 +67,6 @@ public class UsbIO {
     		}
     	} while(temp != '\n');
     	return null;
-    	/*try {
-        	String line = reader.readLine();
-        	System.out.println(line);
-            return line;
-        } catch (OutOfMemoryError e){
-            // OutOfMemoryError implies a broken connection
-            close();
-            new Thread(onBreak).start();
-            throw new IOException();
-        }*/
     }
     
     public void close() throws IOException{
