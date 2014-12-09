@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
-import slotmachien.actions.Action;
 import lejos.nxt.comm.NXTConnection;
 import lejos.nxt.comm.USB;
 
@@ -59,7 +58,7 @@ public class UsbIO {
 
     		s = s + temp;
     		
-    		if(temp == '\0') {
+    		if(s.length() > 6 || temp == '\0') {
                 // OutOfMemoryError implies a broken connection
                 close();
                 new Thread(onBreak).start();

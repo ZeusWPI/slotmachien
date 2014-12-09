@@ -72,9 +72,10 @@ public class MotorBlock {
     }
     
     public void waitComplete() {
-        for (NXTRegulatedMotor m : motors) {
+    	motors[0].waitComplete();
+        /*for (NXTRegulatedMotor m : motors) {
             m.waitComplete();
-        }
+        }*/
     }
 
 }
