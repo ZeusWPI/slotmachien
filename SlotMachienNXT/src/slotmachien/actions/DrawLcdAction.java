@@ -16,12 +16,14 @@ public class DrawLcdAction extends Action {
     
     private void drawStatus(){
         String str = smmh.getStatus().toString();
-        LCD.clear();
+        /*LCD.clear();
         LCD.drawString(
                 str, 
                 (XSIZE - str.length())/2, 
                 (YSIZE)/2
                 );
+                */
+        System.out.println(str);
     }
 
     @Override

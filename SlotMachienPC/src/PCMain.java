@@ -12,19 +12,36 @@ public class PCMain {
     public static void main(String[] args) throws NXTCommException,
             IOException, InterruptedException {
         
-        NXTComm nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
+        final NXTComm nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
         NXTInfo[] nxtInfo = nxtComm.search(null);
         if (nxtInfo.length == 0){
             System.exit(1);
         }
-        nxtComm.open(nxtInfo[0]);
+        
+        safeOpen(nxtComm, nxtInfo[0], "./.lockmachien");
+
         
         OutputStream os = nxtComm.getOutputStream();
         InputStream is = nxtComm.getInputStream();
         
         Pipe.make(is, System.out);
         Pipe.make(System.in, os).join();  // Wait for end of input
-        
-        nxtComm.close();
+    }
+    
+    private static void safeOpen(final NXTComm comm, final NXTInfo conn, String lockpath) throws NXTCommException, IOException{
+    	
+    	LockFile lock = new LockFile(lockpath);
+    	lock.create();
+    	
+        comm.open(conn);
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+        	@Override
+        	public void run() {
+        		try {
+        			comm.close();
+        		} catch (IOException e) {}
+        	}
+        }));
+    	
     }
 }
