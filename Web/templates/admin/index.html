@@ -1,0 +1,12 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+{% if not current_user.is_anonymous() %}
+    {% if current_user.is_admin() %}
+    <a class="btn btn-default" href="{{ url_for('door.index') }}">Door</a>
+    {% else %}
+lol
+    {% endif %}
+{% else %}
+    <a class="btn btn-default" href="{{ url_for('user_login') }}">Log in</a>
+{% endif %}
+{% endblock %}

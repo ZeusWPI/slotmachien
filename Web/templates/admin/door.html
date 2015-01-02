@@ -1,0 +1,5 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+Status: {{state}} <br/>
+Toggle door: <a class="btn btn-default" href="{{ url_for('door.toggle')}}">toggle</a><br/>
+{% endblock %}

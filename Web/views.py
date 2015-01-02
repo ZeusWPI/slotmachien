@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 
 from app import app
-from auth import auth, before_slotmachien_request, before_slack_request, create_token
+from auth import before_slotmachien_request, before_slack_request, create_token
 from utils import send_command
 from models import User
 from kerberos import authenticate_user
@@ -44,10 +44,11 @@ def login():
     password = json.get('password')
 
     if authenticate_user(username, password):
-        try:
-            user = User.get(User.username == username)
+
+        user = User.query.filter_by(username=username).first()
+        if user is not None:
             return jsonify({'token': create_token(user)})
-        except User.DoesNotExist:
-            jsonify({'error': 'user is not added'})
+        else:
+            return jsonify({'error': 'user is not added'})
     else:
         return jsonify({'error': 'username or password is wrong'})

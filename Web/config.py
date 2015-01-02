@@ -1,11 +1,9 @@
 # config
 
 class Configuration(object):
-    DATABASE = {
-        'name': 'slotmachien.db',
-        'engine': 'peewee.SqliteDatabase',
-        'check_same_thread': False,
-    }
-    DEBUG = False
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///test.db'
+    DEBUG = True
     SECRET_KEY = 'shhhh'
     SLACK_WEBHOOK = ''
+    PROCESS = 'python /Users/feliciaan/Documents/ZeusWPI/slotmachien/Web/test.py'
+    LOGFILE = 'slotmachien.log'
