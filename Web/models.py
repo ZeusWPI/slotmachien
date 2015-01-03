@@ -1,13 +1,13 @@
 import uuid
 from datetime import date, timedelta
 
+
 from app import db
 
 # Create database models
 class ServiceToken(db.Model):
     service = db.Column(db.String(20), primary_key=True)
     key = db.Column(db.String(120))
-    logactions = db.relationship('LogAction', backref='service_token', lazy='dynamic')
 
     def configure(self, service, key):
         self.service = service
@@ -54,6 +54,7 @@ class User(db.Model):
     def __repr__(self):
         return '%s' % self.username
 
+
 class Token(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     token = db.Column(db.String(120), unique=True)
@@ -77,16 +78,14 @@ class Token(db.Model):
 
 class LogAction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    service_token_service = db.Column(db.String(20), db.ForeignKey('service_token.service'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     action = db.Column(db.String(15))
     logged_on = db.Column(db.DateTime)
 
-    def configure(self, service_token, user, action, logged_on):
-        self.service_token = service_token
+    def configure(self, user, action, logged_on):
         self.user = user
         self.action = action
         self.logged_on = logged_on
 
     def __repr__(self):
-        return '%s: %s on %s' % (self.user.username, self.action, self.service_token_service)
+        return '%s: %s on %s' % (self.user.username, self.action, self.logged_on)

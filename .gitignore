@@ -1,5 +1,5 @@
 *.class
-
+*/config.py
 # Package Files #
 *.jar
 *.war

@@ -8,9 +8,10 @@ import signal
 import sys
 
 import requests
+from flask.ext.login import current_user
+
 
 from app import app, db, logger
-from auth import has_slack_token, get_user
 from models import LogAction
 
 
@@ -177,9 +178,9 @@ signal.signal(signal.SIGINT, signal_handler)
 
 
 def log_action(action):
-    logger.info("User %s:%s" % (get_user(), action))
+    logger.info("User %s:%s" % (current_user, action))
     if action not in ["status"]:
         logaction = LogAction()
-        logaction.configure(has_slack_token(), get_user(), action, dt.now())
+        logaction.configure(current_user, action, dt.now())
         db.session.add(logaction)
         db.session.commit()

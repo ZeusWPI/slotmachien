@@ -27,7 +27,7 @@ class DoorView(BaseView):
     def index(self):
         state = send_command('status')['status']
 
-        return self.render('admin/door.html', state = state, toggle_url = url_for('.toggle'))
+        return self.render('admin/door.html', state = state)
 
     @expose('/routes')
     def list_routes(self):
@@ -65,7 +65,7 @@ class DoorView(BaseView):
 
         return login.current_user.is_admin()
 
-admin = Admin(app, name='SlotMachien')
+admin = Admin(app, name='SlotMachien', url='/slotmachien/admin', template_mode='bootstrap3')
 
 admin.add_view(DoorView(name='Door', endpoint='door'))
 
