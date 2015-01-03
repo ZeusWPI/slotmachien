@@ -1,7 +1,4 @@
-#!/Users/feliciaan/Documents/ZeusWPI/slotmachien/Web/env/bin/python
-import sys # insert path
-sys.path.insert(0, '/Users/feliciaan/Documents/ZeusWPI/slotmachien/Web/env/lib/python2.7/site-packages')
-
+#!/bin/python
 
 from flup.server.fcgi import WSGIServer
 from logbook import FileHandler
@@ -17,7 +14,9 @@ from auth import *
 from admin import admin
 from login import login_manager
 from models import *
+from utils import start_process
 from views import *
 
 if __name__ == '__main__':
+    start_process()
     WSGIServer(app, bindAddress='/tmp/slotmachien.sock').run()

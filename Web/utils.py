@@ -1,6 +1,7 @@
 from datetime import datetime as dt
 from subprocess import Popen, PIPE
 from threading import Thread
+from functools import wraps
 import threading
 import json
 import time
@@ -13,6 +14,16 @@ from flask.ext.login import current_user
 
 from app import app, db, logger
 from models import LogAction
+
+
+def is_alive(f): # decorater for the Process class
+    @wraps(f)
+    def decorated(self, *args, **kwargs):
+        if not self.check_alive():
+            self.create()
+
+        return f(self, *args, **kwargs)
+    return decorated
 
 
 class Process:
@@ -74,21 +85,16 @@ class Process:
             return False
         return True
 
+    @is_alive
     def stdin(self):
-        if not self.check_alive():
-            self.create()
-
         return self.process.stdin
 
+    @is_alive
     def stdout(self):
-        if not self.check_alive():
-            self.create()
-
         return self.process.stdout
 
+    @is_alive
     def send_command(self, command):
-        if not self.check_alive():
-            self.create()
         command = command.upper()
         if command in ['OPEN', 'CLOSE']:
             self._write_command_(command)
@@ -158,12 +164,18 @@ def send_command(command):
     global process
     log_action(command)
 
+    if process is None:
+        start_process()
+
     response = process.send_command(command)
 
     return response
 
-process = Process()
+def start_process():
+    global process
+    process = Process()
 
+process = None
 
 # Add signal handler because SlotMachienPC cannot be closed by ctrl+c
 def signal_handler(signal, frame):

@@ -35,3 +35,24 @@ def slack_update_door():
         return 'The door is ' + send_command(action)['status'] + '!'
     else:
         return "This command "+ action + " is not supported!"
+
+if app.config['DEBUG']: # add route information
+    @app.route('/routes')
+    def list_routes(self):
+        import urllib
+        output = []
+        for rule in app.url_map.iter_rules():
+            options = {}
+            for arg in rule.arguments:
+                options[arg] = "[{0}]".format(arg)
+
+            methods = ','.join(rule.methods)
+            url = url_for(rule.endpoint, **options)
+            line = urllib.unquote("{:50s} {:20s} {}".format(rule.endpoint, methods, url))
+            output.append(line)
+
+        string = ''
+        for line in sorted(output):
+            string += line + "<br/>"
+
+        return string
