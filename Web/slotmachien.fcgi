@@ -10,7 +10,6 @@ from app import app, db
 log_handler = FileHandler(app.config['LOGFILE'])
 log_handler.push_application()
 
-from auth import *
 from admin import admin
 from login import login_manager
 from models import *

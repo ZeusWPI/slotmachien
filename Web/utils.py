@@ -16,7 +16,7 @@ from app import app, db, logger
 from models import LogAction
 
 
-def is_alive(f): # decorater for the Process class
+def is_alive(f):  # decorater for the Process class
     @wraps(f)
     def decorated(self, *args, **kwargs):
         if not self.check_alive():
@@ -27,6 +27,7 @@ def is_alive(f): # decorater for the Process class
 
 
 class Process:
+
     def __init__(self):
         self.process = None
         self.inputProcessing = None
@@ -57,7 +58,6 @@ class Process:
 
         self.write_lock = threading.Lock()
         logger.info("Started all threads")
-
 
     def clean_process(self):
         logger.info("Started cleaning")
@@ -102,7 +102,7 @@ class Process:
         return {'status': self.last_status.lower().strip()}
 
     def _write_command_(self, command):
-        if self.write_lock != None:
+        if self.write_lock is not None:
             self.write_lock.acquire()
             self.process.stdin.write(command + '\n')
             self.process.stdin.flush()
@@ -110,6 +110,7 @@ class Process:
 
 
 class InputProcessingThread(Thread):
+
     def __init__(self, process):
         super(InputProcessingThread, self).__init__()
         self.process = process
@@ -144,8 +145,8 @@ class InputProcessingThread(Thread):
         logger.error("Door status inconsistent: %s" % (status))
 
 
-
 class HeartBeatThread(Thread):
+
     def __init__(self, process):
         super(HeartBeatThread, self).__init__()
         self.process = process
@@ -171,6 +172,7 @@ def send_command(command):
 
     return response
 
+
 def start_process():
     global process
     process = Process()
@@ -178,13 +180,15 @@ def start_process():
 process = None
 
 # Add signal handler because SlotMachienPC cannot be closed by ctrl+c
+
+
 def signal_handler(signal, frame):
-        global process
-        logger.info("SIGINT called, stopping the program")
-        process.stdin().close()
-        process.clean_process()
-        #process.inputProcessing.join()
-        sys.exit(0)
+    global process
+    logger.info("SIGINT called, stopping the program")
+    process.stdin().close()
+    process.clean_process()
+    # process.inputProcessing.join()
+    sys.exit(0)
 
 signal.signal(signal.SIGINT, signal_handler)
 

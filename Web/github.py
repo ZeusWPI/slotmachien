@@ -21,6 +21,7 @@ github = oauth.remote_app(
     authorize_url='https://github.com/login/oauth/authorize'
 )
 
+
 @app.route('/slotmachien/login')
 def login():
     return github.authorize(callback=url_for('authorized', _external=True))
@@ -39,20 +40,16 @@ def authorized():
     resp = github.authorized_response()
     if resp is None:
         return 'Access denied: reason=%s error=%s' % (
-            request.args['error_reason'],
+            request.args['error'],
             request.args['error_description']
         )
     session['github_token'] = (resp['access_token'], '')
     me = github.get('user')
-    print resp
-    user = User.query.filter_by(username = me.data['login']).first()
+
+    user = User.query.filter_by(username=me.data['login'].lower()).first()
     if user:
-        token = Token()
-        token.configure(user)
-        token.token = resp['access_token']
-        #db.session.add(token) # TODO: test if already exists
-        #db.session.commit()
         login_user(user)
+        # add_token(resp['access_token'], user)
         return redirect(url_for("admin.index"))
 
     return jsonify(me.data)
@@ -62,5 +59,12 @@ def authorized():
 def get_github_oauth_token():
     return session.get('github_token')
 
-def verify_access_token(token):
-    return None
+
+def add_token(token, user):
+    token = Token.query.filter_by(token=token, user=user).first()
+    if token is None:
+        token = Token()
+        token.configure(user)
+        token.token = token
+        db.session.add(token)
+        db.session.commit()

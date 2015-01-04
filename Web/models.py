@@ -5,6 +5,8 @@ from datetime import date, timedelta
 from app import db
 
 # Create database models
+
+
 class ServiceToken(db.Model):
     service = db.Column(db.String(20), primary_key=True)
     key = db.Column(db.String(120))
@@ -25,7 +27,6 @@ class User(db.Model):
     admin = db.Column(db.Boolean)
     tokens = db.relationship('Token', backref='user', lazy='dynamic')
     logactions = db.relationship('LogAction', backref='user', lazy='dynamic')
-
 
     def configure(self, username, slackname, allowed, admin):
         self.username = username
@@ -65,7 +66,7 @@ class Token(db.Model):
     def configure(self, user):
         self.user = user
         self.created_on = date.today()
-        self.expires_on = date.today() + timedelta(days=365) # 1 year
+        self.expires_on = date.today() + timedelta(days=365)  # 1 year
 
         self.create_token()
 

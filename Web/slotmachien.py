@@ -1,6 +1,5 @@
 from app import app, db
 
-from auth import *
 from admin import admin
 from login import login_manager
 from models import *

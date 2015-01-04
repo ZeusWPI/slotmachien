@@ -76,3 +76,19 @@ Error:
 }
 ```
 If the HTTP status code is 401, authentication failed.
+
+## nginx configuration
+You have to run the slotmachien.fcgi program.
+Than add the following configuration to nginx:
+```
+location / {
+    try_files $uri @slotmachien;
+}
+
+location @slotmachien {
+    include fastcgi_params;
+    fastcgi_param PATH_INFO $fastcgi_script_name;
+    fastcgi_param SCRIPT_NAME "";
+    fastcgi_pass unix:/tmp/slotmachien.sock;
+}
+```

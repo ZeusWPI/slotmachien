@@ -1,5 +1,6 @@
 # config
 
+
 class Configuration(object):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///slotmachien.db'
     DEBUG = True

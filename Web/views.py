@@ -1,11 +1,13 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, redirect, url_for
+
 
 from app import app
-from auth import before_request
+from login import before_request
 from utils import send_command
 from models import User
 
 supported_actions = ['open', 'close', 'status']
+
 
 @app.route('/slotmachien/', methods=['POST'])
 def update_door():
@@ -16,15 +18,22 @@ def update_door():
     else:
         return jsonify({'error': 'command: ' + action + ' unknown'})
 
-#TODO: attach
+
+# TODO: attach
 def after_slotmachien_request(response):
     headers = response.headers
     # add the user accestoken
     headers['token'] = current_user.tokens.first().token
 
+
 @app.route('/slotmachien/')
 def status_door():
-    return jsonify(send_command('status'))
+    content_type = request.headers.get('Content-Type', None)
+    if content_type and content_type in 'application/json':
+        return jsonify(send_command('status'))
+
+    return redirect(url_for("admin.index"))
+
 
 @app.route('/slotmachien/slack/', methods=['POST'])
 def slack_update_door():
@@ -34,9 +43,9 @@ def slack_update_door():
     if action in supported_actions:
         return 'The door is ' + send_command(action)['status'] + '!'
     else:
-        return "This command "+ action + " is not supported!"
+        return "This command " + action + " is not supported!"
 
-if app.config['DEBUG']: # add route information
+if app.config['DEBUG']:  # add route information
     @app.route('/routes')
     def list_routes(self):
         import urllib
@@ -48,7 +57,8 @@ if app.config['DEBUG']: # add route information
 
             methods = ','.join(rule.methods)
             url = url_for(rule.endpoint, **options)
-            line = urllib.unquote("{:50s} {:20s} {}".format(rule.endpoint, methods, url))
+            line = urllib.unquote(
+                "{:50s} {:20s} {}".format(rule.endpoint, methods, url))
             output.append(line)
 
         string = ''

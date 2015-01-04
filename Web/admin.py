@@ -8,7 +8,9 @@ from app import app, db
 from models import ServiceToken, User, Token, LogAction
 from utils import send_command
 
+
 class ModelBaseView(ModelView):
+
     def is_accessible(self):
         if login.current_user.is_anonymous():
             return False
@@ -17,17 +19,18 @@ class ModelBaseView(ModelView):
 
 
 class ServiceTokenAdmin(ModelBaseView):
-    column_display_pk = True # show the service
+    column_display_pk = True  # show the service
     column_hide_backrefs = True
     form_columns = ('service', 'key')
 
 
 class DoorView(BaseView):
+
     @expose('/')
     def index(self):
         state = send_command('status')['status']
 
-        return self.render('admin/door.html', state = state)
+        return self.render('admin/door.html', state=state)
 
     @expose('/toggle/')
     def toggle(self):
