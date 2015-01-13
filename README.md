@@ -13,6 +13,3 @@ Software running on the RPi. Communicates with SlotMachienNXT using a stable USB
 
 ### Web
 Web server that handles POST requests to open/close the door, or can send the current status of the lock (open/closed/error). Runs on RPi in conjunction with SlotMachienPC.
-
-### Android
-Android app that communicates with the webserver to open/close the door remotely.
