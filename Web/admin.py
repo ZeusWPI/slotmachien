@@ -46,7 +46,7 @@ class DoorView(BaseView):
         if login.current_user.is_anonymous():
             return False
 
-        return login.current_user.is_admin()
+        return login.current_user.is_authenticated()
 
 admin = Admin(app, name='SlotMachien', url='/slotmachien/admin', template_mode='bootstrap3')
 

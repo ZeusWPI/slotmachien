@@ -1,12 +1,18 @@
 {% extends 'admin/master.html' %}
 {% block body %}
 {% if not current_user.is_anonymous() %}
-    {% if current_user.is_admin() %}
-    <a class="btn btn-default" href="{{ url_for('door.index') }}">Door</a>
-    {% else %}
-lol
-    {% endif %}
+<h1>Welkom {{current_user.username}}</h1>
+{% if current_user.is_admin() %}
+<h1>Welkom mijnheer de administrateur des SlotMachiens</h1>
 {% else %}
-    <a class="btn btn-default" href="{{ url_for('user_login') }}">Log in</a>
+<p>
+    Bestuur de deur manueel :)
+</p>
+
+{% endif %}
+<a class="btn btn-default" href="{{ url_for('door.index') }}">Door</a>
+
+{% else %}
+    <a class="btn btn-default" href="{{ url_for('login') }}">Log in</a>
 {% endif %}
 {% endblock %}

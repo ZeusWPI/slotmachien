@@ -49,16 +49,6 @@ def load_user_from_request(request):
     return None
 
 
-@app.route("/login")
-def user_login():
-    return redirect(url_for('login'))
-
-
-@app.route("/logout")
-def user_logout():
-    return redirect(url_for('logout'))
-
-
 def before_request():
     if current_user.is_anonymous():
         abort(401)

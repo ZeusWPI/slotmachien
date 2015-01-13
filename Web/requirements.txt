@@ -13,3 +13,5 @@ flup==1.0.2
 itsdangerous==0.24
 peewee==2.2.5
 requests==2.4.0
+Flask-OAuthlib==0.8.0
+oauthlib==0.7.2
