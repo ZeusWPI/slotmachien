@@ -18,19 +18,30 @@ class ModelBaseView(ModelView):
         return login.current_user.is_admin()
 
 
-class ServiceTokenAdmin(ModelBaseView):
+class UserAdminModel(ModelBaseView):
+    column_searchable_list = ('username', 'slackname')
+    inline_models = None
+    form_columns = ('username', 'slackname', 'allowed', 'admin')
+
+
+class ServiceTokenAdminModel(ModelBaseView):
     column_display_pk = True  # show the service
     column_hide_backrefs = True
     form_columns = ('service', 'key')
+
+
+class LogActionAdminModel(ModelBaseView):
+    can_create = False
+    can_edit = False
+    can_delete = False
+    column_default_sort = ('logged_on', True)
 
 
 class DoorView(BaseView):
 
     @expose('/')
     def index(self):
-        state = send_command('status')['status']
-
-        return self.render('admin/door.html', state=state)
+        return self.render('admin/door.html')
 
     @expose('/toggle/')
     def toggle(self):
@@ -40,7 +51,10 @@ class DoorView(BaseView):
         else:
             state = send_command('open')['status']
 
-        return redirect(url_for('.index'))
+        return redirect(url_for('admin.index'))
+
+    def is_visible(self):
+        return False
 
     def is_accessible(self):
         if login.current_user.is_anonymous():
@@ -48,11 +62,20 @@ class DoorView(BaseView):
 
         return login.current_user.is_authenticated()
 
+
+@app.context_processor
+def door_processor():
+    def door_status():
+        if not login.current_user.is_anonymous():
+            return send_command('status')['status']
+        return "Not authenticated"
+    return dict(door_status=door_status)
+
 admin = Admin(app, name='SlotMachien', url='/slotmachien/admin', template_mode='bootstrap3')
 
 admin.add_view(DoorView(name='Door', endpoint='door'))
 
-admin.add_view(ServiceTokenAdmin(ServiceToken, db.session))
-admin.add_view(ModelBaseView(User, db.session))
+admin.add_view(UserAdminModel(User, db.session))
+admin.add_view(ServiceTokenAdminModel(ServiceToken, db.session))
 admin.add_view(ModelBaseView(Token, db.session))
-admin.add_view(ModelBaseView(LogAction, db.session))
+admin.add_view(LogActionAdminModel(LogAction, db.session))

@@ -1,9 +1,4 @@
 {% extends 'admin/master.html' %}
 {% block body %}
-<p>
-    Status: <span class="label label-{{ 'success' if state in 'open' else 'warning' }}">{{state}}</span>
-</p>
-<p>
-    Toggle door: <a class="btn btn-default btn-large" href="{{ url_for('door.toggle')}}">toggle</a>
-</p>
+{% include 'admin/base_door.html' with context %}
 {% endblock %}

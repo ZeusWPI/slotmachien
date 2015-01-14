@@ -1,18 +1,17 @@
 {% extends 'admin/master.html' %}
 {% block body %}
 {% if not current_user.is_anonymous() %}
-<h1>Welkom {{current_user.username}}</h1>
+<p>Welkom {{current_user.username}},</p>
 {% if current_user.is_admin() %}
-<h1>Welkom mijnheer de administrateur des SlotMachiens</h1>
-{% else %}
-<p>
-    Bestuur de deur manueel :)
-</p>
-
+<p>Welkom mijnheer de administrateur des SlotMachiens,</p>
 {% endif %}
-<a class="btn btn-default" href="{{ url_for('door.index') }}">Door</a>
-
+{# include door view#}
+{% include 'admin/base_door.html' with context %}
+<br/>
+<p>
+    <a class="btn btn-default btn-large" href="{{ url_for('logout') }}">Log uit</a>
+</p>
 {% else %}
-    <a class="btn btn-default" href="{{ url_for('login') }}">Log in</a>
+<a class="btn btn-default btn-large" href="{{ url_for('login') }}">Log in</a>
 {% endif %}
 {% endblock %}
