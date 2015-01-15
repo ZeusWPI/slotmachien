@@ -141,10 +141,11 @@ class InputProcessingThread(Thread):
         if status in ["open", "closed"]:
             return status
 
-        if "NXT" in status:
+        if "nxt" in status:
             return "NXT Error"
-
+        
         logger.error("Door status inconsistent: %s" % (status))
+        return "error: contact sysadmins"
 
 
 class HeartBeatThread(Thread):
