@@ -53,6 +53,18 @@ class DoorView(BaseView):
 
         return redirect(url_for('admin.index'))
 
+    @expose('/open/')
+    def open(self):
+        return self.send('open')
+
+    @expose('/close/')
+    def close(self):
+        return self.send('close')
+
+    def send(self, command):
+        send_command(command)['status']
+        return redirect(url_for('.index'))
+
     def is_visible(self):
         return False
 

@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, session, request, jsonify
+from flask import Flask, redirect, url_for, session, request, jsonify, flash
 from flask.ext.login import LoginManager, login_user, current_user, logout_user
 from flask.ext.admin import helpers
 from flask_oauthlib.client import OAuth
@@ -22,17 +22,11 @@ github = oauth.remote_app(
 )
 
 
-@app.route('/slotmachien/login')
-def login():
-    return github.authorize(callback=url_for('authorized', _external=True))
-
-
-@app.route('/slotmachien/logout')
-def logout():
-    if 'github_token' in session:
-        session.pop('github_token', None)
-    logout_user()
-    return redirect(url_for('admin.index'))
+def github_login():
+    if app.debug:
+        return github.authorize(callback=url_for('authorized', _external=True))
+    else: # temporary solution because it otherwise gives trouble on the pi because of proxies and such
+        return github.authorize(callback='http://kelder.zeus.ugent.be/slotmachien/login/github/authorized')
 
 
 @app.route('/slotmachien/login/github/authorized')
@@ -52,7 +46,8 @@ def authorized():
         # add_token(resp['access_token'], user)
         return redirect(url_for("admin.index"))
 
-    return jsonify(me.data)
+    flash("You're not allowed to enter, please contact a system administrator")
+    return redirect(url_for("admin.index"))
 
 
 @github.tokengetter

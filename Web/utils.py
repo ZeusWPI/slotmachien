@@ -52,9 +52,10 @@ class Process:
         self.inputProcessing.start()
 
         # Create heartbeat thread
-        self.heartbeat = HeartBeatThread(self)
-        self.heartbeat.setDaemon(True)
-        self.heartbeat.start()
+        # TEMPORARY DISABLE HEARTBEAT BECAUSE SLOTMACHIENNXT CANNOT LIVE WITH IT
+        #self.heartbeat = HeartBeatThread(self)
+        #self.heartbeat.setDaemon(True)
+        #self.heartbeat.start()
 
         self.write_lock = threading.Lock()
         logger.info("Started all threads")
@@ -96,9 +97,10 @@ class Process:
     @is_alive
     def send_command(self, command):
         command = command.upper()
-        if command in ['OPEN', 'CLOSE']:
+        if command in ['OPEN', 'CLOSE'] \
+            and command not in self.last_status.upper():
             self._write_command_(command)
-            time.sleep(1.5)  # wait for a couple of seconds to return
+            time.sleep(0.75)  # wait for a couple of seconds to return
         return {'status': self.last_status.lower().strip()}
 
     def _write_command_(self, command):

@@ -1,11 +1,11 @@
-from flask import redirect, request, url_for, abort
+from flask import redirect, request, url_for, abort, session
 from flask.ext.login import LoginManager, current_user
 from flask_oauthlib.client import OAuth
 
 
 from app import app, db, logger
 from models import User, Token, ServiceToken
-from github import oauth
+from github import oauth, github_login
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -47,6 +47,18 @@ def load_user_from_request(request):
 
     # finally, return None if both methods did not login the user
     return None
+
+@app.route('/slotmachien/login')
+def login():
+    return github_login()
+
+
+@app.route('/slotmachien/logout')
+def logout():
+    if 'github_token' in session:
+        session.pop('github_token', None)
+    logout_user()
+    return redirect(url_for('admin.index'))
 
 
 def before_request():

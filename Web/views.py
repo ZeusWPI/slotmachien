@@ -12,18 +12,11 @@ supported_actions = ['open', 'close', 'status']
 @app.route('/slotmachien/', methods=['POST'])
 def update_door():
     before_request()
-    action = request.get_json(force=True)['action']
+    action = if_toggle(request.get_json(force=True)['action'])
     if action in supported_actions:
         return jsonify(send_command(action))
     else:
         return jsonify({'error': 'command: ' + action + ' unknown'})
-
-
-# TODO: attach
-def after_slotmachien_request(response):
-    headers = response.headers
-    # add the user accestoken
-    headers['token'] = current_user.tokens.first().token
 
 
 @app.route('/slotmachien/')
@@ -38,14 +31,21 @@ def status_door():
 @app.route('/slotmachien/slack/', methods=['POST'])
 def slack_update_door():
     before_request()
-    action = request.form.get('text')
-    print action
+    action = if_toggle(request.form.get('text'))
     if action in supported_actions:
         return 'The door is ' + send_command(action)['status'] + '!'
     else:
         return "This command " + action + " is not supported!"
 
-if app.config['DEBUG']:  # add route information
+
+def if_toggle(action):
+    if action in 'toggle':
+        state = send_command('status')['status']
+        action = 'close' if state in 'open' else 'open'
+    return action
+
+
+if app.debug:  # add route information
     @app.route('/routes')
     def list_routes(self):
         import urllib

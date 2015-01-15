@@ -1,4 +1,10 @@
 {% extends 'admin/master.html' %}
 {% block body %}
 {% include 'admin/base_door.html' with context %}
+<p>
+    <a class="btn btn-default btn-large" href="{{ url_for('door.open') }}">open</a>
+</p>
+<p>
+    <a class="btn btn-default btn-large" href="{{ url_for('door.close') }}">close</a>
+</p>
 {% endblock %}
