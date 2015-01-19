@@ -28,7 +28,7 @@ public class USBHandler extends AbstractObservable<UsbSignal> implements
 	};
 
 	/**
-	 * Does all the stuff! Connects, retries connecting if connection is lost,
+	 * Does all the stuff! Connects, retries connecting if connection is lost, sends signals to known parties and accepts events to send back over usb.
 	 * ...
 	 * 
 	 * @param clock
