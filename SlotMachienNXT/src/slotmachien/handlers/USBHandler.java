@@ -5,9 +5,8 @@ import java.io.IOException;
 import observable.AbstractObservable;
 import observable.Observable;
 import observable.Observer;
-import observable.Signal;
 import slotmachien.internal.UsbIO;
-import slotmachien.signals.UsbSignal;
+import slotmachien.signals.MessageSignal;
 import slotmachien.signals.UsbStatusSignal;
 import slotmachien.signals.UsbStatusSignal.UsbStatus;
 
@@ -20,8 +19,8 @@ import slotmachien.signals.UsbStatusSignal.UsbStatus;
  * 
  * @author pietervdvn
  */
-public class USBHandler extends AbstractObservable<UsbSignal> implements
-		Observer<UsbSignal> {
+public class USBHandler extends AbstractObservable<MessageSignal> implements
+		Observer<MessageSignal> {
 
 	private UsbIO io = null;
 	private final AbstractObservable<UsbStatusSignal> statusSignaller = new AbstractObservable<UsbStatusSignal>() {
@@ -33,7 +32,7 @@ public class USBHandler extends AbstractObservable<UsbSignal> implements
 	 * 
 	 * @param clock
 	 */
-	public USBHandler(Observable<Signal> clock) {
+	public USBHandler() {
 		statusSignaller.addObserver(new RetryConnection());
 		startReading();
 	}
@@ -46,7 +45,7 @@ public class USBHandler extends AbstractObservable<UsbSignal> implements
 				while (io != null) {
 					try {
 						String read = io.readLine();
-						notifyObservers(new UsbSignal(read));
+						notifyObservers(new MessageSignal(read));
 					} catch (Exception e) {
 						disconnect();
 					}
@@ -73,7 +72,7 @@ public class USBHandler extends AbstractObservable<UsbSignal> implements
 	}
 
 	@Override
-	public void notified(UsbSignal signal) {
+	public void notified(MessageSignal signal) {
 		if (io == null) {
 			System.out.println("No connection: " + signal.content);
 			return;

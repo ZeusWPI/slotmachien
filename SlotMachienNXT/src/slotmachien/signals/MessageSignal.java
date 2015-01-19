@@ -3,16 +3,16 @@ package slotmachien.signals;
 import observable.Signal;
 
 /**
- * Has a string, which is a single line read from Usb.
+ * A signal representing a message
  * 
  * @author pietervdvn
  *
  */
-public class UsbSignal extends Signal{
+public class MessageSignal extends Signal{
 
 	public final String content;
 
-	public UsbSignal(String content) {
+	public MessageSignal(String content) {
 		this.content = content;
 	}
 }
