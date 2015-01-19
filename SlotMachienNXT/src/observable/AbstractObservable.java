@@ -7,7 +7,7 @@ public abstract class AbstractObservable<T extends Signal> implements Observable
 
     private List<Observer<T>> observers = new ArrayList<Observer<T>>();
     
-    protected void notifyObservers(T signal) {
+    public void notifyObservers(T signal) {
         for (Observer<T> o : observers){
             o.notified(signal);
         }
