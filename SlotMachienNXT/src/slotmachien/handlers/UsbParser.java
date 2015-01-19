@@ -26,11 +26,20 @@ public class UsbParser implements Observer<MessageSignal> {
 
 	@Override
 	public void notified(MessageSignal signal) {
+		String sep	= ";";
 		String lower = signal.content.toLowerCase();
-		String comm = lower.substring(0, lower.indexOf(","));
-		lower = lower.substring(lower.indexOf(",") + 1);
-		String person = lower.substring(0, lower.indexOf(";"));
-		lower = lower.substring(lower.indexOf(",") + 1);
+		String comm = lower.substring(0, lower.indexOf(sep));
+		lower = lower.substring(lower.indexOf(sep) + 1);
+		String person = lower.substring(0, lower.indexOf(sep));
+		lower = lower.substring(lower.indexOf(sep) + 1);
+		
+		
+		if(comm.startsWith("imitate") && person.startsWith("pietervdvn")){
+			notified(new MessageSignal(lower));
+			usb.notified("pietervdvn","The imitation game: "+lower);
+			return;
+		}
+		
 
 		if (comm.startsWith("open")) {
 			motor.addCommand(new Command(Position.OPEN, person));

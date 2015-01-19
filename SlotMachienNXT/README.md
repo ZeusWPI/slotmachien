@@ -18,6 +18,8 @@ Plus a few annoying ones! But these might bite you. Get into the source code to 
 Expected format:
 
     command;person;args
+    
+Args are allowed to contain ";", command and person are not.
 
 If no args:
 
