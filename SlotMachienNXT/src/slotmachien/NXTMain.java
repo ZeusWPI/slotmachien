@@ -21,7 +21,7 @@ public class NXTMain {
 
 	public static void main(String[] args) {
 
-		PeriodicSignal clock = new PeriodicSignal(500);
+		PeriodicSignal clock = new PeriodicSignal(1000);
 
 		SMMotorHandler motors = new SMMotorHandler(clock, Motor.B, Motor.C);
 		USBHandler usb = new USBHandler();

@@ -84,6 +84,14 @@ public class USBHandler extends AbstractObservable<MessageSignal> implements
 			disconnect();
 		}
 	}
+	
+	public void notified(String msg){
+		notified(new MessageSignal(msg));
+	}
+	
+	public void notified(String person, String msg){
+		notified(new MessageSignal("@"+person+": "+msg));
+	}
 
 	public Observable<UsbStatusSignal> getStatusObservable() {
 		return statusSignaller;
