@@ -1,13 +1,12 @@
 package slotmachien.handlers;
 
-import io.UsbIO;
-
 import java.io.IOException;
 
 import observable.AbstractObservable;
 import observable.Observable;
 import observable.Observer;
 import observable.Signal;
+import slotmachien.internal.UsbIO;
 import slotmachien.signals.UsbSignal;
 import slotmachien.signals.UsbStatusSignal;
 import slotmachien.signals.UsbStatusSignal.UsbStatus;
