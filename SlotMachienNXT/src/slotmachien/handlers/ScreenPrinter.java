@@ -1,5 +1,6 @@
-package observable;
+package slotmachien.handlers;
 
+import observable.Observer;
 import slotmachien.signals.MovedToSignal;
 
 /**

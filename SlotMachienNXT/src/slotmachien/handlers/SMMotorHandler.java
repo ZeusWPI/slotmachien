@@ -1,10 +1,13 @@
-package slotmachien;
+package slotmachien.handlers;
 
 import java.util.EmptyQueueException;
 import java.util.Queue;
 
 import lejos.nxt.NXTRegulatedMotor;
 import observable.AbstractObservable;
+import slotmachien.Command;
+import slotmachien.MotorBlock;
+import slotmachien.Position;
 import slotmachien.signals.MovedToSignal;
 
 public class SMMotorHandler extends AbstractObservable<MovedToSignal> {

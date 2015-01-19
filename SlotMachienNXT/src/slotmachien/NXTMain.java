@@ -1,7 +1,9 @@
 package slotmachien;
 
 import observable.ObservableButton;
-import observable.ScreenPrinter;
+import slotmachien.handlers.ButtonHandlers;
+import slotmachien.handlers.SMMotorHandler;
+import slotmachien.handlers.ScreenPrinter;
 import lejos.nxt.Button;
 import lejos.nxt.Motor;
 
