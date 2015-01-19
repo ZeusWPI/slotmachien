@@ -1,6 +1,9 @@
-package slotmachien;
+package slotmachien.internal;
 import lejos.nxt.NXTRegulatedMotor;
 
+/**
+ * Internal motor block handling, used by SMMotorHandler
+ */
 public class MotorBlock {
 
     private NXTRegulatedMotor[] motors;
