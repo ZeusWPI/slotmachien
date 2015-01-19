@@ -2,8 +2,8 @@ package slotmachien;
 
 import lejos.nxt.Button;
 import lejos.nxt.Sound;
-import observable.ButtonSignal;
 import observable.Observer;
+import slotmachien.signals.ButtonSignal;
 import time.Countdown;
 
 /**

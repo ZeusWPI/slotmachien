@@ -5,7 +5,7 @@ import java.util.Queue;
 
 import lejos.nxt.NXTRegulatedMotor;
 import observable.AbstractObservable;
-import observable.MovedToSignal;
+import slotmachien.signals.MovedToSignal;
 
 public class SMMotorHandler extends AbstractObservable<MovedToSignal> {
 

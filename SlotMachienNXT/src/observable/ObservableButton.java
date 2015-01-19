@@ -1,5 +1,6 @@
 package observable;
 
+import slotmachien.signals.ButtonSignal;
 import lejos.nxt.Button;
 import lejos.nxt.ButtonListener;
 

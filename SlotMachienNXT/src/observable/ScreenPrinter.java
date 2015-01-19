@@ -1,5 +1,7 @@
 package observable;
 
+import slotmachien.signals.MovedToSignal;
+
 /**
  * 
  * Prints changes to the screen

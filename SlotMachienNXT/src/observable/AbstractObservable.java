@@ -9,18 +9,18 @@ public abstract class AbstractObservable<T extends Signal> implements Observable
     
     @Override
     public void notifyObservers(T signal) {
-        for (Observer o : observers){
+        for (Observer<T> o : observers){
             o.notified(signal);
         }
     }
 
     @Override
-    public void addObserver(Observer o) {
+    public void addObserver(Observer<T> o) {
         observers.add(o);
     }
 
     @Override
-    public void removeObserver(Observer o) {
+    public void removeObserver(Observer<T> o) {
         observers.remove(o);
     }
     
