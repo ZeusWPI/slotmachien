@@ -1,6 +1,5 @@
 package slotmachien.internal;
 import lejos.nxt.NXTRegulatedMotor;
-import slotmachien.Position;
 
 /**
  * Internal motor block handling, used by SMMotorHandler

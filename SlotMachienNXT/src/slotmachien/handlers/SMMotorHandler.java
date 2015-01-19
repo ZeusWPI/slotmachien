@@ -8,9 +8,9 @@ import observable.AbstractObservable;
 import observable.Observable;
 import observable.Observer;
 import observable.Signal;
-import slotmachien.Command;
-import slotmachien.Position;
 import slotmachien.internal.MotorBlock;
+import slotmachien.internal.Position;
+import slotmachien.signals.Command;
 import slotmachien.signals.MovedToSignal;
 
 public class SMMotorHandler extends AbstractObservable<MovedToSignal> implements Observer<Command>{

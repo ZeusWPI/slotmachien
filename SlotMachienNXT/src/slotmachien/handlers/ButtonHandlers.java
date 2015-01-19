@@ -2,9 +2,9 @@ package slotmachien.handlers;
 
 import lejos.nxt.Button;
 import observable.Mapper;
-import slotmachien.Command;
-import slotmachien.Position;
+import slotmachien.internal.Position;
 import slotmachien.signals.ButtonSignal;
+import slotmachien.signals.Command;
 
 /**
  * 

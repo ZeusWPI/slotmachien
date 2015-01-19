@@ -2,8 +2,8 @@ package slotmachien.handlers;
 
 import lejos.nxt.Sound;
 import observable.Observer;
-import slotmachien.Command;
-import slotmachien.Position;
+import slotmachien.internal.Position;
+import slotmachien.signals.Command;
 import slotmachien.signals.MessageSignal;
 
 /**

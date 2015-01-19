@@ -1,6 +1,7 @@
-package slotmachien;
+package slotmachien.signals;
 
 import observable.Signal;
+import slotmachien.internal.Position;
 
 public class Command extends Signal{
 	public final Position pos;

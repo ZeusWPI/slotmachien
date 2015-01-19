@@ -1,4 +1,4 @@
-package slotmachien;
+package slotmachien.internal;
 
 public enum Position {
     OPEN(-180), CLOSED(0);
