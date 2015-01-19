@@ -90,6 +90,14 @@ public class UsbParser implements Observer<MessageSignal> {
 		if (person.equals("iasoon")) {
 			usb.notified("channel", "HASKELL IS THE MAX!");
 		}
+		
+		if(person.equals("don")){
+			usb.notified("channel", "Dikke wubs");
+			Sound.playNote(Sound.FLUTE	, 880, 500);
+			Sound.playNote(Sound.PIANO	, 440, 500);
+			Sound.playNote(Sound.FLUTE	, 440, 500);
+			Sound.playNote(Sound.PIANO	, 880, 500);
+		}
 
 	}
 
