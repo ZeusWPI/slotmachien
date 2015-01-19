@@ -1,6 +1,7 @@
 package slotmachien;
 
 import observable.ObservableButton;
+import observable.PeriodicSignal;
 import slotmachien.handlers.ButtonHandlers;
 import slotmachien.handlers.SMMotorHandler;
 import slotmachien.handlers.ScreenPrinter;
@@ -11,7 +12,10 @@ public class NXTMain {
 
     public static void main(String[] args) {
 
-        SMMotorHandler motors = new SMMotorHandler(Motor.B, Motor.C);
+    	
+    	PeriodicSignal clock	= new PeriodicSignal(500);
+    	
+        SMMotorHandler motors = new SMMotorHandler(clock, Motor.B, Motor.C);
 
         ButtonHandlers buttonHandler = new ButtonHandlers(motors);
         new ObservableButton(Button.LEFT).addObserver(buttonHandler);
