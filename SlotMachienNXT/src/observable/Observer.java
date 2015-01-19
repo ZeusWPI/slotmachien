@@ -1,7 +1,7 @@
 package observable;
 
-public interface Observer {
+public interface Observer<T extends Signal> {
 
-	public void notified();
+	public void notified(T signal);
 	
 }

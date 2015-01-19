@@ -11,3 +11,7 @@
 *.iml
 
 *.lockmachien
+
+*.swp
+
+.syntastic_javac_config

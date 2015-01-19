@@ -3,16 +3,14 @@ package time;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import slotmachien.actions.Action;
-
 public class Countdown {
     private int count;
     private long tick;
     private Ticker ticker;
-    private Action action;
+    private Runnable action;
     private Timer timer;
 
-    public Countdown(int count, long tick, Ticker ticker, Action action){
+    public Countdown(int count, long tick, Ticker ticker, Runnable action){
         this.count = count;
         this.tick = tick;
         this.ticker = ticker;
@@ -31,7 +29,7 @@ public class Countdown {
         }
         timer.schedule(new TimerTask(){
             public void run(){
-                action.perform();
+                action.run();
                 cancel();
             }
         }, count*tick);

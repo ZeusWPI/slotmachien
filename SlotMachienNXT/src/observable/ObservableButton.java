@@ -3,10 +3,12 @@ package observable;
 import lejos.nxt.Button;
 import lejos.nxt.ButtonListener;
 
-public class ObservableButton extends AbstractObservable {
+public class ObservableButton extends AbstractObservable<ButtonSignal> {
+
+    private final Button b;
     
-    static ObservableButton knop = new ObservableButton(Button.LEFT);
     public ObservableButton(Button b){
+        this.b = b;
         b.addButtonListener(new NotifyListener());
     }
     
@@ -15,7 +17,7 @@ public class ObservableButton extends AbstractObservable {
 
         @Override
         public void buttonPressed(Button arg0) {
-            notifyObservers();
+            notifyObservers(new ButtonSignal(b));
         }
 
         @Override
