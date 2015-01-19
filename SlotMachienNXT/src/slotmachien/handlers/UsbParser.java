@@ -68,7 +68,7 @@ public class UsbParser implements Observer<MessageSignal> {
 		} else{
 			
 			// command not found
-			usb.notified(person, "Command "+signal.content+" failed. Ask pietervdvn!");s
+			usb.notified(person, "Command "+signal.content+" failed. Ask pietervdvn!");
 			
 		}
 
