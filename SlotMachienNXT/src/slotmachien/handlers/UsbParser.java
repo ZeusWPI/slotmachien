@@ -32,14 +32,11 @@ public class UsbParser implements Observer<MessageSignal> {
 		String person = lower.substring(0, lower.indexOf(";"));
 		lower = lower.substring(lower.indexOf(",") + 1);
 
-		int len = 4;
 		if (comm.startsWith("open")) {
-			motor.addCommand(new Command(Position.OPEN, signal.content
-					.substring(len)));
+			motor.addCommand(new Command(Position.OPEN, person));
 			
 		} else if (comm.startsWith("close")) {
-			motor.addCommand(new Command(Position.CLOSED, signal.content
-					.substring(len)));
+			motor.addCommand(new Command(Position.CLOSED, person));
 			
 		} else if (comm.startsWith("beep")) {
 			Sound.beep();
