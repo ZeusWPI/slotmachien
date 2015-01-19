@@ -27,6 +27,15 @@ public abstract class AbstractObservable<T extends Signal> implements
 	public void addObserver(Observer<T> o) {
 		observers.add(o);
 	}
+	
+	/**
+	 * Adds observer of which the subtype doesn't exactly match
+	 * @param o
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void addObserverDangerous(Observer<Signal> o) {
+		addObserver((Observer) o);
+	}
 
 	@Override
 	public void removeObserver(Observer<T> o) {
