@@ -162,4 +162,8 @@ public class SMMotorHandler extends AbstractObservable<MovedToSignal> implements
 		}
 	}
 
+	public Command getState() {
+		return currentState;
+	}
+
 }

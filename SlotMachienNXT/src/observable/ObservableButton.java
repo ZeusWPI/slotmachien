@@ -1,31 +1,30 @@
 package observable;
 
-import slotmachien.signals.ButtonSignal;
 import lejos.nxt.Button;
 import lejos.nxt.ButtonListener;
+import slotmachien.signals.ButtonSignal;
 
 public class ObservableButton extends AbstractObservable<ButtonSignal> {
 
-    private final Button b;
-    
-    public ObservableButton(Button b){
-        this.b = b;
-        b.addButtonListener(new NotifyListener());
-    }
-    
-    // adapter class
-    class NotifyListener implements ButtonListener {
+	public ObservableButton(Button... b) {
+		for (Button button : b) {
+			button.addButtonListener(new NotifyListener());
+		}
+	}
 
-        @Override
-        public void buttonPressed(Button arg0) {
-            notifyObservers(new ButtonSignal(b));
-        }
+	// adapter class
+	class NotifyListener implements ButtonListener {
 
-        @Override
-        public void buttonReleased(Button arg0) {
-            // Do nothing
-        }
-        
-    }
+		@Override
+		public void buttonPressed(Button arg0) {
+			notifyObservers(new ButtonSignal(arg0));
+		}
+
+		@Override
+		public void buttonReleased(Button arg0) {
+			// Do nothing
+		}
+
+	}
 
 }

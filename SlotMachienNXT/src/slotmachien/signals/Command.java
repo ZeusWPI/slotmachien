@@ -11,4 +11,9 @@ public class Command extends Signal{
 		this.pos = pos;
 		this.comment = comment;
 	}
+	
+	@Override
+	public String toString() {
+		return new MovedToSignal(this).toString();
+	}
 }

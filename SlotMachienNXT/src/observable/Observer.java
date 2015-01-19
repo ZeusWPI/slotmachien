@@ -1,7 +1,14 @@
 package observable;
 
+import slotmachien.signals.UnsubscribeMeException;
+
 public interface Observer<T extends Signal> {
 
-	public void notified(T signal);
+	/**
+	 * When a {@link UnsubscribeMeException} gets thrown, you get unsubscribed
+	 * @param signal
+	 * @return
+	 */
+	public void notified(T signal) throws UnsubscribeMeException;
 	
 }

@@ -6,10 +6,10 @@ import observable.Mapper;
 import observable.ObservableButton;
 import observable.PeriodicSignal;
 import slotmachien.handlers.ButtonHandlers;
+import slotmachien.handlers.MovedToMessage;
 import slotmachien.handlers.SMMotorHandler;
 import slotmachien.handlers.ScreenHandler;
 import slotmachien.handlers.USBHandler;
-import slotmachien.handlers.MovedToMessage;
 
 public class NXTMain {
 
