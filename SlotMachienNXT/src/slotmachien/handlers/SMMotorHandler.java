@@ -13,7 +13,7 @@ import slotmachien.Position;
 import slotmachien.internal.MotorBlock;
 import slotmachien.signals.MovedToSignal;
 
-public class SMMotorHandler extends AbstractObservable<MovedToSignal> {
+public class SMMotorHandler extends AbstractObservable<MovedToSignal> implements Observer<Command>{
 
 	private static final int OPEN_LIMIT_BEFORE_DEADZONE = -40;
 	private static final int CLOSED_LIMIT_BEFORE_DEADZONE = -100;
@@ -110,6 +110,11 @@ public class SMMotorHandler extends AbstractObservable<MovedToSignal> {
 			commandQueue.push(command);
 			commandQueue.notify();
 		}
+	}
+	
+	@Override
+	public void notified(Command signal) {
+		addCommand(signal);
 	}
 
 	/**

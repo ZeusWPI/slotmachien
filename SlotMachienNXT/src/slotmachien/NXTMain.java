@@ -23,7 +23,8 @@ public class NXTMain {
         ScreenHandler screen	= new ScreenHandler();
 
         // handle buttons
-        ButtonHandlers buttonHandler = new ButtonHandlers(motors);
+        ButtonHandlers buttonHandler = new ButtonHandlers();
+        buttonHandler.addObserver(motors);
         new ObservableButton(Button.LEFT).addObserver(buttonHandler);
         new ObservableButton(Button.RIGHT).addObserver(buttonHandler);
         new ObservableButton(Button.ENTER).addObserver(buttonHandler);

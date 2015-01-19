@@ -1,6 +1,8 @@
 package slotmachien;
 
-public class Command {
+import observable.Signal;
+
+public class Command extends Signal{
 	public final Position pos;
 	public final String comment;
 	
