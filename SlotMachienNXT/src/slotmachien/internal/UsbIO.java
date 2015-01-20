@@ -10,8 +10,6 @@ import java.io.OutputStreamWriter;
 
 import lejos.nxt.comm.NXTConnection;
 import lejos.nxt.comm.USB;
-import observable.AbstractObservable;
-import slotmachien.signals.UsbStatusSignal;
 
 /**
  * Low level IO with USB. For use with USBHandler only!
@@ -19,7 +17,7 @@ import slotmachien.signals.UsbStatusSignal;
  * @author pietervdvn
  *
  */
-public class UsbIO extends AbstractObservable<UsbStatusSignal> {
+public class UsbIO {
 
 	private NXTConnection conn;
 	private BufferedReader reader;
@@ -55,15 +53,29 @@ public class UsbIO extends AbstractObservable<UsbStatusSignal> {
 	/**
 	 * Blocking read line. You get the read line, with newline char. Throws an
 	 * exception when something went wrong
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	public String readLine() throws IOException {
 		char temp;
+		char last = '0';
 		String s = "";
+		int sameChar = 0;
 		// Read character per character
 		do {
 			temp = (char) reader.read();
 			s = s + temp;
+			
+			// we count how much time we see the same character. If > 32, we reset the connection
+			if(last == temp){
+				sameChar ++;
+			}
+			last = temp;
+			
+			if(sameChar >= 32){
+				throw new IOException("Connection failed!");
+			}
+			
 		} while (temp != '\n');
 		return s;
 
