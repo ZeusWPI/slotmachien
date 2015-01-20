@@ -28,7 +28,7 @@ public class NXTMain {
 		PeriodicSignal clock = new PeriodicSignal(1000);
 
 		SMMotorHandler motors = new SMMotorHandler(clock, Motor.B, Motor.C);
-		USBHandler usb = new USBHandler();
+		final USBHandler usb = new USBHandler();
 		ScreenHandler screen = new ScreenHandler();
 
 		// write status updates to USB
@@ -81,6 +81,17 @@ public class NXTMain {
 				}
 			}
 
+		});
+		
+		usb.getStatusObservable().addObserver(new Observer<UsbStatusSignal>() {
+
+			@Override
+			public void notified(UsbStatusSignal signal){
+				if(signal.status == UsbStatus.CONNECTED){
+					usb.notified("channel","I'm back online!");
+				}
+				
+			}
 		});
 
 	}
