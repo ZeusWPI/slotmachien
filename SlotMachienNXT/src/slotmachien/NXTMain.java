@@ -13,9 +13,13 @@ import slotmachien.handlers.MovedToMessage;
 import slotmachien.handlers.SMMotorHandler;
 import slotmachien.handlers.ScreenHandler;
 import slotmachien.handlers.USBHandler;
+import slotmachien.handlers.USBStatusToMessage;
 import slotmachien.handlers.UsbParser;
 import slotmachien.signals.ButtonSignal;
+import slotmachien.signals.MessageSignal;
 import slotmachien.signals.UnsubscribeMeException;
+import slotmachien.signals.UsbStatusSignal;
+import slotmachien.signals.UsbStatusSignal.UsbStatus;
 
 public class NXTMain {
 
@@ -37,13 +41,10 @@ public class NXTMain {
 		// abort delayed close when something happens:
 		motors.addObserverDangerous(delayedC.getCanceller());
 
-		
-		
 		// handle buttons
 		ButtonHandlers buttonHandler = new ButtonHandlers();
 		buttonHandler.addObserver(motors);
-		
-		
+
 		new ObservableButton(Button.LEFT, Button.RIGHT)
 				.addObserver(buttonHandler);
 		new ObservableButton(Button.ENTER).addObserverDangerous(delayedC);
@@ -59,6 +60,28 @@ public class NXTMain {
 		// handle usb-input
 		UsbParser parser = new UsbParser(motors, usb);
 		usb.addObserver(parser);
+		// and write usb-failurs to screen
+		Mapper<UsbStatusSignal, MessageSignal> conv = new USBStatusToMessage();
+		usb.getStatusObservable().addObserver(conv);
+		conv.addObserver(screen);
+
+		// beep on usb connected/disconnected
+		usb.getStatusObservable().addObserver(new Observer<UsbStatusSignal>() {
+
+			@Override
+			public void notified(UsbStatusSignal signal) {
+				if (signal.status == UsbStatus.CONNECTED) {
+					Sound.playNote(Sound.XYLOPHONE, 440, 250);
+					Sound.playNote(Sound.XYLOPHONE, 880, 125);
+					Sound.playNote(Sound.XYLOPHONE, 440, 250);
+				} else {
+					Sound.playNote(Sound.XYLOPHONE, 880, 500);
+					Sound.playNote(Sound.XYLOPHONE, 440, 500);
+					Sound.playNote(Sound.XYLOPHONE, 880, 500);
+				}
+			}
+
+		});
 
 	}
 }
