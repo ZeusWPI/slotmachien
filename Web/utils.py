@@ -125,16 +125,10 @@ class InputProcessingThread(Thread):
                 line = self.clean_status(line)
                 self.process.last_status = line
                 logger.info("Door status changed: %s" % (line))
-                self.webhooks(line)
-                # TODO: do webhooks (in new thread)
+                webhookthread = WebhookSenderThread(line)
+                webhookthread.start()
         logger.info('Input processing thread stopped')
         self.process.stopped = True
-
-    def webhooks(self, text):
-        js = json.dumps({'text': text})
-        url = app.config['SLACK_WEBHOOK']
-        if len(url) > 0:
-            requests.post(url, data=js)
 
     def clean_status(self, status):
         status = status.lower().strip()
@@ -143,10 +137,24 @@ class InputProcessingThread(Thread):
 
         if "nxt" in status:
             return "NXT Error"
-        
+
         logger.error("Door status inconsistent: %s" % (status))
         return "error: contact sysadmins"
 
+class WebhookSenderThread(Thread):
+
+    def __init__(self, message):
+        super(WebhookSenderThread, self).__init__()
+        self.message = message
+
+    def run(self):
+        self.slack_webhook()
+
+    def slack_webhook(self):
+        js = json.dumps({'text': self.message})
+        url = app.config['SLACK_WEBHOOK']
+        if len(url) > 0:
+            requests.post(url, data=js)
 
 class HeartBeatThread(Thread):
 
