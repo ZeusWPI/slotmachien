@@ -1,5 +1,5 @@
 *.class
-
+*/config.py
 # Package Files #
 *.jar
 *.war
@@ -16,3 +16,4 @@
 
 .syntastic_javac_config
 /bin/
+Web/slotmachien2.fcgi

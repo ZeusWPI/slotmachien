@@ -1,53 +1,67 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, redirect, url_for
+
 
 from app import app
-from auth import auth, before_slotmachien_request, before_slack_request, create_token
+from login import before_request
 from utils import send_command
 from models import User
-from kerberos import authenticate_user
+
+supported_actions = ['open', 'close', 'status', 'ping','buzz','beep']
 
 
-slotmachien_bp = Blueprint('slotmachien', __name__)
-slotmachien_bp.before_request(before_slotmachien_request)
-
-supported_actions = ['open', 'close', 'status']
-
-@slotmachien_bp.route('/', methods=['POST'])
+@app.route('/slotmachien/', methods=['POST'])
 def update_door():
-    action = request.get_json(force=True)['action']
-    if action.toLower() in supported_actions:
-        return jsonify(send_command(action, "web", ""))
+    before_request()
+    action = if_toggle(request.get_json(force=True)['action'])
+    if action in supported_actions:
+        return jsonify(send_command(action,'todo',''))
     else:
         return jsonify({'error': 'command: ' + action + ' unknown'})
 
 
-app.register_blueprint(slotmachien_bp, url_prefix='/slotmachien')
-
 @app.route('/slotmachien/')
 def status_door():
-    return jsonify(send_command('status',"web",""))
+    content_type = request.headers.get('Content-Type', None)
+    if content_type and content_type in 'application/json':
+        return jsonify(send_command('status','todo',''))
+
+    return redirect(url_for("admin.index"))
 
 @app.route('/slotmachien/slack/', methods=['POST'])
 def slack_update_door():
-    before_slack_request()
-    action = request.form.get('text')
+    before_request()
+    action = if_toggle(request.form.get('text'))
     if action in supported_actions:
-        return 'The door is ' + send_command(action)['status',"web",""] + '!'
+        return 'The door is ' + send_command(action)['status',"todo",""] + '!'
     else:
-        return "This command "+ action + " is not supported!"
+        return "This command " + action + " is not supported!"
 
 
-@app.route('/slotmachien/login', methods=['POST'])
-def login():
-    json = request.get_json(force=True)
-    username = json.get('username')
-    password = json.get('password')
+def if_toggle(action):
+    if action in 'toggle':
+        state = send_command('status')['status']
+        action = 'close' if state in 'open' else 'open'
+    return action
 
-    if authenticate_user(username, password):
-        try:
-            user = User.get(User.username == username)
-            return jsonify({'token': create_token(user)})
-        except User.DoesNotExist:
-            jsonify({'error': 'user is not added'})
-    else:
-        return jsonify({'error': 'username or password is wrong'})
+
+if app.debug:  # add route information
+    @app.route('/routes')
+    def list_routes(self):
+        import urllib
+        output = []
+        for rule in app.url_map.iter_rules():
+            options = {}
+            for arg in rule.arguments:
+                options[arg] = "[{0}]".format(arg)
+
+            methods = ','.join(rule.methods)
+            url = url_for(rule.endpoint, **options)
+            line = urllib.unquote(
+                "{:50s} {:20s} {}".format(rule.endpoint, methods, url))
+            output.append(line)
+
+        string = ''
+        for line in sorted(output):
+            string += line + "<br/>"
+
+        return string

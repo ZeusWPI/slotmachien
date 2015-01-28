@@ -1,0 +1,17 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+{% if not current_user.is_anonymous() %}
+<p>Welkom {{current_user.username}},</p>
+{% if current_user.is_admin() %}
+<p>Welkom mijnheer de administrateur des SlotMachiens,</p>
+{% endif %}
+{# include door view#}
+{% include 'admin/base_door.html' with context %}
+<br/>
+<p>
+    <a class="btn btn-default btn-large" href="{{ url_for('logout') }}">Log uit</a>
+</p>
+{% else %}
+<a class="btn btn-default btn-large" href="{{ url_for('login') }}">Log in</a>
+{% endif %}
+{% endblock %}

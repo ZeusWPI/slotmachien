@@ -1,14 +1,12 @@
 from app import app, db
 
-from auth import *
 from admin import admin
-from database import create_tables
+from login import login_manager
 from models import *
+from utils import start_process
 from views import *
 
 
-admin.setup()
-
 if __name__ == '__main__':
-    create_tables(auth)
+    start_process()
     app.run()
