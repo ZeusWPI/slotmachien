@@ -85,11 +85,11 @@ class Process:
         self.check_alive()
         return self.process.stdout
 
-    def send_command(self, command):
+    def send_command(self, command, user, args):
         self.check_alive()
-        self._write_command_(command)
-        time.sleep(1.5)  # wait for a couple of seconds to return
-        return {'status': self.last_status.lower().strip()}
+        self._write_command_(command+";"+user+";"+args)
+        time.sleep(1.5)  # wait for a couple of seconds to return, to give NXT some time to write
+        return {'status': self.last_status.strip()}
 
     def _write_command_(self, command):
         self.write_lock.acquire()
@@ -107,7 +107,7 @@ class InputProcessingThread(Thread):
         print('starting input processing')
         for line in iter(self.process.stdout().readline, ""):
             if len(line) > 1:
-                self.process.last_status = line
+                self.process.last_status = line	# read a line, write to last_status
                 line = line.strip()
                 print("received: " + line)
                 # TODO: add logging
@@ -138,11 +138,11 @@ class HeartBeatThread(Thread):
         print('thread: heartbeat stopped')
 
 
-def send_command(command):
+def send_command(command, user, args):
     global process
     log_action(command)
 
-    response = process.send_command(command)
+    response = process.send_command(command, user, args)
 
     return response
 
