@@ -9,3 +9,5 @@ class Configuration(object):
     DEBUG = True
     SECRET_KEY = 'shhhh'
     SLACK_WEBHOOK = ''
+    PROCESS = 'python test.py'
+    LOGFILE = 'slotmachien.log'
