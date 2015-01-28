@@ -41,7 +41,7 @@ class Process:
 
     def create(self):
         self.clean_process()
-        self.process = Popen([config.PROCESS], stdin=PIPE, stdout=PIPE,
+        self.process = Popen([app.config['PROCESS']], stdin=PIPE, stdout=PIPE,
                              shell=True)
 
         logger.info('SlotMachienPC pid: %d' % self.process.pid)
