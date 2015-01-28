@@ -37,6 +37,7 @@ class Process:
 
         print('SlotMachienPC pid: ' + str(self.process.pid))
         self.stopped = False
+	self._write_command_("status;startup;")
         self.last_status = self.process.stdout.readline()
 
         # Create input processing thread
@@ -86,10 +87,8 @@ class Process:
 
     def send_command(self, command):
         self.check_alive()
-        command = command.upper()
-        if command in ['OPEN', 'CLOSE']:
-            self._write_command_(command)
-            time.sleep(1.5)  # wait for a couple of seconds to return
+        self._write_command_(command)
+        time.sleep(1.5)  # wait for a couple of seconds to return
         return {'status': self.last_status.lower().strip()}
 
     def _write_command_(self, command):
@@ -109,7 +108,7 @@ class InputProcessingThread(Thread):
         for line in iter(self.process.stdout().readline, ""):
             if len(line) > 1:
                 self.process.last_status = line
-                line = line.lower().strip()
+                line = line.strip()
                 print("received: " + line)
                 # TODO: add logging
                 self.webhooks(line)
@@ -133,7 +132,7 @@ class HeartBeatThread(Thread):
     def run(self):
         print('starting heartbeat')
         while not self.stop:
-            self.process._write_command_('PING')
+            self.process._write_command_('status;heartbeat;')
             self.process.check_alive()
             time.sleep(5)
         print('thread: heartbeat stopped')

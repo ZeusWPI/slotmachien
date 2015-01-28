@@ -23,7 +23,6 @@ import slotmachien.signals.UsbStatusSignal.UsbStatus;
 public class NXTMain {
 
 	public static void main(String[] args) {
-	//	UsbDebug.main();
 		reactive();
 	}
 	
