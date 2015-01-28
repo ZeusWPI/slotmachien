@@ -12,7 +12,9 @@ supported_actions = ['open', 'close', 'status', 'ping','buzz','beep']
 @app.route('/slotmachien/', methods=['POST'])
 def update_door():
     before_request()
-    action = if_toggle(request.get_json(force=True)['action'])
+    request = request.get_json(force=True)['action']
+
+    logger.info("Got general request: "+request)
     if action in supported_actions:
         return jsonify(send_command(action,'todo',''))
     else:
@@ -34,12 +36,6 @@ def slack_update_door():
     logger.info("Got slack request: "+request)
     return "Hi slack!"
 
-
-def if_toggle(action):
-    if action in 'toggle':
-        state = send_command('status')['status']
-        action = 'close' if state in 'open' else 'open'
-    return action
 
 
 if app.debug:  # add route information
