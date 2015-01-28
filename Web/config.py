@@ -6,7 +6,7 @@ class Configuration(object):
         'engine': 'peewee.SqliteDatabase',
         'check_same_thread': False,
     }
-    DEBUG = True
+    DEBUG = False
     SECRET_KEY = 'shhhh'
     SLACK_WEBHOOK = ''
     PROCESS = 'python test.py'
