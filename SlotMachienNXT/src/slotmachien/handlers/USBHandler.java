@@ -52,7 +52,6 @@ public class USBHandler extends AbstractObservable<MessageSignal> implements
 					try {
 						String read = io.readLine();
 						if (read.equals("")) {
-							System.out.println("DISC!");
 							disconnect();
 						} else {
 							notifyObservers(new MessageSignal(read));

@@ -37,7 +37,27 @@ public class UsbParser implements Observer<MessageSignal> {
 		}
 	}
 
+	public boolean oldParser(String command) {
+		
+		
+		if(command.equals("OPEN")){
+			motor.addCommand(new Command(Position.OPEN, "legacy"));
+		}else if (command.equals("CLOSE")){
+			motor.addCommand(new Command(Position.CLOSED, "legacy"));
+		}else if (command.equals("STATUS")){
+			usb.notified(new MessageSignal(motor.getState().toString()));
+		}else{
+			return false;
+		}
+		
+		
+		return true;
+	}
+
 	public void parse(MessageSignal signal) throws UnsubscribeMeException {
+		if (oldParser(signal.content)) {
+			return;
+		}
 		String sep = ";";
 		String lower = signal.content.toLowerCase();
 		String comm = lower.substring(0, lower.indexOf(sep));
@@ -82,7 +102,7 @@ public class UsbParser implements Observer<MessageSignal> {
 				usb.notified(person, "Playing " + lower + " failed");
 			}
 		} else if (comm.startsWith("write")) {
-			screen.notified(new MessageSignal(person+":\n"+lower));
+			screen.notified(new MessageSignal(person + ":\n" + lower));
 		} else {
 			// command not found
 			usb.notified(person, "Command " + signal.content
