@@ -15,6 +15,7 @@ public class PCMain {
         final NXTComm nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
         NXTInfo[] nxtInfo = nxtComm.search(null);
         if (nxtInfo.length == 0){
+        	System.out.println("No connection!");
             System.exit(1);
         }
         

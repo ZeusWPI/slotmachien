@@ -22,18 +22,24 @@ import slotmachien.signals.UsbStatusSignal.UsbStatus;
 public class USBHandler extends AbstractObservable<MessageSignal> implements
 		Observer<MessageSignal> {
 
+	public static boolean debug = false;
+
 	private UsbIO io = null;
 	private final AbstractObservable<UsbStatusSignal> statusSignaller = new AbstractObservable<UsbStatusSignal>() {
 	};
 
 	/**
-	 * Does all the stuff! Connects, retries connecting if connection is lost, sends signals to known parties and accepts events to send back over usb.
+	 * Does all the stuff! Connects, retries connecting if connection is lost,
+	 * sends signals to known parties and accepts events to send back over usb.
 	 * ...
 	 * 
 	 * @param clock
 	 */
 	public USBHandler() {
+		log("Made handler");
 		statusSignaller.addObserver(new RetryConnection());
+		statusSignaller.notifyObservers(new UsbStatusSignal(
+				UsbStatus.DISCONNECTED));
 		startReading();
 	}
 
@@ -45,7 +51,12 @@ public class USBHandler extends AbstractObservable<MessageSignal> implements
 				while (io != null) {
 					try {
 						String read = io.readLine();
-						notifyObservers(new MessageSignal(read));
+						if (read.equals("")) {
+							System.out.println("DISC!");
+							disconnect();
+						} else {
+							notifyObservers(new MessageSignal(read));
+						}
 					} catch (Exception e) {
 						disconnect();
 					}
@@ -66,6 +77,10 @@ public class USBHandler extends AbstractObservable<MessageSignal> implements
 	}
 
 	private void disconnect() {
+		try {
+			io.close();
+		} catch (IOException e) {
+		}
 		io = null;
 		statusSignaller.notifyObservers(new UsbStatusSignal(
 				UsbStatus.DISCONNECTED));
@@ -74,23 +89,23 @@ public class USBHandler extends AbstractObservable<MessageSignal> implements
 	@Override
 	public void notified(MessageSignal signal) {
 		if (io == null) {
-			System.out.println("No connection: " + signal.content);
+			// Return silently
 			return;
 		}
 		try {
 			io.writeLine(signal.content);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// something failed -> send disconnect msg
 			disconnect();
 		}
 	}
-	
-	public void notified(String msg){
+
+	public void notified(String msg) {
 		notified(new MessageSignal(msg));
 	}
-	
-	public void notified(String person, String msg){
-		notified(new MessageSignal("@"+person+": "+msg));
+
+	public void notified(String person, String msg) {
+		notified(new MessageSignal("@" + person + ": " + msg));
 	}
 
 	public Observable<UsbStatusSignal> getStatusObservable() {
@@ -98,7 +113,7 @@ public class USBHandler extends AbstractObservable<MessageSignal> implements
 	}
 
 	/**
-	 * Spawns a new thread to connect when connection is down
+	 * Spawns a new thread to connect when connection is down.
 	 * 
 	 * @author pietervdvn
 	 *
@@ -114,10 +129,17 @@ public class USBHandler extends AbstractObservable<MessageSignal> implements
 
 					@Override
 					public void run() {
+						log("Trying to connect");
 						connect();
 					}
 				}).start();
 			}
+		}
+	}
+
+	private static void log(String msg) {
+		if (debug) {
+			System.out.println("UHL: " + msg);
 		}
 	}
 

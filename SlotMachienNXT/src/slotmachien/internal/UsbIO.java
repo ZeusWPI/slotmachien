@@ -72,8 +72,8 @@ public class UsbIO {
 			}
 			last = temp;
 			
-			if(sameChar >= 32){
-				throw new IOException("Connection failed!");
+			if(sameChar >= 16){
+				return "";	// connection failed, let's return nothing. (Otherwise, at least one \n is given)
 			}
 			
 		} while (temp != '\n');

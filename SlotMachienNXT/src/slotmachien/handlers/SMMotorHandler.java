@@ -4,6 +4,7 @@ import java.util.EmptyQueueException;
 import java.util.Queue;
 
 import lejos.nxt.NXTRegulatedMotor;
+import lejos.nxt.Sound;
 import observable.AbstractObservable;
 import observable.Observable;
 import observable.Observer;
@@ -13,7 +14,8 @@ import slotmachien.internal.Position;
 import slotmachien.signals.Command;
 import slotmachien.signals.MovedToSignal;
 
-public class SMMotorHandler extends AbstractObservable<MovedToSignal> implements Observer<Command>{
+public class SMMotorHandler extends AbstractObservable<MovedToSignal> implements
+		Observer<Command> {
 
 	private static final int OPEN_LIMIT_BEFORE_DEADZONE = -40;
 	private static final int CLOSED_LIMIT_BEFORE_DEADZONE = -100;
@@ -28,6 +30,9 @@ public class SMMotorHandler extends AbstractObservable<MovedToSignal> implements
 
 	private MotorBlock motorblock;
 	private final Queue<Command> commandQueue = new Queue<>();
+	
+	private volatile boolean turning = false;
+	
 	private Command currentState = new Command(Position.CLOSED, "calibrated");
 
 	private final Thread thread;
@@ -65,6 +70,7 @@ public class SMMotorHandler extends AbstractObservable<MovedToSignal> implements
 	}
 
 	private void turnTo(Command command, boolean allowTurnBack) {
+		turning = true;
 		int turn = command.pos.getPos();
 		motorblock.setSpeed(900);
 		motorblock.rotateTo(turn, false);
@@ -78,6 +84,8 @@ public class SMMotorHandler extends AbstractObservable<MovedToSignal> implements
 			throw new IllegalStateException(
 					"turnto failed, motorblock turned back");
 		}
+		turning = false;
+		
 	}
 
 	/**
@@ -85,6 +93,9 @@ public class SMMotorHandler extends AbstractObservable<MovedToSignal> implements
 	 * added to the queue
 	 */
 	public void checkStatus() {
+		if(turning){
+			return;
+		}
 		try {
 			Position p = motorblock.getPosition(OPEN_LIMIT_BEFORE_DEADZONE,
 					CLOSED_LIMIT_BEFORE_DEADZONE);
@@ -108,12 +119,15 @@ public class SMMotorHandler extends AbstractObservable<MovedToSignal> implements
 	public void addCommand(Command command) {
 		synchronized (commandQueue) {
 			commandQueue.push(command);
-			commandQueue.notify();
+			commandQueue.notifyAll();
 		}
 	}
-	
+
 	@Override
 	public void notified(Command signal) {
+		if(signal.pos == currentState.pos){
+			Sound.beep();
+		}
 		addCommand(signal);
 	}
 
@@ -128,13 +142,17 @@ public class SMMotorHandler extends AbstractObservable<MovedToSignal> implements
 		public void run() {
 			while (true) {
 				try {
-					Command cmd;
+					Command cmd = null;
 					synchronized (commandQueue) {
-						cmd = (Command) commandQueue.pop();
+						if (!commandQueue.empty()) {
+							cmd = (Command) commandQueue.pop();
+						}
 					}
-					turnTo(cmd);
-					currentState = cmd;
-					notifyObservers(new MovedToSignal(cmd));
+					if (cmd != null) {
+						turnTo(cmd);
+						currentState = cmd;
+						notifyObservers(new MovedToSignal(cmd));
+					}
 				} catch (IllegalStateException e) {
 				} catch (EmptyQueueException e) {
 				}

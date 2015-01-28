@@ -12,5 +12,11 @@ public class ScreenHandler implements Observer<MessageSignal>{
     public void notified(MessageSignal signal) {
         System.out.println(signal.content);
     }
+    
+    public void clear() {
+    	for (int i = 0; i < 10; i++) {
+			System.out.println();
+		}
+	}
 
 }
