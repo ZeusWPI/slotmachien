@@ -8,6 +8,8 @@ import time
 import signal
 import sys
 
+import config
+
 import requests
 from flask.ext.login import current_user
 
@@ -39,7 +41,7 @@ class Process:
 
     def create(self):
         self.clean_process()
-        self.process = Popen([app.config['PROCESS']], stdin=PIPE, stdout=PIPE,
+        self.process = Popen([config.PROCESS], stdin=PIPE, stdout=PIPE,
                              shell=True)
 
         logger.info('SlotMachienPC pid: %d' % self.process.pid)
