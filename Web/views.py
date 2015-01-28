@@ -30,11 +30,9 @@ def status_door():
 @app.route('/slotmachien/slack/', methods=['POST'])
 def slack_update_door():
     before_request()
-    action = if_toggle(request.form.get('text'))
-    if action in supported_actions:
-        return 'The door is ' + send_command(action)['status',"todo",""] + '!'
-    else:
-        return "This command " + action + " is not supported!"
+    request = request.form.get('text')
+    logger.info("Got slack request: "+request)
+    return "Hi slack!"
 
 
 def if_toggle(action):
