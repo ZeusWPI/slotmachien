@@ -5,7 +5,7 @@ from flask_oauthlib.client import OAuth
 
 from app import app, db, logger
 from models import User, Token, ServiceToken
-from github import oauth, github_login
+# from github import oauth, github_login
 
 login_manager = LoginManager()
 login_manager.init_app(app)
