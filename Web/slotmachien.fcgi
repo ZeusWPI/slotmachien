@@ -7,8 +7,8 @@ from logbook import FileHandler
 from app import app, db
 
 #init logbook here to also handle the process
-log_handler = FileHandler(app.config['LOGFILE'])
-log_handler.push_application()
+# TODO log_handler = FileHandler(app.config['LOGFILE'])
+# TODO log_handler.push_application()
 
 from admin import admin
 from login import login_manager
