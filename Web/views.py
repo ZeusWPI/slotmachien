@@ -33,8 +33,8 @@ def status_door():
 def slack_update_door():
     before_request()
     request = request.form.get('text')
-    logger.info("Got slack request: "+request)
-    return "Hi slack!"
+    print("Got slack request: "+request)
+    return jsonify({"text","Hi slack!"})
 
 
 
