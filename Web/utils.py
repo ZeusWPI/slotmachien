@@ -124,9 +124,9 @@ class InputProcessingThread(Thread):
             if len(line) > 1:
                 old_line = line
                 line = self.clean_status(line)
-                self.log_status(line)
                 self.process.last_status = self.create_status(line)
                 logger.info("Door status changed to %s" % (line[0]))
+                self.log_status(line)
                 webhookthread = WebhookSenderThread(line)
                 webhookthread.start()
         logger.info('Input processing thread stopped')
@@ -143,7 +143,6 @@ class InputProcessingThread(Thread):
 
     def clean_status(self, status):
         status = status.lower().strip()
-        logger.info(status)
 
         if status in ["opened", "closed"]:
             return (status, None, False)

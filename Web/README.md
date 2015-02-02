@@ -21,7 +21,9 @@ and add an AuthKey for the requests.
 Get the authorization code by authenticating @ login
 
 ### Status door (without authorization)
-Send a GET request to `/slotmachien/` or send the send `status` with update door
+Send a GET request to `/slotmachien/` or send the send `status` with update door,
+if the header is set to `Content-Type: application/json` then a JSON is returned,
+otherwise you're redirected to `/slotmachien/admin/`.
 
 ### Update door
 Send a POST request to `/slotmachien/`
@@ -53,17 +55,10 @@ If the HTTP status code is 401, authentication failed.
 
 ## Login
 ### Request
-Send a POST request to `/slotmachien/login`
-Header set the `Content-Type: application/json`
-```javascript
-{
-    "username": username,
-    "password": password
-}
-```
+Login using the link.
 
 ### Response
-If the HTTP status is 200, then we respond with a json, when succesull:
+If the HTTP status is 200, then we respond with a json, when succesull, if the header has `Content-Type: application/json`:
 ```javascript
 {
     "token": <new generated token>
@@ -77,6 +72,7 @@ Error:
 ```
 If the HTTP status code is 401, authentication failed.
 
+# Configuration stuff
 ## nginx configuration
 You have to run the slotmachien.fcgi program.
 Than add the following configuration to nginx:
@@ -91,4 +87,21 @@ location @slotmachien {
     fastcgi_param SCRIPT_NAME "";
     fastcgi_pass unix:/tmp/slotmachien.sock;
 }
+```
+
+## Daemon configuration
+Copy the `slotmachien-fastcgi.sh` to the `/etc/init.d/` directory as `slotmachien`
+
+## Config.py configuration
+Default in demo files:
+```
+class Configuration(object):
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///slotmachien.db'
+    DEBUG = False
+    SECRET_KEY = '<s3r3t>'
+    SLACK_WEBHOOK = 'https://zeuswpi.slack.com/services/hooks/incoming-webhook?token=<s3cr3t>'
+    PROCESS = 'cd /home/slotmachien/slotmachien/SlotMachienPC/bin && /opt/leJOS_NXT/bin/nxjpc PCMain'
+    LOGFILE = '/var/log/slotmachien.log'
+    GITHUB_KEY = '<not-so-secret>'
+    GITHUB_SECRET = '<super-secret>'
 ```
