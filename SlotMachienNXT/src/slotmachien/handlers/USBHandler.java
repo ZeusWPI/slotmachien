@@ -3,7 +3,6 @@ package slotmachien.handlers;
 import java.io.IOException;
 
 import observable.Observable;
-import observable.Observable;
 import observable.Observer;
 import slotmachien.internal.UsbIO;
 import slotmachien.signals.MessageSignal;

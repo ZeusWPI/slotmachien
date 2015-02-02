@@ -51,5 +51,7 @@ public class UsbParser implements Observer<MessageSignal> {
 		}
 
 	}
+	
+
 
 }
