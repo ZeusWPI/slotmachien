@@ -1,6 +1,6 @@
 {% set state = door_status() %}
 <p>
-    Status: <span class="label label-{{ 'success' if state in 'open' else 'warning' }}">{{state}}</span>
+    Status: <span class="label label-{{ 'success' if 'open' in state else 'warning' }}">{{state}}</span>
 </p>
 <p>
     Toggle door: <a class="btn btn-default btn-large" href="{{ url_for('door.toggle')}}">toggle</a>
