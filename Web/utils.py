@@ -101,7 +101,7 @@ class Process:
             and command not in self.last_status.upper():
             command = command + ';' + current_user.username
             self._write_command_(command)
-            time.sleep(0.75)  # wait for a couple of seconds to return
+            time.sleep(1.00)  # wait for a couple of seconds to return
         return {'status': self.last_status.lower().strip()}
 
     def _write_command_(self, command):
@@ -144,7 +144,7 @@ class InputProcessingThread(Thread):
     def clean_status(self, status):
         status = status.lower().strip()
         logger.info(status)
-        
+
         if status in ["opened", "closed"]:
             return (status, None, False)
 
@@ -198,7 +198,7 @@ class WebhookSenderThread(Thread):
             return "The door is %s by %s" % (status[0], status[1])
         elif status[1] in 'manual':
             return "The door is manually %s by some human being!" % (status[0])
-        elif status[1] in ['pdc', 'dc', 'bo', 'bc']:
+        elif status[1] in 'buttons':
             return "The buttons of the door are being pressed, so the door %s!" % (status[0])
         else:
             return "The door status changed to %s" % (status[0])
