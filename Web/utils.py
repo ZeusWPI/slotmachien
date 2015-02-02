@@ -143,7 +143,9 @@ class InputProcessingThread(Thread):
 
     def clean_status(self, status):
         status = status.lower().strip()
-        if status in ["open", "closed"]:
+        logger.info(status)
+        
+        if status in ["opened", "closed"]:
             return (status, None, False)
 
         if ';' in status:
@@ -167,7 +169,12 @@ class InputProcessingThread(Thread):
         return ("error: contact sysadmins", None, False)
 
     def create_status(self, status):
-        return status[0] + ' by ' if status[2] else ' by systemized ' + status[1]
+        if status[2]:
+            return "%s by %s" % (status[0], status[1])
+        elif status[1] in 'manual':
+            return "manually %s by some human being" % (status[0])
+        else:
+            return "%s" % (status[0])
 
 
 class WebhookSenderThread(Thread):
