@@ -124,42 +124,57 @@ class InputProcessingThread(Thread):
             if len(line) > 1:
                 old_line = line
                 line = self.clean_status(line)
-                self.process.last_status = line
-                logger.info("Door status changed to %s" % (line))
+                self.log_status(line)
+                self.process.last_status = self.create_status(line)
+                logger.info("Door status changed to %s" % (line[0]))
                 webhookthread = WebhookSenderThread(line)
                 webhookthread.start()
         logger.info('Input processing thread stopped')
         self.process.stopped = True
 
+    def log_status(self, status):
+        cu = None
+        if status[2]:
+            cu = User.query.filter_by(username=status[1]).first()
+        logaction = LogAction()
+        logaction.configure(cu, action, dt.now())
+        db.session.add(logaction)
+        db.session.commit()
+
     def clean_status(self, status):
         status = status.lower().strip()
         if status in ["open", "closed"]:
-            return status
+            return (status, None, False)
 
         if ';' in status:
             # new kind
             parsed_status = status.split(';')
             action = parsed_status[0]
             by = 'manual'
+            human = False
             if 'p:' in parsed_status[1]:
                 # user
                 username = parsed_status[1].split(':')[1]
-                by = username
+                return (action, username, True)
             elif parsed_status[1] in ['pdc', 'dc', 'bo', 'bc']:
                 by = 'buttons'
-            return '%s by %s' % (action, by)
+            return (action, by, False)
 
         if "nxt" in status:
-            return "NXT Error"
+            return ("NXT Error", None, False)
 
         logger.error("Door status inconsistent: %s" % (status))
-        return "error: contact sysadmins"
+        return ("error: contact sysadmins", None, False)
+
+        def create_status(self, status):
+            return status[0] + ' by ' if status[2] else ' by systemized ' + status[1]
+
 
 class WebhookSenderThread(Thread):
 
-    def __init__(self, message):
+    def __init__(self, status):
         super(WebhookSenderThread, self).__init__()
-        self.message = message
+        self.message = self.create_message(status)
 
     def run(self):
         self.slack_webhook()
@@ -169,6 +184,18 @@ class WebhookSenderThread(Thread):
         url = app.config['SLACK_WEBHOOK']
         if len(url) > 0:
             requests.post(url, data=js)
+
+    def create_message(self, status):
+        if status[2]:
+            # HUMAN
+            return "The door is %s by %s" % (status[0], status[1])
+        elif status[1] in 'manual':
+            return "The door is manually %s by some human being!" % (status[0])
+        elif status[1] in ['pdc', 'dc', 'bo', 'bc']:
+            return "The buttons of the door are being pressed, so the door %s!" % (status[0])
+        else:
+            return "The door status changed to %s" % (status[0])
+
 
 class HeartBeatThread(Thread):
 
@@ -188,7 +215,6 @@ class HeartBeatThread(Thread):
 
 def send_command(command):
     global process
-    log_action(command)
 
     if process is None:
         start_process()
@@ -216,12 +242,3 @@ def signal_handler(signal, frame):
     sys.exit(0)
 
 signal.signal(signal.SIGINT, signal_handler)
-
-
-def log_action(action):
-    logger.info("User %s:%s" % (current_user, action))
-    if action not in ["status"]:
-        logaction = LogAction()
-        logaction.configure(current_user, action, dt.now())
-        db.session.add(logaction)
-        db.session.commit()
