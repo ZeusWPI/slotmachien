@@ -20,7 +20,6 @@ public class MovedToSignal extends Signal {
 	
 	@Override
 	public String toString() {
-		String p	= pos.toString().substring(0,1)+ pos.toString().toLowerCase().substring(1);
-		return p + " " + comment;
+		return pos.toString().toLowerCase() + ";" + comment;
 	}
 }

@@ -5,7 +5,7 @@ import java.util.Queue;
 
 import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.Sound;
-import observable.AbstractObservable;
+import observable.Observable;
 import observable.Observable;
 import observable.Observer;
 import observable.Signal;
@@ -14,7 +14,7 @@ import slotmachien.internal.Position;
 import slotmachien.signals.Command;
 import slotmachien.signals.MovedToSignal;
 
-public class SMMotorHandler extends AbstractObservable<MovedToSignal> implements
+public class SMMotorHandler extends Observable<MovedToSignal> implements
 		Observer<Command> {
 
 	private static final int OPEN_LIMIT_BEFORE_DEADZONE = -40;
@@ -100,10 +100,10 @@ public class SMMotorHandler extends AbstractObservable<MovedToSignal> implements
 			Position p = motorblock.getPosition(OPEN_LIMIT_BEFORE_DEADZONE,
 					CLOSED_LIMIT_BEFORE_DEADZONE);
 			if (p != currentState.pos) {
-				setState(new Command(p, "manual " + p.toString().toLowerCase()));
+				setState(new Command(p, "manual"));
 			}
 		} catch (IllegalStateException e) {
-			addCommand(new Command(Position.OPEN, "in deadzone"));
+			addCommand(new Command(Position.OPEN, "deadzone"));
 		}
 	}
 
@@ -125,9 +125,6 @@ public class SMMotorHandler extends AbstractObservable<MovedToSignal> implements
 
 	@Override
 	public void notified(Command signal) {
-		if(signal.pos == currentState.pos){
-			Sound.beep();
-		}
 		addCommand(signal);
 	}
 

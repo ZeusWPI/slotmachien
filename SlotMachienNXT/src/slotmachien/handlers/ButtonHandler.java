@@ -14,16 +14,13 @@ import slotmachien.signals.Command;
  *
  */
 public class ButtonHandler extends Mapper<ButtonSignal, Command> {
-
-   
-
     @Override
     public Command map(ButtonSignal signal) {
         switch (signal.source.getId()) {
         case Button.ID_LEFT:
-           return new Command(Position.OPEN, "Button open");
+           return new Command(Position.OPEN, "bo");
         case Button.ID_RIGHT:
-            return new Command(Position.CLOSED, "Button close");
+            return new Command(Position.CLOSED, "bc");
         }
         return null;
     }

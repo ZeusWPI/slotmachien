@@ -27,5 +27,11 @@ If no args:
     
 Returns kan be of the following forms
 
-    message
-    @person: message
+    status;cause
+
+Where status is either open or closed, and cause is
+    p:name   Person + name
+    pdc      Pre Delayed Close
+    dc       Delayed Close
+    bo       Button Open
+    bc       Button Close

@@ -7,7 +7,7 @@ package observable;
  *
  */
 public abstract class Mapper<T1 extends Signal, T2 extends Signal> extends
-		AbstractObservable<T2> implements Observer<T1> {
+		Observable<T2> implements Observer<T1> {
 
 	public abstract T2 map(T1 t);
 
@@ -20,7 +20,7 @@ public abstract class Mapper<T1 extends Signal, T2 extends Signal> extends
 	}
 
 	public static <T extends Signal, T1 extends Signal> void pipe(
-			AbstractObservable<T> source, Mapper<T, T1> map, Observer<T1> sink) {
+			Observable<T> source, Mapper<T, T1> map, Observer<T1> sink) {
 		source.addObserver(map);
 		map.addObserver(sink);
 	}

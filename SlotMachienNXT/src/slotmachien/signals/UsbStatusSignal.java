@@ -10,7 +10,7 @@ public class UsbStatusSignal extends Signal{
 		this.status = status;
 	}
 	
-	static public enum UsbStatus{
+	public static enum UsbStatus {
 		CONNECTED, DISCONNECTED
 	}
 

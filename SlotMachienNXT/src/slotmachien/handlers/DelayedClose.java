@@ -17,7 +17,7 @@ public class DelayedClose implements Observer<Signal> {
 	private final DelayedCloser closer = new DelayedCloser();
 
 	private final Command preOpen = new Command(Position.OPEN,
-			"Opening pre-delayed close");
+			"pdc");
 
 	private final Observer<Signal> canceller = new Observer<Signal>() {
 		public void notified(Signal signal) {
@@ -96,7 +96,7 @@ public class DelayedClose implements Observer<Signal> {
 			}
 
 			if (ticks <= 0) {
-				motor.notified(new Command(Position.CLOSED, "Delayed close"));
+				motor.notified(new Command(Position.CLOSED, "dc"));
 				throw new UnsubscribeMeException();
 			}
 			System.out.println(ticks);

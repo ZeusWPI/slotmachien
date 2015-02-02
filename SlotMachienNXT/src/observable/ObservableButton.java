@@ -4,7 +4,7 @@ import lejos.nxt.Button;
 import lejos.nxt.ButtonListener;
 import slotmachien.signals.ButtonSignal;
 
-public class ObservableButton extends AbstractObservable<ButtonSignal> {
+public class ObservableButton extends Observable<ButtonSignal> {
 
 	public ObservableButton(Button... b) {
 		for (Button button : b) {

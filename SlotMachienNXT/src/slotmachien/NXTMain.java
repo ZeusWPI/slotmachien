@@ -22,87 +22,60 @@ import slotmachien.signals.UsbStatusSignal.UsbStatus;
 
 public class NXTMain {
 
-	public static void main(String[] args) {
-		reactive();
-	}
-	
-	public static void reactive() {
-		System.out.println("Start Reactivity");
+    public static void main(String[] args) {
+        reactive();
+    }
 
-		final PeriodicSignal clock = new PeriodicSignal(100);
-		
-		final USBHandler usb = new USBHandler();
+    public static void reactive() {
+        final PeriodicSignal clock = new PeriodicSignal(100);
 
-		final SMMotorHandler motors = new SMMotorHandler(clock, Motor.B, Motor.C);
-		final ScreenHandler screen = new ScreenHandler();
-		
-		// write status updates to USB
-		Mapper.pipe(motors, new MovedToMessage(), usb);
-		// and to screen
-		Mapper.pipe(motors, new MovedToMessage(), screen);
-		
-		// handle buttons
-		ButtonHandler buttonHandler = new ButtonHandler();
-		buttonHandler.addObserver(motors);
+        final USBHandler usb = new USBHandler();
 
-		// delayed closer
-		DelayedClose delayedC = new DelayedClose(motors, new PeriodicSignal(1000), 10);
-		// abort delayed close when something happens:
-		motors.addObserverDangerous(delayedC.getCanceller());
-		
-		
-		ObservableButton escape = new ObservableButton(Button.ESCAPE);
-		
-		new ObservableButton(Button.LEFT, Button.RIGHT)
-		.addObserver(buttonHandler);
-		new ObservableButton(Button.ENTER).addObserverDangerous(delayedC);
-		escape
-		.addObserver(new Observer<ButtonSignal>() {
-			@Override
-			public void notified(ButtonSignal signal){
-				Sound.buzz();
-				screen.clear();
-			}
-		});
+        final SMMotorHandler motors = new SMMotorHandler(clock, Motor.B, Motor.C);
+        final ScreenHandler screen = new ScreenHandler();
 
-		escape.addObserverDangerous(delayedC.getCanceller());
-		
+        // write status updates to USB
+        Mapper.pipe(motors, new MovedToMessage(), usb);
+        // and to screen
+        Mapper.pipe(motors, new MovedToMessage(), screen);
 
-		// handle usb-input
-		UsbParser parser = new UsbParser(motors, usb, screen);
-		usb.addObserver(parser);
-		// and write usb-failurs to screen
-		Mapper<UsbStatusSignal, MessageSignal> conv = new USBStatusToMessage();
-		usb.getStatusObservable().addObserver(conv);
-		conv.addObserver(screen);
-		// beep on usb connected/disconnected
-		usb.getStatusObservable().addObserver(new Observer<UsbStatusSignal>() {
+        // handle buttons
+        ButtonHandler buttonHandler = new ButtonHandler();
+        buttonHandler.addObserver(motors);
 
-			@Override
-			public void notified(UsbStatusSignal signal) {
-				if (signal.status == UsbStatus.CONNECTED) {
-					Sound.playNote(Sound.XYLOPHONE, 440, 250);
-					Sound.playNote(Sound.XYLOPHONE, 880, 125);
-					Sound.playNote(Sound.XYLOPHONE, 440, 250);
-				} else {
-					Sound.playNote(Sound.XYLOPHONE, 880, 500);
-					Sound.playNote(Sound.XYLOPHONE, 440, 500);
-					Sound.playNote(Sound.XYLOPHONE, 880, 500);
-				}
-			}
+        // delayed closer
+        DelayedClose delayedC = new DelayedClose(motors, new PeriodicSignal(
+                1000), 10);
+        // abort delayed close when something happens:
+        motors.addObserverDangerous(delayedC.getCanceller());
 
-		});
+        ObservableButton escape = new ObservableButton(Button.ESCAPE);
 
-		usb.getStatusObservable().addObserver(new Observer<UsbStatusSignal>() {
+        new ObservableButton(Button.LEFT, Button.RIGHT).addObserver(buttonHandler);
+        new ObservableButton(Button.ENTER).addObserverDangerous(delayedC);
 
-			@Override
-			public void notified(UsbStatusSignal signal) {
-				if (signal.status == UsbStatus.CONNECTED) {
-					usb.notified("channel", "I'm back online!");
-				}
+        escape.addObserverDangerous(delayedC.getCanceller());
 
-			}
-		});
-		
-	}
+        // handle usb-input
+        UsbParser parser = new UsbParser(motors, usb, screen);
+        usb.addObserver(parser);
+        // and write usb-failures to screen
+        Mapper<UsbStatusSignal, MessageSignal> conv = new USBStatusToMessage();
+        usb.getStatusObservable().addObserver(conv);
+        conv.addObserver(screen);
+        // beep on usb connected/disconnected
+        usb.getStatusObservable().addObserver(new Observer<UsbStatusSignal>() {
+
+            @Override
+            public void notified(UsbStatusSignal signal) {
+                if (signal.status == UsbStatus.CONNECTED) {
+                    Sound.beepSequenceUp();
+                } else {
+                    Sound.beepSequence();
+                }
+            }
+
+        });
+
+    }
 }
