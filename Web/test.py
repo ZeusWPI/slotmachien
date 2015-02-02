@@ -9,22 +9,6 @@ from threading import Thread
 print >> sys.stderr, os.getpid()
 
 responses = ['OPEN', 'CLOSED']
-<<<<<<< HEAD
-state = random.choice(['open;test;','close;test;'])
-print(state)
-sys.stdout.flush()
-i = 0
-while True:
-    temp = sys.stdin.readline()
-    if temp == "CLOSE":
-        state = 'CLOSED'
-    if temp == "OPEN":
-        state = 'OPEN'
-    time.sleep(random.random()*4)
-    print(random.choice(['open;test;','close;test;']))
-    sys.stdout.flush()
-    i+=1
-=======
 
 class SimulateDoor(Thread):
     def __init__(self):
@@ -35,7 +19,7 @@ class SimulateDoor(Thread):
         i = 0
         while True:
             time.sleep(random.random()*10)
-            self.modify_state(random.choice(responses))
+            self.modify_state(random.choice(responses) + ';p:feliciaan')
 
             i+=1
 
@@ -57,4 +41,3 @@ for line in iter(sys.stdin.readline, ""):
             door.modify_state("open")
         if line in "closed":
             door.modify_state("closed")
->>>>>>> upstream/web-interface2

@@ -4,19 +4,16 @@ from flask import Blueprint, request, jsonify, redirect, url_for
 from app import app
 from login import before_request
 from utils import send_command
-from models import User
 
-supported_actions = ['open', 'close', 'status', 'ping','buzz','beep']
+supported_actions = ['open', 'close', 'status']
 
 
 @app.route('/slotmachien/', methods=['POST'])
 def update_door():
     before_request()
-    request = request.get_json(force=True)['action']
-
-    logger.info("Got general request: "+request)
+    action = if_toggle(request.get_json(force=True)['action'])
     if action in supported_actions:
-        return jsonify(send_command(action,'todo',''))
+        return jsonify(send_command(action))
     else:
         return jsonify({'error': 'command: ' + action + ' unknown'})
 
@@ -25,17 +22,26 @@ def update_door():
 def status_door():
     content_type = request.headers.get('Content-Type', None)
     if content_type and content_type in 'application/json':
-        return jsonify(send_command('status','todo',''))
+        return jsonify(send_command('status'))
 
     return redirect(url_for("admin.index"))
+
 
 @app.route('/slotmachien/slack/', methods=['POST'])
 def slack_update_door():
     before_request()
-    request = request.form.get('text')
-    print("Got slack request: "+request)
-    return jsonify({"text","Hi slack!"})
+    action = if_toggle(request.form.get('text'))
+    if action in supported_actions:
+        return 'The door is ' + send_command(action)['status'] + '!'
+    else:
+        return "This command " + action + " is not supported!"
 
+
+def if_toggle(action):
+    if action in 'toggle':
+        state = send_command('status')['status']
+        action = 'close' if 'open' in state else 'open'
+    return action
 
 
 if app.debug:  # add route information

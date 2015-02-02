@@ -8,14 +8,12 @@ import time
 import signal
 import sys
 
-import config
-
 import requests
 from flask.ext.login import current_user
 
 
 from app import app, db, logger
-from models import LogAction
+from models import LogAction, User
 
 
 def is_alive(f):  # decorater for the Process class
@@ -46,7 +44,6 @@ class Process:
 
         logger.info('SlotMachienPC pid: %d' % self.process.pid)
         self.stopped = False
-	self._write_command_("status;startup;")
         self.last_status = self.process.stdout.readline()
 
         # Create input processing thread
@@ -98,11 +95,14 @@ class Process:
         return self.process.stdout
 
     @is_alive
-    def send_command(self, command, user, args):
-        self.check_alive()
-        self._write_command_(command+";"+user+";"+args)
-        time.sleep(0.75)  # wait for a couple of seconds to return, to give NXT some time to write
-        return {'status': self.last_status.strip()}
+    def send_command(self, command):
+        command = command.upper()
+        if command in ['OPEN', 'CLOSE'] \
+            and command not in self.last_status.upper():
+            command = command + ';' + current_user.username
+            self._write_command_(command)
+            time.sleep(1.00)  # wait for a couple of seconds to return
+        return {'status': self.last_status.lower().strip()}
 
     def _write_command_(self, command):
         if self.write_lock is not None:
@@ -122,23 +122,85 @@ class InputProcessingThread(Thread):
         logger.info('Starting the input processing thread')
         for line in iter(self.process.stdout().readline, ""):
             if len(line) > 1:
-                self.process.last_status = line	# read a line, write to last_status
-                line = line.strip()
-                print("received: " + line)
-                logger.info("Door status changed: %s" % (line))
-
-                # TODO: do webhooks (in new thread)
-                self.webhooks(line)
-
-
+                old_line = line
+                line = self.clean_status(line)
+                self.process.last_status = self.create_status(line)
+                logger.info("Door status changed to %s" % (line[0]))
+                self.log_status(line)
+                webhookthread = WebhookSenderThread(line)
+                webhookthread.start()
         logger.info('Input processing thread stopped')
         self.process.stopped = True
 
-    def webhooks(self, text):
-        js = json.dumps({'text': text})
+    def log_status(self, status):
+        cu = None
+        if status[2]:
+            cu = User.query.filter_by(username=status[1]).first()
+        logaction = LogAction()
+        logaction.configure(cu, status[0], dt.now())
+        db.session.add(logaction)
+        db.session.commit()
+
+    def clean_status(self, status):
+        status = status.lower().strip()
+
+        if status in ["opened", "closed"]:
+            return (status, None, False)
+
+        if ';' in status:
+            # new kind
+            parsed_status = status.split(';')
+            action = parsed_status[0]
+            by = 'manual'
+            human = False
+            if 'p:' in parsed_status[1]:
+                # user
+                username = parsed_status[1].split(':')[1]
+                return (action, username, True)
+            elif parsed_status[1] in ['pdc', 'dc', 'bo', 'bc']:
+                by = 'buttons'
+            return (action, by, False)
+
+        if "nxt" in status:
+            return ("NXT Error", None, False)
+
+        logger.error("Door status inconsistent: %s" % (status))
+        return ("error: contact sysadmins", None, False)
+
+    def create_status(self, status):
+        if status[2]:
+            return "%s by %s" % (status[0], status[1])
+        elif status[1] in 'manual':
+            return "manually %s by some human being" % (status[0])
+        else:
+            return "%s" % (status[0])
+
+
+class WebhookSenderThread(Thread):
+
+    def __init__(self, status):
+        super(WebhookSenderThread, self).__init__()
+        self.message = self.create_message(status)
+
+    def run(self):
+        self.slack_webhook()
+
+    def slack_webhook(self):
+        js = json.dumps({'text': self.message})
         url = app.config['SLACK_WEBHOOK']
         if len(url) > 0:
             requests.post(url, data=js)
+
+    def create_message(self, status):
+        if status[2]:
+            # HUMAN
+            return "The door is %s by %s" % (status[0], status[1])
+        elif status[1] in 'manual':
+            return "The door is manually %s by some human being!" % (status[0])
+        elif status[1] in 'buttons':
+            return "The buttons of the door are being pressed, so the door %s!" % (status[0])
+        else:
+            return "The door status changed to %s" % (status[0])
 
 
 class HeartBeatThread(Thread):
@@ -151,20 +213,19 @@ class HeartBeatThread(Thread):
     def run(self):
         logger.info('Starting the heartbeat thread')
         while not self.stop:
-            self.process._write_command_('status;heartbeat;')
+            self.process._write_command_('PING')
             self.process.check_alive()
             time.sleep(5)
         logger.info('Stopping the heartbeat thread')
 
 
-def send_command(command, user, args):
+def send_command(command):
     global process
-    log_action(command)
 
     if process is None:
         start_process()
 
-    response = process.send_command(command, user, args)
+    response = process.send_command(command)
 
     return response
 
@@ -187,12 +248,3 @@ def signal_handler(signal, frame):
     sys.exit(0)
 
 signal.signal(signal.SIGINT, signal_handler)
-
-
-def log_action(action):
-    logger.info("User %s:%s" % (current_user, action))
-    if action not in ["status"]:
-        logaction = LogAction()
-        logaction.configure(current_user, action, dt.now())
-        db.session.add(logaction)
-        db.session.commit()
