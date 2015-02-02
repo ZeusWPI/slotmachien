@@ -9,3 +9,5 @@ class Configuration(object):
     DEBUG = False
     SECRET_KEY = 'shhhh'
     SLACK_WEBHOOK = ''
+    PROCESS = 'cd /home/slotmachien/slotmachien/SlotMachienPC/src && java -cp /opt/leJOS_NXT/lib/pc/pccomm.jar:. PCMain'
+    LOGFILE = 'slotmachien.log'

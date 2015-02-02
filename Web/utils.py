@@ -1,20 +1,35 @@
 from datetime import datetime as dt
 from subprocess import Popen, PIPE
 from threading import Thread
+from functools import wraps
 import threading
 import json
 import time
 import signal
 import sys
 
-import requests
+import config
 
-from app import app
-from auth import has_slack_token, get_user
+import requests
+from flask.ext.login import current_user
+
+
+from app import app, db, logger
 from models import LogAction
 
 
+def is_alive(f):  # decorater for the Process class
+    @wraps(f)
+    def decorated(self, *args, **kwargs):
+        if not self.check_alive():
+            self.create()
+
+        return f(self, *args, **kwargs)
+    return decorated
+
+
 class Process:
+
     def __init__(self):
         self.process = None
         self.inputProcessing = None
@@ -26,17 +41,12 @@ class Process:
 
     def create(self):
         self.clean_process()
-        if app.config['DEBUG']:
-            self.process = Popen(['python test.py'], stdin=PIPE, stdout=PIPE,
-                                 shell=True)
-        else:
-            self.process = Popen(['cd ../SlotMachienPC/src && ' +
-                                 'java -cp /opt/leJOS_NXT/lib/pc/pccomm.jar:.'
-                                  + ' PCMain'], stdin=PIPE, stdout=PIPE,
-                                 shell=True)
+        self.process = Popen([app.config['PROCESS']], stdin=PIPE, stdout=PIPE,
+                             shell=True)
 
-        print('SlotMachienPC pid: ' + str(self.process.pid))
+        logger.info('SlotMachienPC pid: %d' % self.process.pid)
         self.stopped = False
+	self._write_command_("status;startup;")
         self.last_status = self.process.stdout.readline()
 
         # Create input processing thread
@@ -45,21 +55,23 @@ class Process:
         self.inputProcessing.start()
 
         # Create heartbeat thread
-        self.heartbeat = HeartBeatThread(self)
-        self.heartbeat.setDaemon(True)
-        self.heartbeat.start()
+        # TEMPORARY DISABLE HEARTBEAT BECAUSE SLOTMACHIENNXT CANNOT LIVE WITH IT
+        #self.heartbeat = HeartBeatThread(self)
+        #self.heartbeat.setDaemon(True)
+        #self.heartbeat.start()
 
         self.write_lock = threading.Lock()
+        logger.info("Started all threads")
 
     def clean_process(self):
-        print("Started cleaning")
+        logger.info("Started cleaning")
         if self.process and not self.process.poll():
             self.process.stdin.close()
             self.process.stdout.close()
             try:
                 self.process.terminate()
             except OSError:
-                print("No process to terminate")
+                logger.warn("No process to terminate")
             self.process = None
 
         if self.inputProcessing and self.inputProcessing.isAlive():
@@ -69,52 +81,57 @@ class Process:
         if self.heartbeat and self.heartbeat.isAlive():
             self.heartbeat.stop = True
             self.heartbeat = None
-        print("Closed all threads")
+        logger.info("Closed all threads")
 
     def check_alive(self):
         if not self.process or self.process.poll() or self.stopped:
-            print("DEAD")
-            self.create()
+            logger.info("Java process went down")
+            return False
+        return True
 
+    @is_alive
     def stdin(self):
-        self.check_alive()
         return self.process.stdin
 
+    @is_alive
     def stdout(self):
-        self.check_alive()
         return self.process.stdout
 
-    def send_command(self, command):
+    @is_alive
+    def send_command(self, command, user, args):
         self.check_alive()
-        command = command.upper()
-        if command in ['OPEN', 'CLOSE']:
-            self._write_command_(command)
-            time.sleep(1.5)  # wait for a couple of seconds to return
-        return {'status': self.last_status.lower().strip()}
+        self._write_command_(command+";"+user+";"+args)
+        time.sleep(0.75)  # wait for a couple of seconds to return, to give NXT some time to write
+        return {'status': self.last_status.strip()}
 
     def _write_command_(self, command):
-        self.write_lock.acquire()
-        self.process.stdin.write(command + '\n')
-        self.process.stdin.flush()
-        self.write_lock.release()
+        if self.write_lock is not None:
+            self.write_lock.acquire()
+            self.process.stdin.write(command + '\n')
+            self.process.stdin.flush()
+            self.write_lock.release()
 
 
 class InputProcessingThread(Thread):
+
     def __init__(self, process):
         super(InputProcessingThread, self).__init__()
         self.process = process
 
     def run(self):
-        print('starting input processing')
+        logger.info('Starting the input processing thread')
         for line in iter(self.process.stdout().readline, ""):
             if len(line) > 1:
-                self.process.last_status = line
-                line = line.lower().strip()
+                self.process.last_status = line	# read a line, write to last_status
+                line = line.strip()
                 print("received: " + line)
-                # TODO: add logging
-                self.webhooks(line)
+                logger.info("Door status changed: %s" % (line))
+
                 # TODO: do webhooks (in new thread)
-        print('thread: input processing stopped')
+                self.webhooks(line)
+
+
+        logger.info('Input processing thread stopped')
         self.process.stopped = True
 
     def webhooks(self, text):
@@ -125,43 +142,57 @@ class InputProcessingThread(Thread):
 
 
 class HeartBeatThread(Thread):
+
     def __init__(self, process):
         super(HeartBeatThread, self).__init__()
         self.process = process
         self.stop = False
 
     def run(self):
-        print('starting heartbeat')
+        logger.info('Starting the heartbeat thread')
         while not self.stop:
-            self.process._write_command_('PING')
+            self.process._write_command_('status;heartbeat;')
             self.process.check_alive()
             time.sleep(5)
-        print('thread: heartbeat stopped')
+        logger.info('Stopping the heartbeat thread')
 
 
-def send_command(command):
+def send_command(command, user, args):
     global process
     log_action(command)
 
-    response = process.send_command(command)
+    if process is None:
+        start_process()
+
+    response = process.send_command(command, user, args)
 
     return response
 
-process = Process()
 
+def start_process():
+    global process
+    process = Process()
+
+process = None
 
 # Add signal handler because SlotMachienPC cannot be closed by ctrl+c
+
+
 def signal_handler(signal, frame):
-        global process
-        print("SIGINT called")
-        process.stdin().close()
-        process.heartbeat.join()
-        sys.exit(0)
+    global process
+    logger.info("SIGINT called, stopping the program")
+    process.stdin().close()
+    process.clean_process()
+    # process.inputProcessing.join()
+    sys.exit(0)
 
 signal.signal(signal.SIGINT, signal_handler)
 
 
 def log_action(action):
+    logger.info("User %s:%s" % (current_user, action))
     if action not in ["status"]:
-        LogAction.create(auth_key=has_slack_token(), user=get_user(),
-                         action=action, logged_on=dt.now())
+        logaction = LogAction()
+        logaction.configure(current_user, action, dt.now())
+        db.session.add(logaction)
+        db.session.commit()

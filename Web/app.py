@@ -1,8 +1,12 @@
 from flask import Flask
+from flask.ext.sqlalchemy import SQLAlchemy
 
-from flask_peewee.db import Database
+
+from logbook import Logger
 
 app = Flask(__name__)
 app.config.from_object('config.Configuration')
 
-db = Database(app)
+db = SQLAlchemy(app)
+
+logger = Logger('SlotMachien-Web')

@@ -15,11 +15,9 @@ public class PCMain {
         final NXTComm nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
         NXTInfo[] nxtInfo = nxtComm.search(null);
         if (nxtInfo.length == 0){
+        	System.out.println("No connection!");
             System.exit(1);
         }
-        
-        safeOpen(nxtComm, nxtInfo[0], "./.lockmachien");
-
         
         OutputStream os = nxtComm.getOutputStream();
         InputStream is = nxtComm.getInputStream();
@@ -28,20 +26,4 @@ public class PCMain {
         Pipe.make(System.in, os).join();  // Wait for end of input
     }
     
-    private static void safeOpen(final NXTComm comm, final NXTInfo conn, String lockpath) throws NXTCommException, IOException{
-    	
-    	LockFile lock = new LockFile(lockpath);
-    	lock.create();
-    	
-        comm.open(conn);
-        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-        	@Override
-        	public void run() {
-        		try {
-        			comm.close();
-        		} catch (IOException e) {}
-        	}
-        }));
-    	
-    }
 }
