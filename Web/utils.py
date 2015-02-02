@@ -13,7 +13,7 @@ from flask.ext.login import current_user
 
 
 from app import app, db, logger
-from models import LogAction
+from models import LogAction, User
 
 
 def is_alive(f):  # decorater for the Process class
@@ -99,6 +99,7 @@ class Process:
         command = command.upper()
         if command in ['OPEN', 'CLOSE'] \
             and command not in self.last_status.upper():
+            command = command + ';' + current_user.username
             self._write_command_(command)
             time.sleep(0.75)  # wait for a couple of seconds to return
         return {'status': self.last_status.lower().strip()}
@@ -124,7 +125,7 @@ class InputProcessingThread(Thread):
                 old_line = line
                 line = self.clean_status(line)
                 self.process.last_status = line
-                logger.info("Door status changed: %s" % (line))
+                logger.info("Door status changed to %s" % (line))
                 webhookthread = WebhookSenderThread(line)
                 webhookthread.start()
         logger.info('Input processing thread stopped')
@@ -134,6 +135,19 @@ class InputProcessingThread(Thread):
         status = status.lower().strip()
         if status in ["open", "closed"]:
             return status
+
+        if ';' in status:
+            # new kind
+            parsed_status = status.split(';')
+            action = parsed_status[0]
+            by = 'manual'
+            if 'p:' in parsed_status[1]:
+                # user
+                username = parsed_status[1].split(':')[1]
+                by = username
+            elif parsed_status[1] in ['pdc', 'dc', 'bo', 'bc']:
+                by = 'buttons'
+            return '%s by %s' % (action, by)
 
         if "nxt" in status:
             return "NXT Error"

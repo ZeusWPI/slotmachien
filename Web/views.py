@@ -4,7 +4,6 @@ from flask import Blueprint, request, jsonify, redirect, url_for
 from app import app
 from login import before_request
 from utils import send_command
-from models import User
 
 supported_actions = ['open', 'close', 'status']
 

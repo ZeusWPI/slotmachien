@@ -19,7 +19,7 @@ class SimulateDoor(Thread):
         i = 0
         while True:
             time.sleep(random.random()*10)
-            self.modify_state(random.choice(responses))
+            self.modify_state(random.choice(responses) + ';p:feliciaan')
 
             i+=1
 
