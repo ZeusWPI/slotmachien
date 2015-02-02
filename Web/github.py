@@ -44,6 +44,10 @@ def authorized():
     if user:
         login_user(user)
         # add_token(resp['access_token'], user)
+        content_type = request.headers.get('Content-Type', None)
+        if content_type and content_type in 'application/json':
+            token = add_token(user)
+            return jsonify({'token': token.token})
         return redirect(url_for("admin.index"))
 
     flash("You're not allowed to enter, please contact a system administrator")
@@ -55,11 +59,9 @@ def get_github_oauth_token():
     return session.get('github_token')
 
 
-def add_token(token, user):
-    token = Token.query.filter_by(token=token, user=user).first()
-    if token is None:
-        token = Token()
-        token.configure(user)
-        token.token = token
-        db.session.add(token)
-        db.session.commit()
+def add_token(user):
+    token = Token()
+    token.configure(user)
+    db.session.add(token)
+    db.session.commit()
+    return token
