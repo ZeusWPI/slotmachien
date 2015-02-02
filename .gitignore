@@ -12,4 +12,9 @@
 
 *.lockmachien
 
+*.swp
+
+.syntastic_javac_config
+/bin/
 Web/slotmachien2.fcgi
+/SlotMachienNXT/nbproject/private/
