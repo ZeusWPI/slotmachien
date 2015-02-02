@@ -40,7 +40,7 @@ def slack_update_door():
 def if_toggle(action):
     if action in 'toggle':
         state = send_command('status')['status']
-        action = 'close' if state in 'open' else 'open'
+        action = 'close' if 'open' in state else 'open'
     return action
 
 
