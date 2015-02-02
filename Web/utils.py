@@ -137,7 +137,7 @@ class InputProcessingThread(Thread):
         if status[2]:
             cu = User.query.filter_by(username=status[1]).first()
         logaction = LogAction()
-        logaction.configure(cu, action, dt.now())
+        logaction.configure(cu, status[0], dt.now())
         db.session.add(logaction)
         db.session.commit()
 
