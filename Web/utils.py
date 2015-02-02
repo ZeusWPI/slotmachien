@@ -166,8 +166,8 @@ class InputProcessingThread(Thread):
         logger.error("Door status inconsistent: %s" % (status))
         return ("error: contact sysadmins", None, False)
 
-        def create_status(self, status):
-            return status[0] + ' by ' if status[2] else ' by systemized ' + status[1]
+    def create_status(self, status):
+        return status[0] + ' by ' if status[2] else ' by systemized ' + status[1]
 
 
 class WebhookSenderThread(Thread):
