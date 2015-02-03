@@ -22,6 +22,8 @@ public class PCMain {
         OutputStream os = nxtComm.getOutputStream();
         InputStream is = nxtComm.getInputStream();
         
+        nxtComm.open();
+
         Pipe.make(is, System.out);
         Pipe.make(System.in, os).join();  // Wait for end of input
     }
