@@ -15,12 +15,15 @@ from flask.ext.login import current_user
 from app import app, db, logger
 from models import LogAction, User
 
-STATUS_TO_ENGLISH = {'open': 'opened', 'close': 'closed'}
+STATUS_TO_ENGLISH = {'open': 'opened', 'closed': 'closed'}
 
 
 def past_tensify(status):
     """ Returns an englified past tense """
-    return STATUS_TO_ENGLISH[status]
+    if status in STATUS_TO_ENGLISH:
+        return STATUS_TO_ENGLISH[status]
+    else:
+        return status
 
 
 def is_alive(f):  # decorater for the Process class
