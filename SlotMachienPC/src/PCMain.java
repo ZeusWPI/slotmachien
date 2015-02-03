@@ -19,10 +19,24 @@ public class PCMain {
             System.exit(1);
         }
         
-        OutputStream os = nxtComm.getOutputStream();
-        InputStream is = nxtComm.getInputStream();
+        final OutputStream os = nxtComm.getOutputStream();
+        final InputStream is = nxtComm.getInputStream();
         
         nxtComm.open(nxtInfo[0]);
+
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+        	@Override
+        	public void run() {
+        		try {
+				os.close();
+				is.close();
+        			nxtComm.close();
+				System.exit(0);
+        		} catch (IOException e) {
+				System.exit(1);
+			}
+        	}
+        }));
 
         Pipe.make(is, System.out);
         Pipe.make(System.in, os).join();  // Wait for end of input
