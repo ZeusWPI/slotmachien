@@ -162,7 +162,7 @@ class InputProcessingThread(Thread):
             # new kind
             parsed_status = status.split(';')
             action = parsed_status[0]
-            by = parsed_status[1] 
+            by = parsed_status[1]
             human = False
             if 'p:' in parsed_status[1]:
                 # user
@@ -256,7 +256,7 @@ process = None
 
 def signal_handler(signal, frame):
     global process
-    logger.info("SIGINT called, stopping the program")
+    logger.info("SIG %s called, stopping the program" % (str(signal)))
     process.stdin().close()
     process.clean_process()
     # process.inputProcessing.join()
@@ -264,3 +264,4 @@ def signal_handler(signal, frame):
     sys.exit(0)
 
 signal.signal(signal.SIGINT, signal_handler)
+signal.signal(signal.SIGTERM, signal_handler)
