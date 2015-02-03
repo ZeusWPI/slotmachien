@@ -161,13 +161,12 @@ class InputProcessingThread(Thread):
             # new kind
             parsed_status = status.split(';')
             action = parsed_status[0]
-            by = 'manual'
+            by = parsed_status[1] 
             human = False
             if 'p:' in parsed_status[1]:
                 # user
                 username = parsed_status[1].split(':')[1]
                 return (action, username, True)
-                by = parsed_status[1]
             return (action, by, False)
 
         if "nxt" in status:
@@ -208,9 +207,9 @@ class WebhookSenderThread(Thread):
         elif status[1] in 'manual':
             # With a key
             return "Door has been %s with a key" % (past_tense)
-        elif status[1] == 'pdc':
+        elif status[1] in 'pdc':
             return "Door is going to close in 10 seconds..."
-        elif status[1] == 'dc':
+        elif status[1] in 'dc':
             return "Door has been %s using the delayed close" % (past_tense)
         elif status[1] in ['bo', 'bc']:
             return "Door has been %s using the buttons" % (past_tense)
