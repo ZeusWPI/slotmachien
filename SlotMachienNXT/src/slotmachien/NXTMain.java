@@ -9,6 +9,7 @@ import observable.Mapper;
 import observable.ObservableButton;
 import observable.Observer;
 import observable.PeriodicSignal;
+import observable.UnsubscribeMeException;
 import slotmachien.handlers.ButtonHandler;
 import slotmachien.handlers.DelayedClose;
 import slotmachien.handlers.Images;
@@ -20,9 +21,10 @@ import slotmachien.handlers.USBStatusToMessage;
 import slotmachien.handlers.UsbParser;
 import slotmachien.signals.ButtonSignal;
 import slotmachien.signals.MessageSignal;
-import slotmachien.signals.UnsubscribeMeException;
 import slotmachien.signals.UsbStatusSignal;
 import slotmachien.signals.UsbStatusSignal.UsbStatus;
+import song.Note;
+import song.Song;
 
 public class NXTMain {
     
@@ -77,8 +79,7 @@ public class NXTMain {
         new ObservableButton(Button.LEFT, Button.RIGHT)
                 .addObserver(buttonHandler);
         new ObservableButton(Button.ENTER).addObserverDangerous(delayedC);
-        new ObservableButton(Button.ESCAPE)
-                .addObserver(new Observer<ButtonSignal>() {
+        escape.addObserver(new Observer<ButtonSignal>() {
                     @Override
                     public void notified(ButtonSignal signal) {
                         new Graphics().drawImage(Images.SECRETS, 0, 0, 0);

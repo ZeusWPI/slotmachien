@@ -1,9 +1,9 @@
 package slotmachien.debug;
 
 import observable.Observer;
+import observable.UnsubscribeMeException;
 import slotmachien.handlers.USBHandler;
 import slotmachien.signals.MessageSignal;
-import slotmachien.signals.UnsubscribeMeException;
 import slotmachien.signals.UsbStatusSignal;
 
 /**

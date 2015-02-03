@@ -1,4 +1,4 @@
-package slotmachien;
+package song;
 
 import lejos.nxt.Sound;
 

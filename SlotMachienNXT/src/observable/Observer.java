@@ -1,6 +1,6 @@
 package observable;
 
-import slotmachien.signals.UnsubscribeMeException;
+import slotmachien.signals.Signal;
 
 public interface Observer<T extends Signal> {
 

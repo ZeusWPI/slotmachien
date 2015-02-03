@@ -1,13 +1,10 @@
 package slotmachien.handlers;
 
-import java.io.File;
-
-import lejos.nxt.Sound;
 import observable.Observer;
+import observable.UnsubscribeMeException;
 import slotmachien.internal.Position;
 import slotmachien.signals.Command;
 import slotmachien.signals.MessageSignal;
-import slotmachien.signals.UnsubscribeMeException;
 
 /**
  * Gets USB-signals, parses them, executes them

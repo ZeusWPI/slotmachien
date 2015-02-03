@@ -1,6 +1,5 @@
 package slotmachien.signals;
 
-import observable.Signal;
 
 public class UsbStatusSignal extends Signal{
 	

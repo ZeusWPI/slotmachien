@@ -8,11 +8,11 @@ import lejos.nxt.Sound;
 import observable.Observable;
 import observable.Observable;
 import observable.Observer;
-import observable.Signal;
 import slotmachien.internal.MotorBlock;
 import slotmachien.internal.Position;
 import slotmachien.signals.Command;
 import slotmachien.signals.MovedToSignal;
+import slotmachien.signals.Signal;
 
 public class SMMotorHandler extends Observable<MovedToSignal> implements
 		Observer<Command> {

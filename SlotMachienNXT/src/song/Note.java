@@ -1,4 +1,4 @@
-package slotmachien;
+package song;
 
 public class Note {
     
@@ -11,7 +11,7 @@ public class Note {
     public static final int F = 349;
     public static final int G = 392;
     
-    Note(int freq, int duration) {
+    public Note(int freq, int duration) {
         this.freq = freq;
         this.duration = duration;
     }

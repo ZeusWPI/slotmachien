@@ -1,6 +1,5 @@
 package slotmachien.signals;
 
-import observable.Signal;
 
 /**
  * A signal representing a message

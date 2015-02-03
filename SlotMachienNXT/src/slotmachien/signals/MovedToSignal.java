@@ -1,6 +1,5 @@
 package slotmachien.signals;
 
-import observable.Signal;
 import slotmachien.internal.Position;
 
 public class MovedToSignal extends Signal {

@@ -1,4 +1,4 @@
-package slotmachien.signals;
+package observable;
 
 /**
  * A observer can throw this if it wants to be unsubscribed

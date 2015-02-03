@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import slotmachien.signals.UnsubscribeMeException;
+import slotmachien.signals.Signal;
 
 public class Observable<T extends Signal> {
 
