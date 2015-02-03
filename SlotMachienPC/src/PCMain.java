@@ -35,6 +35,9 @@ public class PCMain {
                         } catch (Exception e){}
                     }
                 }).start();
+		try {
+		    Thread.sleep(500);
+		} catch(Exception e) {}
             }
         }));
 
