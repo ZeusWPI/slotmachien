@@ -6,6 +6,7 @@ import threading
 import json
 import time
 import signal
+import os
 import sys
 
 import requests
@@ -245,6 +246,7 @@ def signal_handler(signal, frame):
     process.stdin().close()
     process.clean_process()
     # process.inputProcessing.join()
+    os.kill(process.process.pid, signal.SIGTERM)
     sys.exit(0)
 
 signal.signal(signal.SIGINT, signal_handler)
