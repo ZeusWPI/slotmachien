@@ -204,12 +204,12 @@ class WebhookSenderThread(Thread):
         if status[2]:
             # By commands
             return "Door has been %s by %s" % (past_tense, status[1])
-        elif status[1] in 'manual':
+        elif status[1] == 'manual':
             # With a key
             return "Door has been %s with a key" % (past_tense)
-        elif status[1] in 'pdc':
+        elif status[1] == 'pdc':
             return "Door is going to close in 10 seconds..."
-        elif status[1] in 'dc':
+        elif status[1] == 'dc':
             return "Door has been %s using the delayed close" % (past_tense)
         elif status[1] in ['bo', 'bc']:
             return "Door has been %s using the buttons" % (past_tense)
