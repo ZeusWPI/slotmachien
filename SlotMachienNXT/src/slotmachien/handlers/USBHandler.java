@@ -6,6 +6,7 @@ import observable.Observable;
 import observable.Observer;
 import slotmachien.internal.UsbIO;
 import slotmachien.signals.MessageSignal;
+import slotmachien.signals.StringSignal;
 import slotmachien.signals.UsbStatusSignal;
 import slotmachien.signals.UsbStatusSignal.UsbStatus;
 
@@ -18,7 +19,7 @@ import slotmachien.signals.UsbStatusSignal.UsbStatus;
  * 
  * @author pietervdvn
  */
-public class USBHandler extends Observable<MessageSignal> implements
+public class USBHandler extends Observable<StringSignal> implements
         Observer<MessageSignal> {
 
     public static boolean debug = false;
@@ -51,7 +52,7 @@ public class USBHandler extends Observable<MessageSignal> implements
                         if (read.equals("")) {
                             disconnect();
                         } else {
-                            notifyObservers(new MessageSignal(read));
+                            notifyObservers(new StringSignal(read));
                         }
                     } catch (Exception e) {
                         disconnect();
@@ -86,15 +87,15 @@ public class USBHandler extends Observable<MessageSignal> implements
             return;
         }
         try {
-            io.writeLine(signal.content);
+            io.writeLine(signal.toString());
         } catch (Exception e) {
             // something failed -> send disconnect msg
             disconnect();
         }
     }
 
-    public void notified(String msg) {
-        notified(new MessageSignal(msg));
+    public void notified(String head, String body) {
+        notified(new MessageSignal(head, body));
     }
 
     public Observable<UsbStatusSignal> getStatusObservable() {

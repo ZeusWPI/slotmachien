@@ -7,7 +7,10 @@ public class Song {
     private int[] inst;
     private int bpm;
     private int shift;
-    
+
+    private Thread playing = null;
+    private SongRunnable songrunnable;
+
     public Song(int bpm, int[] inst, int shift, Note... notes) {
         this.bpm = bpm;
         this.shift = shift;
@@ -16,16 +19,35 @@ public class Song {
     }
 
     public void play() {
-        new Thread(new Runnable() {
+        if (playing == null) {
+            songrunnable = new SongRunnable();
+            playing = new Thread(songrunnable);
+            playing.start();
+        } else {
+            songrunnable.stop();
+            playing = null;
+            songrunnable = null;
+        }
+    }
 
-            @Override
-            public void run() {
-                for(Note note : notes) {
-                    Sound.playNote(inst, note.freq * shift, note.duration * bpm);
+    private class SongRunnable implements Runnable {
+
+        private volatile boolean stop = false;
+
+        @Override
+        public void run() {
+            for (Note note : notes) {
+                if (stop) {
+                    return;
                 }
+                Sound.playNote(inst, note.freq * shift, note.duration * bpm);
             }
+        }
 
-        }).start();
+        public void stop() {
+            stop = true;
+        }
+
     }
 
 }

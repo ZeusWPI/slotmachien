@@ -95,7 +95,19 @@ public class DelayedClose implements Observer<Signal> {
         @Override
         public void notified(Signal signal) throws UnsubscribeMeException {
             if (cancelled) {
-                System.out.println("Cancelled");
+                
+                Image i;
+                switch (motor.getState().pos) {
+                case OPEN:
+                    i = Images.OPEN;
+                    break;
+                case CLOSED:
+                    i = Images.CLOSED;
+                default:
+                    i = Images.ZEUS_LOGO;
+                    break;
+                }
+                new Graphics().drawImage(i, 0, 0, 0);
                 cancelled = false;
                 ticks = 0; // set ticks on zero, to indicate halting
                 throw new UnsubscribeMeException();

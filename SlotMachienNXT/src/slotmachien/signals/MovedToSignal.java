@@ -17,8 +17,5 @@ public class MovedToSignal extends Signal {
 		this(currentState.pos, currentState.comment, currentState);
 	}
 	
-	@Override
-	public String toString() {
-		return pos.toString().toLowerCase() + ";" + comment;
-	}
+
 }

@@ -14,6 +14,6 @@ public class MovedToMessage extends Mapper<MovedToSignal, MessageSignal> {
 
 	@Override
 	public MessageSignal map(MovedToSignal t) {
-		return new MessageSignal(t.toString());
+		return new MessageSignal(t.pos.toString(), t.comment);
 	}
 }
