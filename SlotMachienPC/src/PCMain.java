@@ -15,7 +15,7 @@ public class PCMain {
         final NXTComm nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
         NXTInfo[] nxtInfo = nxtComm.search(null);
         if (nxtInfo.length == 0){
-        	System.out.println("No connection!");
+            System.out.println("No connection!");
             System.exit(1);
         }
         
@@ -25,17 +25,17 @@ public class PCMain {
         nxtComm.open(nxtInfo[0]);
 
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-        	@Override
-        	public void run() {
-        		try {
-				os.close();
-				is.close();
-        			nxtComm.close();
-				System.exit(0);
-        		} catch (IOException e) {
-				System.exit(1);
-			}
-        	}
+            @Override
+            public void run() {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            nxtComm.close();
+                        } catch (Exception e){}
+                    }
+                }).start();
+            }
         }));
 
         Pipe.make(is, System.out);
