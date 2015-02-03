@@ -194,13 +194,13 @@ class WebhookSenderThread(Thread):
     def create_message(self, status):
         if status[2]:
             # HUMAN
-            return "The door is %s by %s" % (status[0], status[1])
+            return "Door has been %s by %s" % (status[0], status[1])
         elif status[1] in 'manual':
-            return "The door is manually %s by some human being!" % (status[0])
+            return "Door has been %s with a key" % (status[0])
         elif status[1] in 'buttons':
-            return "The buttons of the door are being pressed, so the door %s!" % (status[0])
+            return "Door has been %s by the buttons" % (status[0])
         else:
-            return "The door status changed to %s" % (status[0])
+            return "Door status changed to %s" % (status[0])
 
 
 class HeartBeatThread(Thread):
