@@ -15,6 +15,16 @@ from flask.ext.login import current_user
 from app import app, db, logger
 from models import LogAction, User
 
+STATUS_TO_ENGLISH = {'open': 'opened', 'closed': 'closed'}
+
+
+def past_tensify(status):
+    """ Returns an englified past tense """
+    if status in STATUS_TO_ENGLISH:
+        return STATUS_TO_ENGLISH[status]
+    else:
+        return status
+
 
 def is_alive(f):  # decorater for the Process class
     @wraps(f)
@@ -192,15 +202,18 @@ class WebhookSenderThread(Thread):
             requests.post(url, data=js)
 
     def create_message(self, status):
+        past_tense = past_tensify(status[0])
         if status[2]:
-            # HUMAN
-            return "The door is %s by %s" % (status[0], status[1])
+            # By commands
+            return "Door has been %s by %s" % (past_tense, status[1])
         elif status[1] in 'manual':
-            return "The door is manually %s by some human being!" % (status[0])
+            # With a key
+            return "Door has been %s with a key" % (past_tense)
         elif status[1] in 'buttons':
-            return "The buttons of the door are being pressed, so the door %s!" % (status[0])
+            # Buttons
+            return "Door has been %s by the buttons" % (past_tense)
         else:
-            return "The door status changed to %s" % (status[0])
+            return "Door status changed to %s" % (past_tense)
 
 
 class HeartBeatThread(Thread):
