@@ -1,13 +1,11 @@
 package slotmachien.handlers;
 
-import java.io.File;
-
-import lejos.nxt.Sound;
 import observable.Observer;
+import observable.UnsubscribeMeException;
 import slotmachien.internal.Position;
 import slotmachien.signals.Command;
 import slotmachien.signals.MessageSignal;
-import slotmachien.signals.UnsubscribeMeException;
+import slotmachien.signals.StringSignal;
 
 /**
  * Gets USB-signals, parses them, executes them
@@ -15,7 +13,7 @@ import slotmachien.signals.UnsubscribeMeException;
  * @author pietervdvn
  *
  */
-public class UsbParser implements Observer<MessageSignal> {
+public class UsbParser implements Observer<StringSignal> {
 
 	private final SMMotorHandler motor;
 	private final USBHandler usb;
@@ -26,16 +24,16 @@ public class UsbParser implements Observer<MessageSignal> {
 	}
 
 	@Override
-	public void notified(MessageSignal signal) throws UnsubscribeMeException {
+	public void notified(StringSignal signal) throws UnsubscribeMeException {
 
 		try {
 			parse(signal);
 		} catch (Exception e) {
-			usb.notified(new MessageSignal("Parsing failed: " + signal.content));
+			usb.notified(new MessageSignal("parsefail", signal.content));
 		}
 	}
 
-	public void parse(MessageSignal signal) throws UnsubscribeMeException {
+	public void parse(StringSignal signal) throws UnsubscribeMeException {
 		String sep = ";";
 		String lower = signal.content.toLowerCase();
 		String comm = lower.substring(0, lower.indexOf(sep));
@@ -51,5 +49,7 @@ public class UsbParser implements Observer<MessageSignal> {
 		}
 
 	}
+	
+
 
 }

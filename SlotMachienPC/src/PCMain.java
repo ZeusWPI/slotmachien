@@ -15,13 +15,32 @@ public class PCMain {
         final NXTComm nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
         NXTInfo[] nxtInfo = nxtComm.search(null);
         if (nxtInfo.length == 0){
-        	System.out.println("No connection!");
+            System.out.println("No connection!");
             System.exit(1);
         }
         
-        OutputStream os = nxtComm.getOutputStream();
-        InputStream is = nxtComm.getInputStream();
+        final OutputStream os = nxtComm.getOutputStream();
+        final InputStream is = nxtComm.getInputStream();
         
+        nxtComm.open(nxtInfo[0]);
+
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+            @Override
+            public void run() {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            nxtComm.close();
+                        } catch (Exception e){}
+                    }
+                }).start();
+		try {
+		    Thread.sleep(500);
+		} catch(Exception e) {}
+            }
+        }));
+
         Pipe.make(is, System.out);
         Pipe.make(System.in, os).join();  // Wait for end of input
     }

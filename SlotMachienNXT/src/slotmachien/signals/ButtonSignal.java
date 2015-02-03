@@ -1,6 +1,5 @@
 package slotmachien.signals;
 
-import observable.Signal;
 import lejos.nxt.Button;
 
 public class ButtonSignal extends Signal {

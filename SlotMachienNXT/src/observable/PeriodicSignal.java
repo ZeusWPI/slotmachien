@@ -1,5 +1,6 @@
 package observable;
 
+import slotmachien.signals.Signal;
 import lejos.util.*;
 
 /**
@@ -9,10 +10,7 @@ import lejos.util.*;
  */
 public class PeriodicSignal extends Observable<Signal>{
 	
-	private final int millis;
-	
 	public PeriodicSignal(int millis) {
-		this.millis = millis;
 		Timer t = new Timer(millis, new TimerListener() {
             @Override
             public void timedOut() {

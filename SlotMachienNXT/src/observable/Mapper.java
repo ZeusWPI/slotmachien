@@ -1,5 +1,7 @@
 package observable;
 
+import slotmachien.signals.Signal;
+
 /**
  * Converts events from a observable to notifications in a observer
  * 

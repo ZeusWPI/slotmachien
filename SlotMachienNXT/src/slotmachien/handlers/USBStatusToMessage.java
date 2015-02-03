@@ -9,7 +9,7 @@ public class USBStatusToMessage extends Mapper<UsbStatusSignal, MessageSignal>{
 	@Override
 	public MessageSignal map(UsbStatusSignal t) {
 		if(t != null){
-			return new MessageSignal("USB is "+t.status.toString());
+			return new MessageSignal("usb", t.status.toString());
 		}
 		return null;
 	}
