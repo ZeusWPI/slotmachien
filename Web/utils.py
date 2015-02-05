@@ -249,11 +249,13 @@ def start_process():
     global process
     process = Process()
 
+    # Add signal handlers
+    signal.signal(signal.SIGINT, signal_handler)
+    signal.signal(signal.SIGTERM, signal_handler)
+
 process = None
 
 # Add signal handler because SlotMachienPC cannot be closed by ctrl+c
-
-
 def signal_handler(signal, frame):
     global process
     logger.info("SIG %s called, stopping the program" % (str(signal)))
@@ -262,6 +264,3 @@ def signal_handler(signal, frame):
     # process.inputProcessing.join()
     os.kill(process.process.pid, signal.SIGTERM)
     sys.exit(0)
-
-signal.signal(signal.SIGINT, signal_handler)
-signal.signal(signal.SIGTERM, signal_handler)

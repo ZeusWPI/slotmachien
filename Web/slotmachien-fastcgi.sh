@@ -26,7 +26,6 @@ PIDFILE=/var/run/$DAEMON_NAME.pid
 
 do_start () {
     log_daemon_msg "Starting system $DAEMON_NAME daemon"
-    rm -f /tmp/slotmachien.sock
     start-stop-daemon --start --background --pidfile $PIDFILE --make-pidfile --user $DAEMON_USER -g slotmachien \
     --startas /bin/bash -- -c "exec $DAEMON $DAEMON_ARGS > /var/log/slotmachien-error.log 2>&1"
 
@@ -38,6 +37,7 @@ do_start () {
 do_stop () {
     log_daemon_msg "Stopping system $DAEMON_NAME daemon"
     start-stop-daemon --stop --pidfile $PIDFILE --retry 10
+    rm -f /tmp/slotmachien.sock
     log_end_msg $?
 }
 
