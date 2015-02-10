@@ -1,7 +1,46 @@
+{% extends 'admin/master.html' %}
+{% block body %}
 {% set state = door_status() %}
 <p>
-    Status: <span class="label label-{{ 'success' if 'open' in state else 'warning' }}">{{state}}</span>
+    Status: <span class="label label-{{ 'success' if 'open' in state else 'warning' }}" id="state">{{state}}</span>
 </p>
 <p>
-    Toggle door: <a class="btn btn-default btn-large" href="{{ url_for('door.toggle')}}">toggle</a>
+    Toggle door: <a class="btn btn-default btn-large" href="{{ url_for('door.toggle')}}" id="toggle">toggle</a>
 </p>
+{% endblock %}
+
+{% block head %}
+<script type="text/javascript" src="//code.jquery.com/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    namespace = '/slotmachien'; // change to an empty string to use the global namespace
+    // the socket.io documentation recommends sending an explicit package upon connection
+    // this is specially important when using the global namespace
+    var socket = io.connect('http://' + document.domain + ':' + location.port + namespace/*, {resource: 'slotmachien/socket.io'}/**/);
+    socket.on('connect', function() {
+        console.log('connected')
+    });
+
+    socket.on('state-change', function(msg) {
+        console.log(msg.data)
+        $('#state').text(msg.data);
+        if(/open/i.test(msg.data)) {
+          $('#state').removeClass('label-warning').addClass('label-success')
+        } else {
+          $('#state').removeClass('label-sucess').addClass('label-warning')
+        }
+    });
+    // handlers for the different forms in the page
+    // these send data to the server in a variety of ways
+    $('#toggle').on("click", function() {
+        $.get('/slotmachien/admin/door/toggle',
+             function() {
+              console.log('Toggle posted');
+            }
+        );
+        return false;
+    });
+});
+</script>
+{% endblock %}

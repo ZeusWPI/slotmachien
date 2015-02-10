@@ -15,6 +15,7 @@ from flask.ext.login import current_user
 
 from app import app, db, logger
 from models import LogAction, User
+from sockets import send_message
 
 STATUS_TO_ENGLISH = {'open': 'opened', 'closed': 'closed'}
 
@@ -189,18 +190,22 @@ class WebhookSenderThread(Thread):
 
     def __init__(self, status):
         super(WebhookSenderThread, self).__init__()
-        self.message = self.create_message(status)
+        self.status = status
 
     def run(self):
+        self.sockets()
         self.slack_webhook()
 
+    def sockets(self):
+        send_message(self.create_websocket_message(self.status))
+
     def slack_webhook(self):
-        js = json.dumps({'text': self.message})
+        js = json.dumps({'text': self.create_slack_message(self.status)})
         url = app.config['SLACK_WEBHOOK']
         if len(url) > 0:
             requests.post(url, data=js)
 
-    def create_message(self, status):
+    def create_slack_message(self, status):
         past_tense = past_tensify(status[0])
         if status[2]:
             # By commands
@@ -216,6 +221,13 @@ class WebhookSenderThread(Thread):
             return "Door has been %s using the buttons" % (past_tense)
         else:
             return "Door status changed to %s" % (past_tense)
+
+    def create_websocket_message(self, status):
+        past_tense = past_tensify(status[0])
+        if status[2]:
+            return "%s by %s" % (past_tense, status[1])
+        else:
+            return past_tense
 
 
 class HeartBeatThread(Thread):

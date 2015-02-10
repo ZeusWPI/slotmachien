@@ -1,4 +1,4 @@
-{% extends 'admin/master.html' %}
+{% extends 'admin/base_door.html' %}
 {% block body %}
 {% if not current_user.is_anonymous() %}
 <p>Welkom {{current_user.username}},</p>
@@ -6,8 +6,7 @@
 <p>Welkom mijnheer de administrateur des SlotMachiens,</p>
 {% endif %}
 {# include door view#}
-{% include 'admin/base_door.html' with context %}
-<br/>
+{{ super() }}<br/>
 <p>
     <a class="btn btn-default btn-large" href="{{ url_for('logout') }}">Log uit</a>
 </p>
