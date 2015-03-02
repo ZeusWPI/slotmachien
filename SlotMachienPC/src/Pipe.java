@@ -1,4 +1,5 @@
 import java.io.BufferedWriter;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -18,15 +19,20 @@ public class Pipe implements Runnable {
 
     @Override
     public void run(){
-        try (Scanner scanner = new Scanner(new InputStreamReader(in));
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(in));
              BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out))) {
-            while (scanner.hasNextLine()) {
-                writer.write(scanner.nextLine());
+            while (true) {
+                String line = reader.readLine();
+                writer.write(line);
                 writer.newLine();
                 writer.flush();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("lostconnection");
+            //e.printStackTrace();
+        } finally {
+            System.out.println("lostconnection");
+            System.exit(1);
         }
     }
     
