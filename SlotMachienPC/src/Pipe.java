@@ -19,8 +19,9 @@ public class Pipe implements Runnable {
 
     @Override
     public void run(){
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out))) {
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        try {
             while (true) {
                 String line = reader.readLine();
                 writer.write(line);
@@ -28,11 +29,7 @@ public class Pipe implements Runnable {
                 writer.flush();
             }
         } catch (Exception e) {
-            System.out.println("lostconnection");
-            //e.printStackTrace();
-        } finally {
-            System.out.println("lostconnection");
-            System.exit(1);
+            System.exit(0);
         }
     }
     
