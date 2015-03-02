@@ -11,8 +11,9 @@ import slotmachien.signals.MessageSignal;
  */
 public class ScreenHandler implements Observer<MessageSignal> {
 
-    Graphics g = new Graphics();
-
+    static Graphics g = new Graphics();
+    static Image lastImage = Images.ZEUS_LOGO;
+    
     @Override
     public void notified(MessageSignal signal) {
         String lowerhead = signal.head.toLowerCase();
@@ -27,8 +28,14 @@ public class ScreenHandler implements Observer<MessageSignal> {
         }
     }
 
-    public void displayImage(Image i) {
+    public static void displayImage(Image i) {
         g.drawImage(i, 0, 0, 0);
+        lastImage = i;
+    }
+    
+    public static void redraw() {
+        g.clear();
+        displayImage(lastImage);
     }
 
 }
