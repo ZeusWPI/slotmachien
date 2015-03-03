@@ -42,9 +42,10 @@ public class UsbIO {
     public static UsbIO waitForUsbIO() {
         // do while not null needed because the API sometimes returns null
         // spooky
+        NXTConnection conn;
         do {
-            NXTConnection conn = USB.waitForConnection();
-        while (conn != null);
+            conn = USB.waitForConnection();
+        } while (conn == null);
 
         return new UsbIO(conn);
     }
