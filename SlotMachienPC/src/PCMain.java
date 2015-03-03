@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -32,9 +33,14 @@ public class PCMain {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        PrintStream out = System.out;
+                        System.setOut(System.err);
+
                         try {
                             nxtComm.close();
                         } catch (Exception e){}
+
+                        System.setOut(out);
                     }
                 }).start();
 		try {
