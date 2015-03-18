@@ -5,7 +5,7 @@ from flask_oauthlib.client import OAuth
 
 from app import app, db, logger
 from models import User, Token, ServiceToken
-from github import oauth, github_login
+from zeus import oauth, zeus_login
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -50,13 +50,13 @@ def load_user_from_request(request):
 
 @app.route('/slotmachien/login')
 def login():
-    return github_login()
+    return zeus_login()
 
 
 @app.route('/slotmachien/logout')
 def logout():
-    if 'github_token' in session:
-        session.pop('github_token', None)
+    if 'zeus_token' in session:
+        session.pop('zeus_token', None)
     logout_user()
     return redirect(url_for('admin.index'))
 

@@ -8,5 +8,5 @@ class Configuration(object):
     SLACK_WEBHOOK = '<add url>'
     PROCESS = 'python test.py'
     LOGFILE = 'slotmachien.log'
-    GITHUB_KEY = '<fill in>'
-    GITHUB_SECRET = '<fill in>'
+    ZEUS_KEY = '<fill in>'
+    ZEUS_SECRET = '<fill in>'

@@ -1,7 +1,7 @@
-from flask import Flask, redirect, url_for, session, request, jsonify, flash
+from flask import Flask, redirect, url_for, session, request, jsonify, flash, request
 from flask.ext.login import LoginManager, login_user, current_user, logout_user
 from flask.ext.admin import helpers
-from flask_oauthlib.client import OAuth
+from flask_oauthlib.client import OAuth, OAuthException
 
 
 from app import app, db
@@ -9,36 +9,38 @@ from models import User, Token
 
 oauth = OAuth(app)
 
-github = oauth.remote_app(
-    'github',
-    consumer_key=app.config['GITHUB_KEY'],
-    consumer_secret=app.config['GITHUB_SECRET'],
-    request_token_params={'scope': 'user:email'},
-    base_url='https://api.github.com/',
-    request_token_url=None,
+zeus = oauth.remote_app(
+    'zeus',
+    consumer_key=app.config['ZEUS_KEY'],
+    consumer_secret=app.config['ZEUS_SECRET'],
+    request_token_params={},
+    base_url='http://kelder.zeus.ugent.be',
     access_token_method='POST',
-    access_token_url='https://github.com/login/oauth/access_token',
-    authorize_url='https://github.com/login/oauth/authorize'
+    access_token_url='https://kelder.zeus.ugent.be/oauth/oauth2/token/',
+    authorize_url='https://kelder.zeus.ugent.be/oauth/oauth2/authorize/'
 )
 
 
-def github_login():
+def zeus_login():
     if app.debug:
-        return github.authorize(callback=url_for('authorized', _external=True))
+        return zeus.authorize(callback=url_for('authorized', _external=True))
     else: # temporary solution because it otherwise gives trouble on the pi because of proxies and such
-        return github.authorize(callback='http://kelder.zeus.ugent.be/slotmachien/login/github/authorized')
+        return zeus.authorize(callback='http://kelder.zeus.ugent.be/slotmachien/login/zeus/authorized')
 
 
-@app.route('/slotmachien/login/github/authorized')
+@app.route('/slotmachien/login/zeus/authorized')
 def authorized():
-    resp = github.authorized_response()
+    resp = zeus.authorized_response()
     if resp is None:
         return 'Access denied: reason=%s error=%s' % (
             request.args['error'],
             request.args['error_description']
         )
-    session['github_token'] = (resp['access_token'], '')
-    me = github.get('user')
+    if isinstance(resp, OAuthException):
+        return 'Access denied: %s' % resp.message + '<br>' + str(resp.data)
+    return str(resp) #TEMP: return token til we get the user name
+    session['zeus_token'] = (resp['access_token'], '')
+    me = zeus.get('user')
 
     user = User.query.filter_by(username=me.data['login'].lower()).first()
     if user:
@@ -54,9 +56,9 @@ def authorized():
     return redirect(url_for("admin.index"))
 
 
-@github.tokengetter
-def get_github_oauth_token():
-    return session.get('github_token')
+@zeus.tokengetter
+def get_zeus_oauth_token():
+    return session.get('zeus_token')
 
 
 def add_token(user):
