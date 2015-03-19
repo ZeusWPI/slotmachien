@@ -22,15 +22,13 @@ class ServiceToken(db.Model):
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True)
-    slackname = db.Column(db.String(80), unique=True)
     allowed = db.Column(db.Boolean)
     admin = db.Column(db.Boolean)
     tokens = db.relationship('Token', backref='user', lazy='dynamic')
     logactions = db.relationship('LogAction', backref='user', lazy='dynamic')
 
-    def configure(self, username, slackname, allowed, admin):
+    def configure(self, username, allowed, admin):
         self.username = username
-        self.slackname = slackname
         self.allowed = allowed
         self.admin = admin
 
