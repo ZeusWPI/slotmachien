@@ -2,6 +2,7 @@ from flask import Flask, redirect, url_for, session, request, jsonify, flash, re
 from flask.ext.login import LoginManager, login_user, current_user, logout_user
 from flask.ext.admin import helpers
 from flask_oauthlib.client import OAuth, OAuthException
+import json
 
 
 from app import app, db
@@ -41,16 +42,14 @@ def authorized():
     #return str(resp) #TEMP: return token til we get the user name
     session['zeus_token'] = (resp['access_token'], '')
     me = zeus.get('current_user/')
+    username = me.data.get('username', '').lower()
 
-    user = User.query.filter_by(username=me.data['username'].lower()).first()
-    if user:
-        login_user(user)
-        # add_token(resp['access_token'], user)
-        content_type = request.headers.get('Content-Type', None)
-        if content_type and content_type in 'application/json':
-            token = add_token(user)
-            return jsonify({'token': token.token})
-        return redirect(url_for("admin.index"))
+    user = User.query.filter_by(username=username).first()
+    if len(username) > 0 and user:
+        return login_and_redirect_user(user)
+    elif len(username) > 0:
+        user = create_user(username)
+        return login_and_redirect_user(user)
 
     flash("You're not allowed to enter, please contact a system administrator")
     return redirect(url_for("admin.index"))
@@ -61,9 +60,35 @@ def get_zeus_oauth_token():
     return session.get('zeus_token')
 
 
+def login_and_redirect_user(user):
+    login_user(user)
+    # add_token(resp['access_token'], user)
+    content_type = request.headers.get('Content-Type', None)
+    if content_type and content_type in 'application/json':
+        token = add_token(user)
+        return jsonify({'token': token.token})
+    if not user.is_authenticated():
+        flash("You can login after an administrator has verified your account.")
+    return redirect(url_for("admin.index"))
+
+
 def add_token(user):
     token = Token()
     token.configure(user)
     db.session.add(token)
     db.session.commit()
     return token
+
+
+def create_user(username):
+    user = User()
+    user.configure(username, username + 'FIXME', False, False)
+    db.session.add(user)
+    db.session.commit()
+    # EASTER EGG
+    text = 'Welcome ' + username + '!'
+    js = json.dumps({'text': text})
+    url = app.config['SLACK_WEBHOOK']
+    if len(url) > 0:
+        requests.post(url, data=js)
+    return user
