@@ -46,10 +46,10 @@ class DoorView(BaseView):
     @expose('/toggle/')
     def toggle(self):
         state = send_command('status')['status']
-        if 'open' in state:
-            state = send_command('close')['status']
-        else:
+        if 'close' in state:
             state = send_command('open')['status']
+        else:
+            state = send_command('close')['status']
 
         return redirect(url_for('admin.index'))
 
