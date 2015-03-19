@@ -13,5 +13,6 @@
 </p>
 {% else %}
 <a class="btn btn-default btn-large" href="{{ url_for('login') }}">Log in</a>
+Current state: <span class="label label-{{ 'success' if 'open' in state else 'warning' }}">{{state}}</span>
 {% endif %}
 {% endblock %}

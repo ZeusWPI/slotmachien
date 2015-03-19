@@ -72,7 +72,7 @@ class DoorView(BaseView):
         if login.current_user.is_anonymous():
             return False
 
-        return login.current_user.is_authenticated()
+        return login.current_user.is_allowed()
 
 
 @app.context_processor

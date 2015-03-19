@@ -35,9 +35,12 @@ class User(db.Model):
         self.admin = admin
 
     def is_authenticated(self):
-        return self.allowed
+        return True
 
     def is_active(self):
+        return True
+
+    def is_allowed(self):
         return self.allowed
 
     def is_admin(self):

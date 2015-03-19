@@ -67,8 +67,6 @@ def login_and_redirect_user(user):
     if content_type and content_type in 'application/json':
         token = add_token(user)
         return jsonify({'token': token.token})
-    if not user.is_authenticated():
-        flash("You can login after an administrator has verified your account.")
     return redirect(url_for("admin.index"))
 
 

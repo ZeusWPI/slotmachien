@@ -62,5 +62,5 @@ def logout():
 
 
 def before_request():
-    if current_user.is_anonymous():
+    if current_user.is_anonymous() and not current_user.is_allowed():
         abort(401)
