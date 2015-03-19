@@ -14,7 +14,7 @@ zeus = oauth.remote_app(
     consumer_key=app.config['ZEUS_KEY'],
     consumer_secret=app.config['ZEUS_SECRET'],
     request_token_params={},
-    base_url='http://kelder.zeus.ugent.be',
+    base_url='http://kelder.zeus.ugent.be/oauth/api/',
     access_token_method='POST',
     access_token_url='https://kelder.zeus.ugent.be/oauth/oauth2/token/',
     authorize_url='https://kelder.zeus.ugent.be/oauth/oauth2/authorize/'
@@ -38,11 +38,11 @@ def authorized():
         )
     if isinstance(resp, OAuthException):
         return 'Access denied: %s' % resp.message + '<br>' + str(resp.data)
-    return str(resp) #TEMP: return token til we get the user name
+    #return str(resp) #TEMP: return token til we get the user name
     session['zeus_token'] = (resp['access_token'], '')
-    me = zeus.get('user')
+    me = zeus.get('current_user/')
 
-    user = User.query.filter_by(username=me.data['login'].lower()).first()
+    user = User.query.filter_by(username=me.data['username'].lower()).first()
     if user:
         login_user(user)
         # add_token(resp['access_token'], user)

@@ -1,4 +1,7 @@
 #!/usr/bin/python
+## TEMPORARY ## SHOULD BE DELETED AFTER KELDER.ZEUS HAS THEIR CERTIFICATE
+import os
+os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
 from flup.server.fcgi import WSGIServer
 from logbook import FileHandler
