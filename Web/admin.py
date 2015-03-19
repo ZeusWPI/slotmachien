@@ -78,9 +78,7 @@ class DoorView(BaseView):
 @app.context_processor
 def door_processor():
     def door_status():
-        if not login.current_user.is_anonymous():
-            return send_command('status')['status']
-        return "Not authenticated"
+        return send_command('status')['status']
     return dict(door_status=door_status)
 
 admin = Admin(app, name='SlotMachien', url='/slotmachien/admin', template_mode='bootstrap3')

@@ -12,7 +12,9 @@
     <a class="btn btn-default btn-large" href="{{ url_for('logout') }}">Log uit</a>
 </p>
 {% else %}
+<p>
+Current state: <span class="label label-{{ 'success' if 'open' in state else 'warning' }}">{{door_status()}}</span>
+</p>
 <a class="btn btn-default btn-large" href="{{ url_for('login') }}">Log in</a>
-Current state: <span class="label label-{{ 'success' if 'open' in state else 'warning' }}">{{state}}</span>
 {% endif %}
 {% endblock %}

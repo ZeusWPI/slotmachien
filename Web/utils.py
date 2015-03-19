@@ -178,7 +178,7 @@ class InputProcessingThread(Thread):
 
     def create_status(self, status):
         if status[2]:
-            return "%s by %s" % (status[0], status[1])
+            return "%s by %s" % (past_tensify(status[0]), status[1])
         elif status[1] in 'manual':
             return "manually %s by some human being" % (status[0])
         else:
