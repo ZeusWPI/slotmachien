@@ -6,13 +6,11 @@ import java.util.Queue;
 import lejos.nxt.NXTRegulatedMotor;
 import observable.Observable;
 import observable.Observer;
-import observable.UnsubscribeMeException;
 import slotmachien.internal.MotorBlock;
 import slotmachien.internal.Position;
 import slotmachien.signals.Command;
 import slotmachien.signals.MovedToSignal;
 import slotmachien.signals.Signal;
-import slotmachien.signals.UsbStatusSignal;
 
 public class SMMotorHandler extends Observable<MovedToSignal> implements
         Observer<Command> {
