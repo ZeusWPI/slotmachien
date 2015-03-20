@@ -5,6 +5,7 @@ import observable.Observer;
 import observable.UnsubscribeMeException;
 import slotmachien.signals.MessageSignal;
 import slotmachien.signals.UsbStatusSignal;
+import slotmachien.signals.UsbStatusSignal.UsbStatus;
 
 public class USBStatusOpeningMessageHandler extends Observable<MessageSignal>
         implements Observer<UsbStatusSignal> {
@@ -23,7 +24,9 @@ public class USBStatusOpeningMessageHandler extends Observable<MessageSignal>
 
     @Override
     public void notified(UsbStatusSignal signal) throws UnsubscribeMeException {
-        notifyObservers(new MessageSignal(smmh.getState().pos.name(), "current"));
+        if(signal != null && signal.status == UsbStatus.CONNECTED) {
+            notifyObservers(new MessageSignal(smmh.getState().pos.name(), "init"));
+        }
     }
 
 }

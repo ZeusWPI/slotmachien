@@ -30,8 +30,10 @@ Returns kan be of the following forms
     status;cause
 
 Where status is either open or closed, and cause is
+
     p:name   Person + name
     pdc      Pre Delayed Close
     dc       Delayed Close
     bo       Button Open
     bc       Button Close
+    init     Sent when a USB connection has been established
