@@ -17,6 +17,7 @@ import slotmachien.handlers.MovedToMessage;
 import slotmachien.handlers.SMMotorHandler;
 import slotmachien.handlers.ScreenHandler;
 import slotmachien.handlers.USBHandler;
+import slotmachien.handlers.USBStatusOpeningMessageHandler;
 import slotmachien.handlers.USBStatusToMessage;
 import slotmachien.handlers.UsbParser;
 import slotmachien.signals.ButtonSignal;
@@ -58,6 +59,11 @@ public class NXTMain {
         final SMMotorHandler motors = new SMMotorHandler(clock, Motor.B,
                 Motor.C);
         final ScreenHandler screen = new ScreenHandler();
+        
+        // Will listen to every connect and post the status of the door when a connection occurs
+        USBStatusOpeningMessageHandler usbsomh = new USBStatusOpeningMessageHandler(motors);
+        usbsomh.addObserver(usb);
+        usb.statusSignaller.addObserver(usbsomh);
 
         // write status updates to USB
         Mapper.pipe(motors, new MovedToMessage(), usb);
@@ -109,6 +115,5 @@ public class NXTMain {
             }
 
         });
-
     }
 }
