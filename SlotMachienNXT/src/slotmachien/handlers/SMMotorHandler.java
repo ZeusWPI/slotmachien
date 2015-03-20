@@ -3,11 +3,7 @@ package slotmachien.handlers;
 import java.util.EmptyQueueException;
 import java.util.Queue;
 
-import javax.microedition.lcdui.Graphics;
-
 import lejos.nxt.NXTRegulatedMotor;
-import lejos.nxt.Sound;
-import observable.Observable;
 import observable.Observable;
 import observable.Observer;
 import slotmachien.internal.MotorBlock;
@@ -99,9 +95,6 @@ public class SMMotorHandler extends Observable<MovedToSignal> implements
             return;
         }
 
-        //ScreenHandler.redraw();
-        //new Graphics().drawString("" + motorblock.getTachoCount(), 0, 0, 0);
-
         try {
             Position p = motorblock.getPosition(OPEN_LIMIT_BEFORE_DEADZONE,
                     CLOSED_LIMIT_BEFORE_DEADZONE);
@@ -117,7 +110,7 @@ public class SMMotorHandler extends Observable<MovedToSignal> implements
         currentState = cmd;
         notifyObservers(new MovedToSignal(cmd));
     }
-
+    
     /*
      * END OF UTILITY
      */

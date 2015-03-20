@@ -25,7 +25,7 @@ public class USBHandler extends Observable<StringSignal> implements
     public static boolean debug = false;
 
     private UsbIO io = null;
-    private final Observable<UsbStatusSignal> statusSignaller = new Observable<UsbStatusSignal>();
+    public final Observable<UsbStatusSignal> statusSignaller = new Observable<UsbStatusSignal>();
 
     /**
      * Does all the stuff! Connects, retries connecting if connection is lost,

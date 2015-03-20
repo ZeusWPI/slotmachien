@@ -36,3 +36,4 @@ Where status is either open or closed, and cause is
     dc       Delayed Close
     bo       Button Open
     bc       Button Close
+    init     Sent when a USB connection has been established
