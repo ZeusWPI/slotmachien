@@ -4,7 +4,7 @@ from flask_oauthlib.client import OAuth
 
 import requests
 
-from app import app, db, logger
+from app import app, db, logger, cache
 from models import User, Token, ServiceToken
 from zeus import oauth, zeus_login
 
@@ -32,7 +32,7 @@ def load_user_from_request(request):
                 return user
             else:
                 logger.error(
-                    "Username %s is not in the database" % username)
+                    "User ID %s is not in the database" % user_id)
 
     # try token login
     token = request.headers.get('Authorization')
@@ -60,14 +60,26 @@ def logout():
 
 
 def before_request():
-    if current_user.is_anonymous() and not current_user.is_allowed():
+    if current_user.is_anonymous() or not current_user.is_allowed():
         abort(401)
 
 
 def request_user_slack(user_id):
+    identifier = 'slack_id/%s' % user_id
+    username = cache.get(identifier)
+    if username is None:
+        username = request_username_slack(user_id)
+        if username is not None:
+            cache.set(identifier, username)
+    if username is not None:
+        user = User.query.filter_by(username=username.lower()).first()
+        return user
+    return None
+
+def request_username_slack(user_id):
     payload = {'token': app.config['SLACK_TOKEN'], 'user': user_id}
     r = requests.get('https://slack.com/api/users.info', params=payload)
-    print r.url
+
     if r.status_code == 200:
         response = r.json()
         json_user = response.get('user', '')
@@ -75,6 +87,5 @@ def request_user_slack(user_id):
             email = response['user']['profile']['email']
             if '@zeus.ugent.be' in email:
                 username = email.split('@zeus.ugent.be')[0]
-                user = User.query.filter_by(username=username.lower()).first()
-                return user
+                return username
     return None

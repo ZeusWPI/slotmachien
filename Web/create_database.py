@@ -10,6 +10,7 @@ db.session.add(feli)
 
 don = User()
 don.configure("don", True, True)
+db.session.add(don)
 
 # To future developers, add yourself here
 
