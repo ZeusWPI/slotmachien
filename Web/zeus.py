@@ -39,7 +39,7 @@ def authorized():
         )
     if isinstance(resp, OAuthException):
         return 'Access denied: %s' % resp.message + '<br>' + str(resp.data)
-    #return str(resp) #TEMP: return token til we get the user name
+
     session['zeus_token'] = (resp['access_token'], '')
     me = zeus.get('current_user/')
     username = me.data.get('username', '').lower()
@@ -80,7 +80,7 @@ def add_token(user):
 
 def create_user(username):
     user = User()
-    user.configure(username, username + 'FIXME', False, False)
+    user.configure(username, False, False)
     db.session.add(user)
     db.session.commit()
     # EASTER EGG

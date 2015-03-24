@@ -19,9 +19,9 @@ class ModelBaseView(ModelView):
 
 
 class UserAdminModel(ModelBaseView):
-    column_searchable_list = ('username', 'slackname')
+    column_searchable_list = ('username',)
     inline_models = None
-    form_columns = ('username', 'slackname', 'allowed', 'admin')
+    form_columns = ('username', 'allowed', 'admin')
 
 
 class ServiceTokenAdminModel(ModelBaseView):

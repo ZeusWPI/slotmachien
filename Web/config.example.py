@@ -10,3 +10,4 @@ class Configuration(object):
     LOGFILE = 'slotmachien.log'
     ZEUS_KEY = '<fill in>'
     ZEUS_SECRET = '<fill in>'
+    SLACK_TOKEN = '<fill in>'
