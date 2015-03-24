@@ -3,6 +3,7 @@ from flask.ext.login import LoginManager, login_user, current_user, logout_user
 from flask.ext.admin import helpers
 from flask_oauthlib.client import OAuth, OAuthException
 import json
+import requests
 
 
 from app import app, db
