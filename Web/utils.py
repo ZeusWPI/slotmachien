@@ -204,7 +204,7 @@ class WebhookSenderThread(Thread):
         past_tense = past_tensify(status[0])
         if status[2]:
             # By commands
-            return "Door has been %s by %s" % (past_tense, status[1])
+            return "%s %s the door" % (status[1], past_tense)
         elif status[1] == 'manual':
             # With a key
             return "Door has been %s with a key" % (past_tense)

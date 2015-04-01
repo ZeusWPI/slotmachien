@@ -76,6 +76,7 @@ def request_user_slack(user_id):
         return user
     return None
 
+
 def request_username_slack(user_id):
     payload = {'token': app.config['SLACK_TOKEN'], 'user': user_id}
     r = requests.get('https://slack.com/api/users.info', params=payload)
@@ -85,7 +86,7 @@ def request_username_slack(user_id):
         json_user = response.get('user', '')
         if len(json_user) > 0:
             email = response['user']['profile']['email']
-            if '@zeus.ugent.be' in email:
+            if '@zeus.ugent.be' in email and email.endswith('@zeus.ugent.be'):
                 username = email.split('@zeus.ugent.be')[0]
                 return username
     return None
