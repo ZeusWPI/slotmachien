@@ -140,6 +140,8 @@ class InputProcessingThread(Thread):
                 self.log_status(line)
                 webhookthread = WebhookSenderThread(line)
                 webhookthread.start()
+                doorshotthread = DoorshotThread()
+                doorshotthread.start()
         logger.info('Input processing thread stopped')
         self.process.stopped = True
 
@@ -217,6 +219,20 @@ class WebhookSenderThread(Thread):
         else:
             return "Door status changed to %s" % (past_tense)
 
+
+class DoorshotThread(Thread):
+
+    def __init__(self):
+        super(DoorshotThread, self).__init__()
+
+    def run(self):
+        if not app.debug:
+            self.run_doorshot()
+
+    def run_doorshot(self):
+            r = requests.post('https://zeus.ugent.be/slackintegrations/doorshot')
+            webhookthread = WebhookSenderThread(r.text)
+            webhookthread.start()
 
 class HeartBeatThread(Thread):
 
