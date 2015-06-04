@@ -15,3 +15,4 @@ peewee==2.2.5
 requests==2.4.0
 Flask-OAuthlib==0.8.0
 oauthlib==0.7.2
+Flask-Migrate==1.4.0
