@@ -2,20 +2,29 @@ SlotMachienWeb
 ==============
 
 # Installation
-Use virtualenv or so, install everything through pip
+1. Install necessary packages, best in a virtualenv.
 Do `pip install -r requirements.txt`
 
-After that start the server in one shell, and in another one create an admin account
+2. Modify configuration settings, copy the `config.example.py`-file to `config.py` and fill it in.
+To acquire OAuth-credentials, mail sysadmins@zeus.UGent.be.
+Make sure you're in debug when the NXT is not connected.
+
+3. Initialize database with alembic, execute the following command `python slotmachien.py db upgrade`
+
+4. To start developing, add yourself to the database. Open a python shell and execute the following commands:
 ```
-from slotmachien import auth
-auth.User.create_table(fail_silently=True)  # make sure table created.
-admin = auth.User(username='admin', email='', admin=True, active=True)
-admin.set_password('admin')
-admin.save()
+from models import User, db
+admin = User()
+admin.configure('<your Zeus OAuth name>', True, True)
+db.session.add(admin)
+
+# commit all the things
+db.session.commit()
 ```
 
+5. Run the server on your computer with `python slotmachien.py runserver`
 After that you can go to localhost:<port>/admin, and login to the admin interface,
-and add an AuthKey for the requests.
+and add an AuthKey for the slack requests.
 # API
 ## Sending requests
 Get the authorization code by authenticating @ login
