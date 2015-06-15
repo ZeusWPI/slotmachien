@@ -239,6 +239,7 @@ class DoorshotThread(Thread):
                 if len(url) > 0:
                     requests.post(url, data=js)
 
+
 class HeartBeatThread(Thread):
 
     def __init__(self, process):
