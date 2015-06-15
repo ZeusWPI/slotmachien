@@ -231,8 +231,12 @@ class DoorshotThread(Thread):
 
     def run_doorshot(self):
             r = requests.post('https://zeus.ugent.be/slackintegrations/doorshot')
-            webhookthread = WebhookSenderThread(r.text)
-            webhookthread.start()
+            # send only if status code is 200
+            if r.status_code == requests.codes.ok:
+                js = json.dumps({'text': r.text})
+                url = app.config['SLACK_WEBHOOK']
+                if len(url) > 0:
+                    requests.post(url, data=js)
 
 class HeartBeatThread(Thread):
 
