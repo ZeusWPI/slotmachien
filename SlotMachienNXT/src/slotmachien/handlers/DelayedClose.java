@@ -15,8 +15,9 @@ import slotmachien.internal.Position;
 import slotmachien.signals.Command;
 import slotmachien.signals.MovedToSignal;
 import slotmachien.signals.Signal;
+import slotmachien.signals.MessageSignal;
 
-public class DelayedClose implements Observer<Signal> {
+public class DelayedClose extends Observable<MessageSignal> implements Observer<Signal> {
 
     private final SMMotorHandler motor;
     private final int ticks;
@@ -66,6 +67,8 @@ public class DelayedClose implements Observer<Signal> {
 
         if (motor.getState().pos != Position.OPEN) {
             motor.notified(preOpen);
+        } else {
+            notifyObservers(new MessageSignal("OPEN", "pdc"));
         }
 
         // lets reset and activate the actual closer!
