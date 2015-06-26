@@ -233,10 +233,12 @@ class DoorshotThread(Thread):
             r = requests.post('https://zeus.ugent.be/slackintegrations/doorshot')
             # send only if status code is 200
             if r.status_code == requests.codes.ok:
+                logger.info("Link to gif: %s" % r.text)
                 js = json.dumps({'text': r.text})
                 url = app.config['SLACK_WEBHOOK']
                 if len(url) > 0:
                     requests.post(url, data=js)
+
 
 class HeartBeatThread(Thread):
 
