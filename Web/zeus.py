@@ -16,10 +16,10 @@ zeus = oauth.remote_app(
     consumer_key=app.config['ZEUS_KEY'],
     consumer_secret=app.config['ZEUS_SECRET'],
     request_token_params={},
-    base_url='http://kelder.zeus.ugent.be/oauth/api/',
+    base_url='http://adams.ugent.be/oauth/api/',
     access_token_method='POST',
-    access_token_url='https://kelder.zeus.ugent.be/oauth/oauth2/token/',
-    authorize_url='https://kelder.zeus.ugent.be/oauth/oauth2/authorize/'
+    access_token_url='https://adams.ugent.be/oauth/oauth2/token/',
+    authorize_url='https://adams.ugent.be/oauth/oauth2/authorize/'
 )
 
 
@@ -27,7 +27,7 @@ def zeus_login():
     if app.debug:
         return zeus.authorize(callback=url_for('authorized', _external=True))
     else: # temporary solution because it otherwise gives trouble on the pi because of proxies and such
-        return zeus.authorize(callback='http://kelder.zeus.ugent.be/slotmachien/login/zeus/authorized')
+        return zeus.authorize(callback='http://adams.ugent.be/slotmachien/login/zeus/authorized')
 
 
 @app.route('/slotmachien/login/zeus/authorized')
