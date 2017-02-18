@@ -27,7 +27,7 @@ def zeus_login():
     if app.debug:
         return zeus.authorize(callback=url_for('authorized', _external=True))
     else: # temporary solution because it otherwise gives trouble on the pi because of proxies and such
-        return zeus.authorize(callback='http://adams.ugent.be/slotmachien/login/zeus/authorized')
+        return zeus.authorize(callback='http://kelder.zeus.ugent.be/slotmachien/login/zeus/authorized')
 
 
 @app.route('/slotmachien/login/zeus/authorized')
