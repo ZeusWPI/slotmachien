@@ -140,8 +140,9 @@ class InputProcessingThread(Thread):
                 self.log_status(line)
                 webhookthread = WebhookSenderThread(line)
                 webhookthread.start()
-                doorshotthread = DoorshotThread()
-                doorshotthread.start()
+                if line[0] == "open" and line[1] == "manual":
+                    doorshotthread = DoorshotThread()
+                    doorshotthread.start()
         logger.info('Input processing thread stopped')
         self.process.stopped = True
 
