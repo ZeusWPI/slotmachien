@@ -37,11 +37,13 @@ def load_user_from_request(request):
             if servicetoken.service == 'mattermost':
                 # Create new user if needed, user will already be authorized
                 username = request.values.get('username')
-                user = User()
-                # Auto-approve user
-                user.configure(username, True, False)
-                db.session.add(user)
-                db.session.commit()
+                user = User.query.filter_by(username=username.lower()).first()
+                if user is None:
+                    user = User()
+                    # Auto-approve user
+                    user.configure(username, True, False)
+                    db.session.add(user)
+                    db.session.commit()
                 return user
 
     # try token login
