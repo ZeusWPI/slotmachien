@@ -23,16 +23,26 @@ def load_user_from_request(request):
     auth_key = (request.args.get('token') or
                 request.form.get('token'))
     if auth_key:
-        servictoken = ServiceToken.query.filter_by(key=auth_key).first()
-        if servictoken:
-            user_id = (request.args.get('user_id') or
-                        request.form.get('user_id'))
-            user = request_user_slack(user_id)
-            if user and user.is_allowed():
+        servicetoken = ServiceToken.query.filter_by(key=auth_key).first()
+        if servicetoken:
+            if servicetoken.service == 'slack':
+                user_id = (request.args.get('user_id') or
+                           request.form.get('user_id'))
+                user = request_user_slack(user_id)
+                if user and user.is_allowed():
+                    return user
+                else:
+                    logger.error(
+                        "User ID %s is not in the database" % user_id)
+            if servicetoken.service == 'mattermost':
+                # Create new user if needed, user will already be authorized
+                username = request.values.get('username')
+                user = User()
+                # Auto-approve user
+                user.configure(username, True, False)
+                db.session.add(user)
+                db.session.commit()
                 return user
-            else:
-                logger.error(
-                    "User ID %s is not in the database" % user_id)
 
     # try token login
     token = request.headers.get('Authorization')
