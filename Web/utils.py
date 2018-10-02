@@ -2,6 +2,8 @@ from datetime import datetime as dt
 from subprocess import Popen, PIPE
 from threading import Thread
 from functools import wraps
+from pipes import quote
+import subprocess
 import threading
 import json
 import time
@@ -184,7 +186,6 @@ class InputProcessingThread(Thread):
         else:
             return "%s" % (status[0])
 
-
 class WebhookSenderThread(Thread):
 
     def __init__(self, status):
@@ -198,7 +199,8 @@ class WebhookSenderThread(Thread):
         js = json.dumps({'text': self.message})
         url = app.config['SLACK_WEBHOOK']
         if len(url) > 0:
-            requests.post(url, data=js)
+            subprocess.call(["curl","-i","-X","POST","-H","Content-Type: application/json","-d",js,url])
+            subprocess.call(["curl", "-s", "https://kelder.zeus.ugent.be/webcam/cgi/ptdc.cgi?command=set_pos&posX=16&posY=8"])
 
     def create_message(self, status):
         past_tense = past_tensify(status[0])
