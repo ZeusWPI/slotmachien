@@ -173,7 +173,7 @@ class InputProcessingThread(Thread):
             return (action, by, False)
 
         if "nxt" in status:
-            return ("NXT Error", None, False)
+            return ("NXT Error " + status, None, False)
 
         logger.error("Door status inconsistent: %s" % (status))
         return ("error: contact sysadmins", None, False)
