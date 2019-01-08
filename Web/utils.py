@@ -155,6 +155,7 @@ class InputProcessingThread(Thread):
         db.session.commit()
 
     def clean_status(self, status):
+        print(status)
         status = status.lower().strip()
 
         if status in ["opened", "closed"]:
@@ -165,7 +166,6 @@ class InputProcessingThread(Thread):
             parsed_status = status.split(';')
             action = parsed_status[0]
             by = parsed_status[1]
-            human = False
             if 'p:' in parsed_status[1]:
                 # user
                 username = parsed_status[1].split(':')[1]
@@ -181,7 +181,7 @@ class InputProcessingThread(Thread):
     def create_status(self, status):
         if status[2]:
             return "%s by %s" % (past_tensify(status[0]), status[1])
-        elif status[1] in 'manual':
+        elif status[1] == 'manual':
             return "manually %s by some human being" % (status[0])
         else:
             return "%s" % (status[0])
