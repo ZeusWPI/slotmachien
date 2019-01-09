@@ -142,6 +142,9 @@ class InputProcessingThread(Thread):
                 self.log_status(line)
                 webhookthread = WebhookSenderThread(line)
                 webhookthread.start()
+                if line[0] == "open" and line[1] == "manual":
+                    doorshotthread = DoorshotThread()
+                    doorshotthread.start()
         logger.info('Input processing thread stopped')
         self.process.stopped = True
 
@@ -218,6 +221,26 @@ class WebhookSenderThread(Thread):
             return "Door has been %s using the buttons" % (past_tense)
         else:
             return "Door status changed to %s" % (past_tense)
+
+
+class DoorshotThread(Thread):
+
+    def __init__(self):
+        super(DoorshotThread, self).__init__()
+
+    def run(self):
+        if not app.debug:
+            self.run_doorshot()
+
+    def run_doorshot(self):
+            r = requests.post('https://zeus.ugent.be/slackintegrations/doorshot')
+            # send only if status code is 200
+            if r.status_code == requests.codes.ok:
+                logger.info("Link to gif: %s" % r.text)
+                js = json.dumps({'text': r.text})
+                url = app.config['SLACK_WEBHOOK']
+                if len(url) > 0:
+                    requests.post(url, data=js)
 
 
 class HeartBeatThread(Thread):

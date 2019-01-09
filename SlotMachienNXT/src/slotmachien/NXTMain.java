@@ -79,6 +79,7 @@ public class NXTMain {
                 1000), 10);
         // abort delayed close when something happens:
         motors.addObserverDangerous(delayedC.getCanceller());
+        delayedC.addObserver(usb);
 
         ObservableButton escape = new ObservableButton(Button.ESCAPE);
 
