@@ -59,7 +59,10 @@ class Process:
         logger.info('SlotMachienPC pid: %d' % self.process.pid)
         self.stopped = False
         self.last_status = self.process.stdout.readline()
-        self.last_door_status = self.process.stdout.readline()
+        if "open" in self.last_status.strip().lower():
+            self.last_door_status = "open"
+        else:
+            self.last_door_status = "closed"
 
         # Create input processing thread
         self.inputProcessing = InputProcessingThread(self)
