@@ -48,6 +48,7 @@ class Process:
         self.write_lock = None
         self.stopped = False
         self.last_status = ''
+        self.last_door_status = ''
         self.create()
 
     def create(self):
@@ -58,6 +59,10 @@ class Process:
         logger.info('SlotMachienPC pid: %d' % self.process.pid)
         self.stopped = False
         self.last_status = self.process.stdout.readline()
+        if "open" in self.last_status.strip().lower():
+            self.last_door_status = "open"
+        else:
+            self.last_door_status = "closed"
 
         # Create input processing thread
         self.inputProcessing = InputProcessingThread(self)
@@ -115,7 +120,7 @@ class Process:
             command = command + ';' + current_user.username
             self._write_command_(command)
             time.sleep(1.00)  # wait for a couple of seconds to return
-        return {'status': self.last_status.lower().strip()}
+        return {'status': self.last_status.lower().strip(), 'door_status': self.last_door_status.lower().strip()}
 
     def _write_command_(self, command):
         if self.write_lock is not None:
@@ -138,6 +143,7 @@ class InputProcessingThread(Thread):
                 old_line = line
                 line = self.clean_status(line)
                 self.process.last_status = self.create_status(line)
+                self.process.last_door_status = line[0]
                 logger.info("Door status changed to %s" % (line[0]))
                 self.log_status(line)
                 webhookthread = WebhookSenderThread(line)
